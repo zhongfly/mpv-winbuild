@@ -1,0 +1,57 @@
+name: MPV
+
+on: 
+  schedule:
+    - cron:  '0 18 */2 * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build MPV
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        bit: [32, 64]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: fregante/setup-git-user@v1
+      - name: Build
+        shell: bash
+        run: |
+          sudo bash build.sh "${{ matrix.bit }}"
+#       - name: upload logs
+#         uses: actions/upload-artifact@master
+#         with:
+#           name: logs
+#           path: |
+#             mpv-winbuild-cmake/build64/packages/mpv-prefix/src/mpv-stamp/mpv-build-*.log
+#             mpv-winbuild-cmake/build64/packages/mujs-prefix/src/mujs-stamp/mujs-build-*.log
+#             mpv-winbuild-cmake/build64/packages/libsrt-prefix/src/libsrt-stamp/libsrt-configure-*.log
+      - name: upload artifact
+        id: upload
+        uses: kittaakos/upload-artifact-as-is@master
+        with:
+          path: mpv-winbuild-cmake/release/*.7z
+      - name: 'Get latest commit sha'
+        id: get_sha
+        uses: mego22/actions-git-sha@main
+        with:
+          repo: "https://github.com/mpv-player/mpv.git"
+      - name: 'Current Time'
+        run: |
+          export TZ='Asia/Shanghai'
+          echo "long_time=$(date "+%Y-%m-%d-%H:%M:%S")" >> $GITHUB_ENV
+          echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+          echo "sha=$(expr substr "${{ steps.get_sha.outputs.sha }}" 1 7)" >> $GITHUB_ENV
+      - uses: ncipollo/release-action@v1
+        if: ${{ steps.upload.outcome == 'success' }}
+        with:
+          artifacts: "mpv-winbuild-cmake/release/*.7z"
+          commit: main
+          name: "MPV ${{ env.long_time }} ${{ env.sha }}"
+          body: "MPV sha: https://github.com/mpv-player/mpv/commit/${{ steps.get_sha.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
+          tag: "${{ env.short_time }}"
+          allowUpdates: true
+          prerelease: true
+          token: ${{ secrets.GITHUB_TOKEN }}
