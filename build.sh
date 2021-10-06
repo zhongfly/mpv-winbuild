@@ -2,6 +2,7 @@
 set -x
 
 main() {
+    export TZ='Asia/Shanghai'
     dependency
     local branch="gcc10"
     dependency
