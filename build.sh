@@ -3,9 +3,17 @@ set -x
 
 main() {
     dependency
-    git clone https://github.com/shinchiro/mpv-winbuild-cmake.git
+    local branch="gcc10"
+    dependency
+    if [ -d mpv-winbuild-cmake ] ; then
+        git  clone https://github.com/shinchiro/mpv-winbuild-cmake.git temp
+        mv -f temp/* mpv-winbuild-cmake/
+        sudo rm -rf temp
+    else
+        git clone https://github.com/shinchiro/mpv-winbuild-cmake.git
+    fi
     cd mpv-winbuild-cmake
-    git checkout gcc10
+    git checkout $branch
     gitdir=$(pwd)
 
     if [ -z "$2" ]; then
@@ -36,19 +44,25 @@ package() {
     local arch=$2
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
-        continue
-    else
-        build $bit $arch
+        sudo rm -rf $buildroot/build$bit/mpv-$arch*
     fi
+    build $bit $arch
     zip $bit $arch
+    sudo rm -rf $buildroot/build$bit/mpv-$arch*
+    sudo chmod -R a+rwx $buildroot/build$bit
 }
 
 build() {
     local bit=$1
     local arch=$2
-    mkdir -p $buildroot/build$bit
-    cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
-    ninja -C $buildroot/build$bit gcc
+    if [ -d $buildroot/build$bit ]; then
+        cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
+        ninja -C $buildroot/build$bit update
+    else
+        mkdir -p $buildroot/build$bit
+        cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
+        ninja -C $buildroot/build$bit gcc
+    fi
     ninja -C $buildroot/build$bit mujs || ninja -C $buildroot/build$bit mujs-removebuild && ninja -C $buildroot/build$bit mujs;
     ninja -C $buildroot/build$bit mpv || ninja -C $buildroot/build$bit mpv
 

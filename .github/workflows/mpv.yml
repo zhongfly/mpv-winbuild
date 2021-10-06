@@ -16,6 +16,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: fregante/setup-git-user@v1
+      - name: 'Get mpv latest commit sha'
+        id: get_sha
+        uses: mego22/actions-git-sha@main
+        with:
+          repo: "https://github.com/mpv-player/mpv.git"
+      - name: 'Get winbuild latest commit sha'
+        id: build_sha
+        uses: mego22/actions-git-sha@main
+        with:
+          repo: "https://github.com/shinchiro/mpv-winbuild-cmake.git"
+      
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: mpv-winbuild-cmake/build${{ matrix.bit }}
+          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-${{ steps.get_sha.outputs.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-
+            ${{ runner.os }}-build${{ matrix.bit }}-
+
       - name: Build
         shell: bash
         run: |
@@ -28,16 +48,13 @@ jobs:
 #             mpv-winbuild-cmake/build64/packages/mpv-prefix/src/mpv-stamp/mpv-build-*.log
 #             mpv-winbuild-cmake/build64/packages/mujs-prefix/src/mujs-stamp/mujs-build-*.log
 #             mpv-winbuild-cmake/build64/packages/libsrt-prefix/src/libsrt-stamp/libsrt-configure-*.log
+
       - name: upload artifact
         id: upload
         uses: kittaakos/upload-artifact-as-is@master
         with:
           path: mpv-winbuild-cmake/release/*.7z
-      - name: 'Get latest commit sha'
-        id: get_sha
-        uses: mego22/actions-git-sha@main
-        with:
-          repo: "https://github.com/mpv-player/mpv.git"
+
       - name: 'Current Time'
         run: |
           export TZ='Asia/Shanghai'
@@ -50,7 +67,7 @@ jobs:
           artifacts: "mpv-winbuild-cmake/release/*.7z"
           commit: main
           name: "MPV ${{ env.long_time }} ${{ env.sha }}"
-          body: "MPV sha: https://github.com/mpv-player/mpv/commit/${{ steps.get_sha.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
+          body: "MPV git commit: https://github.com/mpv-player/mpv/commit/${{ steps.get_sha.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: true
