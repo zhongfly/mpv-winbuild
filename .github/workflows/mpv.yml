@@ -33,8 +33,8 @@ jobs:
           path: mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-${{ steps.get_sha.outputs.sha }}
           restore-keys: |
-            ${{ runner.os }}-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-
-            ${{ runner.os }}-build${{ matrix.bit }}-
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-
 
       - name: Build
         shell: bash
