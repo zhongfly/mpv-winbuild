@@ -2,11 +2,11 @@ name: MPV
 
 on: 
   schedule:
-    - cron:  '0 18 */3 * *'
+    - cron:  '0 18 * * *'
   workflow_dispatch:
 
 jobs:
-  build:
+  build_mpv:
     name: Build MPV
     runs-on: ubuntu-latest
     strategy:
@@ -49,26 +49,31 @@ jobs:
 #             mpv-winbuild-cmake/build64/packages/mujs-prefix/src/mujs-stamp/mujs-build-*.log
 #             mpv-winbuild-cmake/build64/packages/libsrt-prefix/src/libsrt-stamp/libsrt-configure-*.log
 
-      - name: upload artifact
+      - name: Upload artifact
         id: upload
         uses: kittaakos/upload-artifact-as-is@master
         with:
           path: mpv-winbuild-cmake/release/*.7z
 
-      - name: 'Current Time'
+      - name: Get current time
         run: |
           export TZ='Asia/Shanghai'
-          echo "long_time=$(date "+%Y-%m-%d-%H:%M:%S")" >> $GITHUB_ENV
+          echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
           echo "sha=$(expr substr "${{ steps.get_sha.outputs.sha }}" 1 7)" >> $GITHUB_ENV
-      - uses: ncipollo/release-action@v1
+      - name: Create release
+        uses: ncipollo/release-action@v1
         if: ${{ steps.upload.outcome == 'success' }}
         with:
           artifacts: "mpv-winbuild-cmake/release/*.7z"
           commit: main
-          name: "MPV ${{ env.long_time }} ${{ env.sha }}"
+          name: "MPV ${{ env.long_time }}"
           body: "MPV git commit: https://github.com/mpv-player/mpv/commit/${{ steps.get_sha.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prune old releases
+        run: ./prunetags.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
