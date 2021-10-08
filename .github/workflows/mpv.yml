@@ -30,17 +30,17 @@ jobs:
         run: |
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+          echo "month=$(date "+%Y-%m")" >> $GITHUB_ENV
           echo "sha=$(expr substr "${{ steps.get_sha.outputs.sha }}" 1 7)" >> $GITHUB_ENV
       
       - name: Cache
         uses: actions/cache@v2
         with:
           path: mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-${{ steps.get_sha.outputs.sha }}-${{ env.short_time }}
+          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}-${{ steps.build_sha.outputs.sha }}-${{ env.short_time }}
           restore-keys: |
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}-${{ steps.get_sha.outputs.sha }}
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ steps.build_sha.outputs.sha }}
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}-${{ steps.build_sha.outputs.sha }}
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}
 
       - name: Build
         shell: bash
