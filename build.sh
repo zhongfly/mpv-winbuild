@@ -8,7 +8,9 @@ main() {
     dependency
     if [ -d mpv-winbuild-cmake ] ; then
         git  clone https://github.com/shinchiro/mpv-winbuild-cmake.git temp
+        shopt -s dotglob
         mv -f temp/* mpv-winbuild-cmake/
+        shopt -u dotglob
         sudo rm -rf temp
     else
         git clone https://github.com/shinchiro/mpv-winbuild-cmake.git
