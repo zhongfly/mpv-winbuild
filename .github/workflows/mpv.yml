@@ -28,7 +28,6 @@ jobs:
           repo: "https://github.com/shinchiro/mpv-winbuild-cmake.git"
       - name: Get current time
         run: |
-          export TZ='Asia/Shanghai'
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
           echo "sha=$(expr substr "${{ steps.get_sha.outputs.sha }}" 1 7)" >> $GITHUB_ENV
