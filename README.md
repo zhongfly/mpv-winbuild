@@ -10,7 +10,7 @@ Based on <https://github.com/shinchiro/mpv-winbuild-cmake>.
 
 ## Auto-Builds
 
-Builds run daily at 18:00 UTC (or GitHubs idea of that time) and are automatically released on success.
+Builds run daily at 12:00 UTC (or GitHubs idea of that time) and are automatically released on success.
 
 ### Release Retention Policy
 
