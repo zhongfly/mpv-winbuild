@@ -65,7 +65,6 @@ build() {
         cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
         ninja -C $buildroot/build$bit gcc
     fi
-    ninja -C $buildroot/build$bit mujs || ninja -C $buildroot/build$bit mujs-removebuild && ninja -C $buildroot/build$bit mujs;
     ninja -C $buildroot/build$bit mpv || ninja -C $buildroot/build$bit mpv
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
