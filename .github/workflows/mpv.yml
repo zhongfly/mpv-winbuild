@@ -4,6 +4,17 @@ on:
   schedule:
     - cron:  '0 12 * * *'
   workflow_dispatch:
+    inputs:
+      clean:
+        description: 'input anything if you want to clean build files'
+        required: false
+      cache_id:
+        description: 'input cache_id if you want to renew cache'
+        required: false
+      release:
+        description: "input 'false' if you don't want to release"
+        required: false
+        default: "true"
 
 jobs:
   build_mpv:
@@ -21,39 +32,32 @@ jobs:
         uses: mego22/actions-git-sha@main
         with:
           repo: "https://github.com/mpv-player/mpv.git"
-      - name: 'Get winbuild latest commit sha'
-        id: build_sha
-        uses: mego22/actions-git-sha@main
-        with:
-          repo: "https://github.com/shinchiro/mpv-winbuild-cmake.git"
       - name: Get current time
         run: |
-          echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
           echo "month=$(date "+%Y-%m")" >> $GITHUB_ENV
-          echo "sha=$(expr substr "${{ steps.get_sha.outputs.sha }}" 1 7)" >> $GITHUB_ENV
       
       - name: Cache
         uses: actions/cache@v2
         with:
           path: mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}-${{ steps.build_sha.outputs.sha }}-${{ env.short_time }}
+          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}-${{ github.event.inputs.cache_id }}
           restore-keys: |
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}-${{ steps.build_sha.outputs.sha }}
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}
 
       - name: Build
         shell: bash
         run: |
-          sudo bash build.sh "${{ matrix.bit }}"
-#       - name: upload logs
-#         uses: actions/upload-artifact@master
-#         with:
-#           name: logs
-#           path: |
-#             mpv-winbuild-cmake/build64/packages/mpv-prefix/src/mpv-stamp/mpv-build-*.log
-#             mpv-winbuild-cmake/build64/packages/mujs-prefix/src/mujs-stamp/mujs-build-*.log
-#             mpv-winbuild-cmake/build64/packages/libsrt-prefix/src/libsrt-stamp/libsrt-configure-*.log
+          sudo bash build.sh "${{ matrix.bit }}" "${{ github.event.inputs.clean }}"
+      # - name: upload logs
+      #   uses: actions/upload-artifact@master
+      #   if: always()
+      #   with:
+      #     name: logs
+      #     path: |
+      #       mpv-winbuild-cmake/build64/packages/mpv-prefix/src/mpv-stamp/mpv-*.log
 
       - name: Upload artifact
         id: upload
@@ -61,11 +65,34 @@ jobs:
         with:
           path: mpv-winbuild-cmake/release/*.7z
 
+  publish_release:
+    name: Publish release
+    needs: build_mpv
+    if: ${{ github.event.inputs.release != "false" }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+    
+      - name: 'Get mpv latest commit sha'
+        id: get_sha
+        uses: mego22/actions-git-sha@main
+        with:
+          repo: "https://github.com/mpv-player/mpv.git"
+      - name: Get current time
+        run: |
+          echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
+          echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+
       - name: Create release
         uses: ncipollo/release-action@v1
-        if: ${{ steps.upload.outcome == 'success' }}
         with:
-          artifacts: "mpv-winbuild-cmake/release/*.7z"
+          artifacts: "artifacts/*/*.7z"
           commit: main
           name: "MPV ${{ env.long_time }}"
           body: "MPV git commit: https://github.com/mpv-player/mpv/commit/${{ steps.get_sha.outputs.sha }}\nBuild Time: ${{ env.long_time }}"

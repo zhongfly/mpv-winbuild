@@ -17,12 +17,9 @@ main() {
     cd mpv-winbuild-cmake
     git checkout $branch
     gitdir=$(pwd)
+    buildroot=$(pwd)
+    isClean=$2
 
-    if [ -z "$2" ]; then
-        buildroot=$(pwd)
-    else
-        buildroot=$2
-    fi
     prepare
     if [ "$1" == "32" ]; then
         package "32" "i686"
@@ -45,8 +42,9 @@ package() {
     local bit=$1
     local arch=$2
 
-    if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
-        sudo rm -rf $buildroot/build$bit/mpv-$arch*
+    if [ -n "$isClean" ]; then
+        echo "Clean $bit-bit build files"
+        sudo rm -rf $buildroot/build$bit
     fi
     build $bit $arch
     zip $bit $arch
@@ -71,7 +69,7 @@ build() {
         echo "Successfully compiled $bit-bit. Continue"
     else
         echo "Failed compiled $bit-bit. Stop"
-        exit
+        exit 1
     fi
 }
 
