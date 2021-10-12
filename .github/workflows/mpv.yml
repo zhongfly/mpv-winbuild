@@ -68,7 +68,7 @@ jobs:
   publish_release:
     name: Publish release
     needs: build_mpv
-    if: ${{ github.event.inputs.release != "false" }}
+    if: ${{ github.event.inputs.release != 'false' }}
     runs-on: ubuntu-latest
 
     steps:
