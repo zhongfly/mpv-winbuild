@@ -48,16 +48,17 @@ jobs:
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}
 
       - name: Build
+        id: build
         shell: bash
         run: |
           sudo bash build.sh "${{ matrix.bit }}" "${{ github.event.inputs.clean }}"
-      # - name: upload logs
-      #   uses: actions/upload-artifact@master
-      #   if: always()
-      #   with:
-      #     name: logs
-      #     path: |
-      #       mpv-winbuild-cmake/build64/packages/mpv-prefix/src/mpv-stamp/mpv-*.log
+      - name: upload error logs
+        uses: actions/upload-artifact@master
+        if: ${{ steps.build.outcome == 'failure' }}
+        with:
+          name: logs
+          path: |
+            mpv-winbuild-cmake/build${{ matrix.bit }}/packages/**/*-err.log
 
       - name: Upload artifact
         id: upload
