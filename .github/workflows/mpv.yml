@@ -35,7 +35,6 @@ jobs:
       - name: Get current time
         run: |
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-          echo "month=$(date "+%Y-%m")" >> $GITHUB_ENV
       
       - name: Cache
         uses: actions/cache@v2
@@ -45,7 +44,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.month }}
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}
 
       - name: Build
         id: build
