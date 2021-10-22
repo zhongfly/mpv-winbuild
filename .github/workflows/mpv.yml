@@ -101,8 +101,8 @@ jobs:
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Prune old releases
-        shell: bash
-        run: |
-          sudo bash prunetags.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          bash prunetags.sh
