@@ -31,9 +31,15 @@ jobs:
       - uses: fregante/setup-git-user@v1
       - name: 'Get mpv latest commit sha'
         id: get_sha
-        uses: mego22/actions-git-sha@main
+        uses: actions/github-script@v5
         with:
-          repo: "https://github.com/mpv-player/mpv.git"
+          script: |
+            const commit = await github.rest.repos.getCommit({
+              owner: 'mpv-player',
+              repo: 'mpv',
+              ref: `master`
+            })
+            core.setOutput('sha', String(commit.data.sha))
       - name: Get current time
         run: |
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
