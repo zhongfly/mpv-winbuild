@@ -23,6 +23,8 @@ jobs:
     strategy:
       matrix:
         bit: [64]
+    outputs:
+      sha: ${{ steps.get_sha.outputs.sha }}
 
     steps:
       - uses: actions/checkout@v2
@@ -79,11 +81,6 @@ jobs:
         with:
           path: artifacts
     
-      - name: 'Get mpv latest commit sha'
-        id: get_sha
-        uses: mego22/actions-git-sha@main
-        with:
-          repo: "https://github.com/mpv-player/mpv.git"
       - name: Get current time
         run: |
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
@@ -95,7 +92,7 @@ jobs:
           artifacts: "artifacts/*/*.7z"
           commit: main
           name: "MPV ${{ env.long_time }}"
-          body: "MPV git commit: https://github.com/mpv-player/mpv/commit/${{ steps.get_sha.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
+          body: "MPV git commit: https://github.com/mpv-player/mpv/commit/${{ needs.build_mpv.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: false
