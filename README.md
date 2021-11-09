@@ -23,6 +23,12 @@ This repo only provides 64-bit version. If you need a 32-bit version, you can fo
 -   The last build of each month is kept for one years.
 -   The last 14 daily builds are kept.
 
+### CI Builds
+
+Every hour, check whether there is a new commit in mpv repo, if there is a new commit, builds will run automatically but will not be released.
+
+You can go to the the **[Action](https://github.com/zhongfly/mpv-build/actions)** tab in this repo,and download artifact from any successful action.
+
 ## Information about packages
 
 same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://flat.badgen.net/github/last-commit/shinchiro/mpv-winbuild-cmake?cache=1800)](https://github.com/shinchiro/mpv-winbuild-cmake)
