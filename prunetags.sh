@@ -23,7 +23,7 @@ for TAG in ${TAGS[@]}; do
     fi
 
     if [[ ${#MONTHLY_TAGS[@]} -lt ${KEEP_MONTHLY} ]]; then
-        TAG_MONTH="$(echo $TAG | cut -d- -f3)"
+        TAG_MONTH="$(echo $TAG | cut -d- -f2)"
 
         if [[ ${TAG_MONTH} != ${CUR_MONTH} ]]; then
             CUR_MONTH="${TAG_MONTH}"
