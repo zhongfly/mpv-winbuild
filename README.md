@@ -1,10 +1,10 @@
-# mpv-build
+# mpv-winbuild
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/zhongfly/mpv-build/MPV)
-[![releases](https://img.shields.io/github/v/release/zhongfly/mpv-build)](https://github.com/zhongfly/mpv-build/releases/latest)
-[![downloads](https://img.shields.io/github/downloads/zhongfly/mpv-build/total)](https://github.com/zhongfly/mpv-build/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/zhongfly/mpv-winbuild/MPV)](https://github.com/zhongfly/mpv-winbuild/actions)
+[![releases](https://img.shields.io/github/v/release/zhongfly/mpv-winbuild)](https://github.com/zhongfly/mpv-winbuild/releases/latest)
+[![downloads](https://img.shields.io/github/downloads/zhongfly/mpv-winbuild/total)](https://github.com/zhongfly/mpv-winbuild/releases)
 
-Use Github Action to build mpv-win with latest commit.
+Use Github Action to build mpv for Windows with latest commit.
 
 Based on <https://github.com/shinchiro/mpv-winbuild-cmake>.
 
@@ -27,7 +27,7 @@ This repo only provides 64-bit version. If you need a 32-bit version, you can fo
 
 Every hour, check whether there is a new commit in mpv repo, if there is a new commit, builds will run automatically but will not be released.
 
-You can go to the the **[Action](https://github.com/zhongfly/mpv-build/actions)** tab in this repo,and download artifact from any successful action.
+You can go to the the **[Action](https://github.com/zhongfly/mpv-winbuild/actions)** tab in this repo,and download artifact from any successful action.
 
 ## Information about packages
 
