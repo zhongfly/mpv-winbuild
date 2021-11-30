@@ -28,7 +28,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: fregante/setup-git-user@v1
       - name: 'Get mpv latest commit sha'
         id: get_sha
         uses: actions/github-script@v5
@@ -58,7 +57,8 @@ jobs:
         id: build
         shell: bash
         run: |
-          sudo bash build.sh "${{ matrix.bit }}" "${{ github.event.inputs.clean }}"
+          docker pull ubuntu:22.04
+          docker run --rm -v $GITHUB_WORKSPACE:/root/workdir ubuntu:22.04 /bin/sh -c "apt-get -qq update && DEBIAN_FRONTEND=noninteractive apt-get -yqq install sudo tzdata && cd /root/workdir && chmod +x build.sh && bash build.sh '${{ matrix.bit }}' '${{ github.event.inputs.clean }}'"
       - name: upload error logs
         uses: actions/upload-artifact@master
         if: ${{ always() && steps.build.outcome == 'failure' }}
