@@ -80,7 +80,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   megasdk (with termcap, readline, cryptopp, sqlite, libuv, libsodium) [![megasdk](https://flat.badgen.net/github/last-commit/meganz/sdk?scale=0.8&cache=1800)](https://github.com/meganz/sdk)
     -   [aom](https://aomedia.googlesource.com/aom/)
     -   dav1d [![dav1d](https://flat.badgen.net/github/last-commit/videolan/dav1d?scale=0.8&cache=1800)](https://code.videolan.org/videolan/dav1d/)
-    -   libplacebo [![libplacebo](https://flat.badgen.net/github/last-commit/haasn/libplacebo?scale=0.8&cache=1800)](https://github.com/haasn/libplacebo)
+    -   libplacebo (with libepoxy) [![libplacebo](https://flat.badgen.net/github/last-commit/haasn/libplacebo?scale=0.8&cache=1800)](https://github.com/haasn/libplacebo)
     -   [fontconfig](https://gitlab.freedesktop.org/fontconfig/fontconfig)
     -   libbs2b [![libbs2b](https://flat.badgen.net/github/last-commit/alexmarsev/libbs2b?scale=0.8&cache=1800)](https://github.com/alexmarsev/libbs2b)
     -   [libssh](https://git.libssh.org/projects/libssh.git)
