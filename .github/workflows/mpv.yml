@@ -59,13 +59,16 @@ jobs:
         run: |
           docker pull ubuntu:22.04
           docker run --rm -v $GITHUB_WORKSPACE:/root/workdir ubuntu:22.04 /bin/sh -c "apt-get -qq update && DEBIAN_FRONTEND=noninteractive apt-get -yqq install sudo tzdata && cd /root/workdir && chmod +x build.sh && bash build.sh '${{ matrix.bit }}' '${{ github.event.inputs.clean }}'"
+      - name: Collect error logs
+        if: ${{ always() && steps.build.outcome == 'failure' }}
+        run: |
+          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*-err.log -r
       - name: upload error logs
         uses: actions/upload-artifact@master
         if: ${{ always() && steps.build.outcome == 'failure' }}
         with:
           name: logs
-          path: |
-            mpv-winbuild-cmake/build${{ matrix.bit }}/packages/**/*-err.log
+          path: logs.7z
 
       - name: Upload artifact
         id: upload
