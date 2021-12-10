@@ -57,7 +57,6 @@ jobs:
         id: build
         shell: bash
         run: |
-          docker pull ubuntu:22.04
           docker run --rm -v $GITHUB_WORKSPACE:/root/workdir archlinux:base-devel /usr/bin/bash -c "cd /root/workdir && chmod +x build.sh && bash build.sh '${{ matrix.bit }}' '${{ github.event.inputs.clean }}'"
       - name: Collect error logs
         if: ${{ always() && steps.build.outcome == 'failure' }}
