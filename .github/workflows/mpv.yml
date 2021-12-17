@@ -94,7 +94,7 @@ jobs:
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
 
-      - name: Commit version & delete duplicate tag
+      - name: Commit version & remove existing tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
@@ -106,7 +106,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add version
           git diff-index --quiet HEAD || ( git commit -m "${{ env.short_time }}" && git push origin version )
-          # [ $(git tag -l "${{ env.short_time }}") ] && ( gh release delete "${{ env.short_time }}" ; git push --delete origin "${{ env.short_time }}" ; git tag -d "${{ env.short_time }}" )
+          [ $(git tag -l "${{ env.short_time }}") ] && ( gh release delete "${{ env.short_time }}" ; git push --delete origin "${{ env.short_time }}" ; git tag -d "${{ env.short_time }}" )
           git checkout main
 
       - name: Create release
