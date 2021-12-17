@@ -106,7 +106,11 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add version
           git diff-index --quiet HEAD || ( git commit -m "${{ env.short_time }}" && git push origin version )
-          [ $(git tag -l "${{ env.short_time }}") ] && ( gh release delete "${{ env.short_time }}" ; git push --delete origin "${{ env.short_time }}" ; git tag -d "${{ env.short_time }}" )
+          if [ $(git tag -l "${{ env.short_time }}") ] ;then
+            gh release delete "${{ env.short_time }}" || true
+            git push --delete origin "${{ env.short_time }}" || true
+            git tag -d "${{ env.short_time }}" || true
+          fi
           git checkout main
 
       - name: Create release
