@@ -130,7 +130,4 @@ jobs:
         shell: bash
         run: |
           git checkout main
-          cp prunetags.sh /tmp/prunetags.sh
-          git checkout version || ( git fetch && git checkout -b version origin/version )
-          cp /tmp/prunetags.sh prunetags.sh
           bash prunetags.sh
