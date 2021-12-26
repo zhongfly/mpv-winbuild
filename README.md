@@ -14,9 +14,9 @@ Builds run daily at 12:00 UTC (trigger by [pipedream](https://pipedream.com/)) a
 
 This repo only provides 64-bit version. If you need a 32-bit version, you can fork this repo and edit mpv.yml.
 
-> `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `mpv-1.dll` file.
+> `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `mpv-2.dll` file.
 > 
-> Some media players based on libmpv will need `mpv-1.dll`.You can upgrade their built-in libmpv version by overwriting mpv-1.dll.
+> Some media players based on libmpv will need `mpv-2.dll`.You can upgrade their built-in libmpv version by overwriting mpv-2.dll.
 
 ### Release Retention Policy
 
@@ -66,7 +66,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   mujs [![mujs](https://flat.badgen.net/github/last-commit/ccxvii/mujs?scale=0.8&cache=1800)](https://github.com/ccxvii/mujs)
     -   libarchive [![libarchive](https://flat.badgen.net/github/last-commit/libarchive/libarchive?scale=0.8&cache=1800)](https://github.com/libarchive/libarchive)
     -   libjpeg [![libjpeg](https://flat.badgen.net/github/last-commit/libjpeg-turbo/libjpeg-turbo/main?scale=0.8&cache=1800)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-    -   shaderc (with spirv-headers, spirv-tools, glslang) [![shaderc](https://flat.badgen.net/github/last-commit/google/shaderc/main?scale=0.8&cache=1800)](https://github.com/google/shaderc)
+    -   shaderc (with [spirv-headers](https://github.com/KhronosGroup/SPIRV-Headers), [spirv-tools](https://github.com/KhronosGroup/SPIRV-Tools), [glslang](https://github.com/KhronosGroup/glslang)) [![shaderc](https://flat.badgen.net/github/last-commit/google/shaderc/main?scale=0.8&cache=1800)](https://github.com/google/shaderc)
     -   vulkan [![Vulkan-Loader](https://flat.badgen.net/github/last-commit/KhronosGroup/Vulkan-Loader?scale=0.8&cache=1800)](https://github.com/KhronosGroup/Vulkan-Loader) [![Vulkan-Headers](https://flat.badgen.net/github/last-commit/KhronosGroup/Vulkan-Headers/main?scale=0.8&cache=1800)](https://github.com/KhronosGroup/Vulkan-Headers)
     -   spirv-cross [![spirv-cross](https://flat.badgen.net/github/last-commit/KhronosGroup/SPIRV-Cross?scale=0.8&cache=1800)](https://github.com/KhronosGroup/SPIRV-Cross)
     -   fribidi [![fribidi](https://flat.badgen.net/github/last-commit/fribidi/fribidi?scale=0.8&cache=1800)](https://github.com/fribidi/fribidi)
@@ -87,18 +87,18 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libsrt [![libsrt](https://flat.badgen.net/github/last-commit/Haivision/srt?scale=0.8&cache=1800)](https://github.com/Haivision/srt)
 
 -   Zip
-    -   expat (2.4.1)
-    -   bzip (1.0.8)
-    -   zlib (1.2.11)
-    -   xvidcore (1.3.7)
-    -   vorbis (1.3.7)
-    -   speex (1.2.0)
-    -   ogg (1.3.5)
-    -   lzo (2.10)
-    -   libmodplug (0.8.9.0)
-    -   libopenmpt (0.5.10)
-    -   libiconv (1.16)
-    -   gmp (6.2.1)
-    -   vapoursynth (R57)
-    -   libsdl2 (2.0.16)
-    -   libressl (3.1.5)
+    -   [expat](https://github.com/libexpat/libexpat) (2.4.1)
+    -   [bzip](https://sourceware.org/pub/bzip2/) (1.0.8)
+    -   [zlib](https://sourceforge.net/projects/libpng/files/zlib/) (1.2.11)
+    -   [xvidcore](https://labs.xvid.com/source/) (1.3.7)
+    -   [vorbis](https://xiph.org/downloads/) (1.3.7)
+    -   [speex](https://ftp.osuosl.org/pub/xiph/releases/speex/) (1.2.0)
+    -   [ogg](https://ftp.osuosl.org/pub/xiph/releases/ogg/) (1.3.5)
+    -   [lzo](https://fossies.org/linux/misc/) (2.10)
+    -   [libmodplug](https://sourceforge.net/projects/modplug-xmms/files/libmodplug/) (0.8.9.0)
+    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.5.10)
+    -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.16)
+    -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
+    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R57)
+    -   [libsdl2](https://www.libsdl.org/release/) (2.0.16)
+    -   [libressl](https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/) (3.1.5)
