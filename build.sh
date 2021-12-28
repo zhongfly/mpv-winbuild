@@ -5,9 +5,9 @@ main() {
     dependency
     git config --global user.name "github-actions[bot]"
     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    local branch="master"
+    local branch="mirror"
     if [ -d mpv-winbuild-cmake ] ; then
-        git  clone https://github.com/shinchiro/mpv-winbuild-cmake.git temp
+        git  clone https://github.com/zhongfly/mpv-winbuild-cmake.git temp
         shopt -s dotglob
         mv -f temp/* mpv-winbuild-cmake/
         shopt -u dotglob
