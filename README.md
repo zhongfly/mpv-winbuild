@@ -16,11 +16,11 @@ This repo only provides 64-bit version. If you need a 32-bit version, you can fo
 
 > `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `mpv-2.dll` file.
 > 
-> Some media players based on libmpv will need `mpv-2.dll`.You can upgrade their built-in libmpv version by overwriting mpv-2.dll.
+> Some media players based on libmpv use `mpv-2.dll`.You can upgrade their libmpv version by overwriting mpv-2.dll.
 
 ### Release Retention Policy
 
--   The last build of each month is kept for one years.
+-   The last build of each month is kept for one year.
 -   The last 14 daily builds are kept.
 
 ### CI Builds
