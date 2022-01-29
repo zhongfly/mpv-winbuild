@@ -93,7 +93,7 @@ zip() {
 }
 
 download_mpv_package() {
-    local package_url="https://codeload.github.com/shinchiro/mpv-packaging/zip/master"
+    local package_url="https://codeload.github.com/zhongfly/mpv-packaging/zip/master"
     if [ -e mpv-packaging.zip ]; then
         echo "Package exists. Check if it is newer.."
         remote_commit=$(git ls-remote https://github.com/shinchiro/mpv-packaging.git master | awk '{print $1;}')
