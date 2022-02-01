@@ -59,6 +59,7 @@ build() {
     local arch=$2
     if [ -d $buildroot/build$bit ]; then
         cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
+        ninja -C $buildroot/build$bit mpv-removebuild
         ninja -C $buildroot/build$bit update
     else
         mkdir -p $buildroot/build$bit
