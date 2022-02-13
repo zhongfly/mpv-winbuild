@@ -5,17 +5,25 @@ on:
   #   - cron:  '0 12 * * *'
   workflow_dispatch:
     inputs:
-      clean:
-        description: 'input anything if you want to clean build files'
+      needclean:
+        description: 'Delete cache and completely rebuild erverything'
+        required: true
+        default: false
+        type: boolean
+      release:
+        description: "Publish a release"
+        required: true
+        default: false
+        type: boolean
+      command:
+        description: 'input command you want to run before build'
         required: false
       cache_id:
         description: 'input cache_id if you want to renew cache'
         required: false
-      release:
-        description: "input 'false' if you don't want to release"
-        required: false
-        default: "true"
-
+env:
+  release: false
+  
 jobs:
   build_mpv:
     name: Build MPV
@@ -57,7 +65,7 @@ jobs:
         id: build
         shell: bash
         run: |
-          docker run --rm -v $GITHUB_WORKSPACE:/root/workdir archlinux:base-devel /usr/bin/bash -c "cd /root/workdir && chmod +x build.sh && bash build.sh '${{ matrix.bit }}' '${{ github.event.inputs.clean }}'"
+          docker run --rm -v $GITHUB_WORKSPACE:/root/workdir archlinux:base-devel /usr/bin/bash -c "cd /root/workdir && chmod +x build.sh && bash build.sh '${{ matrix.bit }}' '${{ github.event.inputs.needclean }}' '${{ github.event.inputs.command }}'"
       - name: Collect error logs
         if: ${{ always() && steps.build.outcome == 'failure' }}
         run: |
@@ -78,7 +86,7 @@ jobs:
   publish_release:
     name: Publish release
     needs: build_mpv
-    if: ${{ github.event.inputs.release != 'false' }}
+    if: ${{ (github.event.inputs.release != null && github.event.inputs.release == 'true') || (github.event.inputs.release == null && env.release == 'true') }}
     runs-on: ubuntu-latest
 
     steps:

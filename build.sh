@@ -19,7 +19,8 @@ main() {
     git checkout $branch
     gitdir=$(pwd)
     buildroot=$(pwd)
-    isClean=$2
+    needClean="$2"
+    userCommand="$3"
 
     prepare
     if [ "$1" == "32" ]; then
@@ -44,10 +45,13 @@ package() {
     local bit=$1
     local arch=$2
 
-    if [ -n "$isClean" ]; then
+    if [ "$needClean" == "true" ]; then
         echo "Clean $bit-bit build files"
         sudo rm -rf $buildroot/build$bit
     fi
+	if [ -n "$userCommand" ]; then
+		eval "$userCommand"
+	fi
     build $bit $arch
     zip $bit $arch
     sudo rm -rf $buildroot/build$bit/mpv-$arch*
@@ -117,4 +121,4 @@ prepare() {
     cd ../..
 }
 
-main $1 $2
+main "$1" "$2" "$3"
