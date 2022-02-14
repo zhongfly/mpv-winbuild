@@ -69,7 +69,7 @@ jobs:
       - name: Collect error logs
         if: ${{ always() && steps.build.outcome == 'failure' }}
         run: |
-          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*-err.log -r
+          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*.log -r
       - name: upload error logs
         uses: actions/upload-artifact@master
         if: ${{ always() && steps.build.outcome == 'failure' }}
