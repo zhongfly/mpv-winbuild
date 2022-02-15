@@ -7,12 +7,12 @@ on:
     inputs:
       needclean:
         description: 'Delete cache and completely rebuild erverything'
-        required: true
+        required: false
         default: false
         type: boolean
       release:
         description: "Publish a release"
-        required: true
+        required: false
         default: false
         type: boolean
       command:
