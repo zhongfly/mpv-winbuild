@@ -19,8 +19,8 @@ main() {
     git checkout $branch
     gitdir=$(pwd)
     buildroot=$(pwd)
-    needClean="$2"
-    userCommand="$3"
+    needClean=$2
+    userCommand=$3
 
     prepare
     if [ "$1" == "32" ]; then
