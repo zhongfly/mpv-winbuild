@@ -77,11 +77,42 @@ jobs:
           name: logs
           path: logs.7z
 
-      - name: Upload artifact
-        id: upload
-        uses: kittaakos/upload-artifact-as-is@master
+      - name: "Get artifacts' name and path"
+        id: get_files
+        uses: actions/github-script@v6
         with:
-          path: mpv-winbuild-cmake/release/*.7z
+          script: |
+            const path = require('path');
+            const types = ["mpv-debug", "mpv-dev", "mpv"];
+            const arch = ${{ matrix.bit }} == "64" ? "x86_64" : "i686";
+            for (let type of types) {
+              const globber = await glob.create(`mpv-winbuild-cmake/release/${type}-${arch}-*.7z`);
+              const files = await globber.glob();
+              if ( files.length > 0 ) {
+                const file = files[0];
+                core.exportVariable( `${type}-name`, path.basename(file) );
+                core.exportVariable( `${type}-path`, file );
+              }
+            }
+
+      - name: upload mpv-debug
+        uses: actions/upload-artifact@master
+        if: ${{ env.mpv-debug-name && env.mpv-debug-path }}
+        with:
+          name: ${{ env.mpv-debug-name }}
+          path: ${{ env.mpv-debug-path }}
+      - name: upload mpv-dev
+        uses: actions/upload-artifact@master
+        if: ${{ env.mpv-dev-name && env.mpv-dev-path }}
+        with:
+          name: ${{ env.mpv-dev-name }}
+          path: ${{ env.mpv-dev-path }}
+      - name: upload mpv
+        uses: actions/upload-artifact@master
+        if: ${{ env.mpv-name && env.mpv-path }}
+        with:
+          name: ${{ env.mpv-name }}
+          path: ${{ env.mpv-path }}
 
   publish_release:
     name: Publish release
