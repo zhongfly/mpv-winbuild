@@ -158,7 +158,7 @@ jobs:
           artifacts: "artifacts/*/*.7z"
           commit: version
           name: "MPV ${{ env.long_time }}"
-          body: "MPV git commit: https://github.com/mpv-player/mpv/commit/${{ needs.build_mpv.outputs.sha }}\nBuild Time: ${{ env.long_time }}"
+          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ needs.build_mpv.outputs.sha }}\n**Build Time**: ${{ env.long_time }}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: false
