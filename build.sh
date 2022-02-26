@@ -49,9 +49,9 @@ package() {
         echo "Clean $bit-bit build files"
         sudo rm -rf $buildroot/build$bit
     fi
-	if [ -n "$userCommand" ]; then
-		eval "$userCommand"
-	fi
+    if [ -n "$userCommand" ]; then
+        eval "$userCommand"
+    fi
     build $bit $arch
     zip $bit $arch
     sudo rm -rf $buildroot/build$bit/mpv-$arch*
