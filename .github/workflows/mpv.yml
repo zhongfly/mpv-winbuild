@@ -35,7 +35,7 @@ jobs:
       sha: ${{ steps.get_sha.outputs.sha }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 'Get mpv latest commit sha'
         id: get_sha
         uses: actions/github-script@v6
@@ -122,7 +122,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
