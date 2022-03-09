@@ -21,13 +21,30 @@ on:
       cache_id:
         description: 'input cache_id if you want to renew cache'
         required: false
+
+# Workflow level env does not work properly in all fields.
+# https://github.com/actions/runner/issues/480
 env:
   release: false
-  
+
 jobs:
+  # https://github.com/actions/runner/issues/480#issuecomment-1055373623
+  params:
+    runs-on: ubuntu-latest
+    outputs:
+      params: ${{ steps.env-vars.outputs.params }}
+    steps:
+      - name: Install jq
+        run: pip install jq
+      - id: env-vars
+        name: Output environment variables
+        run: echo "::set-output name=params::$(echo $(jq -n 'env'))"
+
   build_mpv:
     name: Build MPV
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
     strategy:
       matrix:
         bit: [64]
@@ -35,7 +52,18 @@ jobs:
       sha: ${{ steps.get_sha.outputs.sha }}
 
     steps:
+      - name: Install Dependencies
+        run: |
+          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake meson ragel yasm nasm asciidoc enca gperf unzip p7zip gcc-multilib clang python-pip curl lib32-glib2 wget
+          pip3 install rst2pdf mako meson >/dev/null 2>&1
       - uses: actions/checkout@v3
+      - name: Checkout toolchain
+        uses: actions/checkout@v3
+        with:
+          repository: shinchiro/mpv-winbuild-cmake
+          path: mpv-winbuild-cmake
       - name: 'Get mpv latest commit sha'
         id: get_sha
         uses: actions/github-script@v6
@@ -54,18 +82,26 @@ jobs:
       - name: Cache
         uses: actions/cache@v2
         with:
-          path: mpv-winbuild-cmake/build${{ matrix.bit }}
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}-${{ github.event.inputs.cache_id }}
           restore-keys: |
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}
-
+      - name: Clean Cache
+        if: ${{ github.event.inputs.needclean == 'true' }}
+        shell: bash
+        run: |
+          sudo rm -rf mpv-winbuild-cmake/build${{ matrix.bit }}
       - name: Build
         id: build
         shell: bash
         run: |
-          docker run --rm -v $GITHUB_WORKSPACE:/root/workdir archlinux:base-devel /usr/bin/bash -c $'cd /root/workdir && chmod +x build.sh && bash build.sh \'${{ matrix.bit }}\' \'${{ github.event.inputs.needclean }}\' \'${{ github.event.inputs.command }}\''
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          chmod +x build.sh
+          cd mpv-winbuild-cmake
+          bash ../build.sh '${{ matrix.bit }}' '${{ github.event.inputs.command }}'
       - name: Collect error logs
         if: ${{ always() && steps.build.outcome == 'failure' }}
         run: |
@@ -96,19 +132,19 @@ jobs:
             }
 
       - name: upload mpv-debug
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         if: ${{ env.mpv-debug-name && env.mpv-debug-path }}
         with:
           name: ${{ env.mpv-debug-name }}
           path: ${{ env.mpv-debug-path }}
       - name: upload mpv-dev
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         if: ${{ env.mpv-dev-name && env.mpv-dev-path }}
         with:
           name: ${{ env.mpv-dev-name }}
           path: ${{ env.mpv-dev-path }}
       - name: upload mpv
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         if: ${{ env.mpv-name && env.mpv-path }}
         with:
           name: ${{ env.mpv-name }}
@@ -116,8 +152,8 @@ jobs:
 
   publish_release:
     name: Publish release
-    needs: build_mpv
-    if: ${{ (github.event.inputs.release != null && github.event.inputs.release == 'true') || (github.event.inputs.release == null && false ) }}
+    needs: [build_mpv,params]
+    if: ${{ (github.event.inputs.release != null && github.event.inputs.release == 'true') || (github.event.inputs.release == null && fromJson(needs.params.outputs.params).release ) }}
     runs-on: ubuntu-latest
 
     steps:
