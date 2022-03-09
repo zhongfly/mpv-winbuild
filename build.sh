@@ -2,25 +2,9 @@
 set -x
 
 main() {
-    dependency
-    git config --global user.name "github-actions[bot]"
-    git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    local branch="master"
-    if [ -d mpv-winbuild-cmake ] ; then
-        git  clone https://github.com/shinchiro/mpv-winbuild-cmake.git temp
-        shopt -s dotglob
-        mv -f temp/* mpv-winbuild-cmake/
-        shopt -u dotglob
-        sudo rm -rf temp
-    else
-        git clone https://github.com/shinchiro/mpv-winbuild-cmake.git
-    fi
-    cd mpv-winbuild-cmake
-    git checkout $branch
     gitdir=$(pwd)
     buildroot=$(pwd)
-    needClean=$2
-    userCommand=$3
+    userCommand=$2
 
     prepare
     if [ "$1" == "32" ]; then
@@ -34,21 +18,10 @@ main() {
     rm -rf ./release/mpv-packaging-master
 }
 
-dependency() {
-    sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-    sudo pacman -Syu --noconfirm
-    sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake meson ragel yasm nasm asciidoc enca gperf unzip p7zip gcc-multilib clang python-pip curl lib32-glib2 wget
-    pip3 install rst2pdf mako meson >/dev/null 2>&1
-}
-
 package() {
     local bit=$1
     local arch=$2
 
-    if [ "$needClean" == "true" ]; then
-        echo "Clean $bit-bit build files"
-        sudo rm -rf $buildroot/build$bit
-    fi
     if [ -n "$userCommand" ]; then
         eval "$userCommand"
     fi
@@ -70,7 +43,7 @@ build() {
         cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
         ninja -C $buildroot/build$bit gcc
     fi
-    ninja -C $buildroot/build$bit mpv || ninja -C $buildroot/build$bit mpv
+    ninja -C $buildroot/build$bit mpv
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
         echo "Successfully compiled $bit-bit. Continue"
@@ -121,4 +94,4 @@ prepare() {
     cd ../..
 }
 
-main "$1" "$2" "$3"
+main "$1" "$2"
