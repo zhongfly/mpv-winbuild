@@ -57,7 +57,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libass [![libass](https://flat.badgen.net/github/last-commit/libass/libass?scale=0.8&cache=1800)](https://github.com/libass/libass)
     -   libmysofa [![libmysofa](https://flat.badgen.net/github/last-commit/hoene/libmysofa?scale=0.8&cache=1800)](https://github.com/hoene/libmysofa)
     -   lcms2 [![lcms2](https://flat.badgen.net/github/last-commit/mm2/Little-CMS?scale=0.8&cache=1800)](https://github.com/mm2/Little-CMS)
-    -   lame [![lame](https://flat.badgen.net/https/gitlab-latest-commit-rphv1x3zj2pi.runkit.sh/salsa.debian.org/multimedia-team/lame?scale=0.8&cache=1800)](https://salsa.debian.org/multimedia-team/lame)
+    -   lame [![lame](https://flat.badgen.net/gitlab/last-commit/shinchiro//lame?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/lame)
     -   harfbuzz [![harfbuzz](https://flat.badgen.net/github/last-commit/harfbuzz/harfbuzz/main?scale=0.8&cache=1800)](https://github.com/harfbuzz/harfbuzz)
     -   game-music-emu [![game-music-emu](https://flat.badgen.net/https/bitbucket-ft1l4pi7n5hp.runkit.sh/mpyne/game-music-emu?scale=0.8&cache=1800)](https://bitbucket.org/mpyne/game-music-emu)
     -   freetype2 [![freetype2](https://flat.badgen.net/gitlab/last-commit/shinchiro/freetype2?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/freetype2)
@@ -87,7 +87,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libsrt [![libsrt](https://flat.badgen.net/github/last-commit/Haivision/srt?scale=0.8&cache=1800)](https://github.com/Haivision/srt)
 
 -   Zip
-    -   [expat](https://github.com/libexpat/libexpat) (2.4.1)
+    -   [expat](https://github.com/libexpat/libexpat) (2.4.7)
     -   [bzip](https://sourceware.org/pub/bzip2/) (1.0.8)
     -   [zlib](https://sourceforge.net/projects/libpng/files/zlib/) (1.2.11)
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7)
@@ -101,4 +101,4 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R57)
     -   [libsdl2](https://www.libsdl.org/release/) (2.0.16)
-    -   [libressl](https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/) (3.1.5)
+    -   [libressl](https://cdn.openbsd.org/pub/OpenBSD/LibreSSL/) (3.1.5)
