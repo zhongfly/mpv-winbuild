@@ -80,7 +80,7 @@ jobs:
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
       
       - name: Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}-${{ github.event.inputs.cache_id }}
