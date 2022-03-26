@@ -8,12 +8,12 @@ on:
       needclean:
         description: 'Delete cache and completely rebuild erverything'
         required: false
-        default: false
+        default: 'false'
         type: boolean
       release:
         description: "Publish a release"
         required: false
-        default: false
+        default: 'false'
         type: boolean
       command:
         description: 'input command you want to run before build'
@@ -36,34 +36,13 @@ jobs:
     steps:
       - name: Install jq
         run: pip install jq
-      - id: env-vars
-        name: Output environment variables
-        run: echo "::set-output name=params::$(echo $(jq -n 'env'))"
-
-  build_mpv:
-    name: Build MPV
-    runs-on: ubuntu-latest
-    container:
-      image: archlinux:base-devel
-    strategy:
-      matrix:
-        bit: [64]
-    outputs:
-      sha: ${{ steps.get_sha.outputs.sha }}
-
-    steps:
-      - name: Install Dependencies
+      - name: Generate cache_id
         run: |
-          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake meson ragel yasm nasm asciidoc enca gperf unzip p7zip gcc-multilib clang python-pip curl lib32-glib2 wget
-          pip3 install rst2pdf mako meson >/dev/null 2>&1
-      - uses: actions/checkout@v3
-      - name: Checkout toolchain
-        uses: actions/checkout@v3
-        with:
-          repository: shinchiro/mpv-winbuild-cmake
-          path: mpv-winbuild-cmake
+          if [ "${{ github.event.inputs.cache_id }}" ] ; then
+            echo "cache_id=${{ github.event.inputs.cache_id }}" >> $GITHUB_ENV
+          else
+            echo "cache_id=$(echo $RANDOM | md5sum | head -c 20)" >> $GITHUB_ENV
+          fi
       - name: 'Get mpv latest commit sha'
         id: get_sha
         uses: actions/github-script@v6
@@ -74,18 +53,49 @@ jobs:
               repo: 'mpv',
               ref: `master`
             })
-            core.setOutput('sha', String(commit.data.sha))
-      - name: Get current time
+            core.exportVariable('sha', String(commit.data.sha))
+      - id: env-vars
+        name: Output environment variables
+        run: echo "::set-output name=params::$(echo $(jq -n 'env'))"
+
+  build_mpv:
+    name: Build MPV
+    needs: params
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    strategy:
+      matrix:
+        bit: [64]
+
+    steps:
+      - name: Install Dependencies
         run: |
+          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake meson ragel yasm nasm asciidoc enca gperf unzip p7zip gcc-multilib clang python-pip curl lib32-glib2 wget
+          pip3 install rst2pdf mako meson >/dev/null 2>&1
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - uses: actions/checkout@v3
+      - name: Checkout toolchain
+        uses: actions/checkout@v3
+        with:
+          repository: shinchiro/mpv-winbuild-cmake
+          path: mpv-winbuild-cmake
+      - name: Get Params
+        run: |
+          echo "sha=${{ fromJson(needs.params.outputs.params).sha }}" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+          echo "cache_id=${{ fromJson(needs.params.outputs.params).cache_id }}" >> $GITHUB_ENV
       
       - name: Cache
         uses: actions/cache@v2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}-${{ github.event.inputs.cache_id }}
+          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}
           restore-keys: |
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ steps.get_sha.outputs.sha }}
+            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ env.sha }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}
       - name: Clean Cache
@@ -97,15 +107,13 @@ jobs:
         id: build
         shell: bash
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           chmod +x build.sh
           cd mpv-winbuild-cmake
           bash ../build.sh '${{ matrix.bit }}' '${{ github.event.inputs.command }}'
       - name: Collect error logs
         if: ${{ always() && steps.build.outcome == 'failure' }}
         run: |
-          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*.log -r
+          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*-*.log -r
       - name: upload error logs
         uses: actions/upload-artifact@master
         if: ${{ always() && steps.build.outcome == 'failure' }}
@@ -194,7 +202,7 @@ jobs:
           artifacts: "artifacts/*/*.7z"
           commit: version
           name: "MPV ${{ env.long_time }}"
-          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ needs.build_mpv.outputs.sha }}\n**Build Time**: ${{ env.long_time }}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
+          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: false
