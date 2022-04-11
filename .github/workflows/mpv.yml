@@ -90,7 +90,7 @@ jobs:
           echo "cache_id=${{ fromJson(needs.params.outputs.params).cache_id }}" >> $GITHUB_ENV
       
       - name: Cache
-        uses: actions/cache@v3.0.1
+        uses: actions/cache@v3.0.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}
