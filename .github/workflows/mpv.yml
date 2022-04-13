@@ -77,6 +77,8 @@ jobs:
           pip3 install rst2pdf mako meson >/dev/null 2>&1
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global --add safe.directory $(pwd)
+          git config --global --add safe.directory $(pwd)/mpv-winbuild-cmake
       - uses: actions/checkout@v3
       - name: Checkout toolchain
         uses: actions/checkout@v3
