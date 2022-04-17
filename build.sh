@@ -4,6 +4,7 @@ set -x
 main() {
     gitdir=$(pwd)
     buildroot=$(pwd)
+    srcdir=$(pwd)/src_packages
     userCommand=$2
 
     prepare
@@ -34,16 +35,15 @@ package() {
 build() {
     local bit=$1
     local arch=$2
-    if [ -d $buildroot/build$bit ]; then
-        cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
-        ninja -C $buildroot/build$bit mpv-removebuild
+    
+    cmake -DTARGET_ARCH=$arch-w64-mingw32 -DALWAYS_REMOVE_BUILDFILES=OFF -DSINGLE_SOURCE_LOCATION=$srcdir -G Ninja -H$gitdir -B$buildroot/build$bit
+    ninja -C $buildroot/build$bit download || true
+    if [[ "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
         ninja -C $buildroot/build$bit update
     else
-        mkdir -p $buildroot/build$bit
-        cmake -DTARGET_ARCH=$arch-w64-mingw32 -G Ninja -H$gitdir -B$buildroot/build$bit
         ninja -C $buildroot/build$bit gcc
     fi
-    ninja -C $buildroot/build$bit mpv
+    ninja -C $buildroot/build$bit mpv && ninja -C $buildroot/build$bit mpv-removebuild
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
         echo "Successfully compiled $bit-bit. Continue"
