@@ -151,6 +151,8 @@ jobs:
                 core.exportVariable( `${type}-path`, file );
               }
             }
+            const arch_bit = ${{ matrix.bit }} == "64" ? "x64" : "x86";
+            core.exportVariable("arch_bit",arch_bit);
 
       - name: upload mpv-debug
         uses: actions/upload-artifact@v3
@@ -170,6 +172,12 @@ jobs:
         with:
           name: ${{ env.mpv-name }}
           path: ${{ env.mpv-path }}
+          
+      - name: upload ffmpeg
+        uses: actions/upload-artifact@v3
+        with:
+          name: ffmpeg_${{ env.arch_bit }}
+          path: mpv-winbuild-cmake/build${{ matrix.bit }}/install/mingw/bin/ffmpeg.exe
 
   publish_release:
     name: Publish release
