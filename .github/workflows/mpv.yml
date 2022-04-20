@@ -147,37 +147,42 @@ jobs:
               const files = await globber.glob();
               if ( files.length > 0 ) {
                 const file = files[0];
-                core.exportVariable( `${type}-name`, path.basename(file) );
-                core.exportVariable( `${type}-path`, file );
+                core.exportVariable( `${type}_name`, path.basename(file) );
+                core.exportVariable( `${type}_path`, file );
               }
             }
-            const arch_bit = ${{ matrix.bit }} == "64" ? "x64" : "x86";
-            core.exportVariable("arch_bit",arch_bit);
+            
+            let { stdout: ffmpeg_hash } = await exec.getExecOutput("git -C mpv-winbuild-cmake/src_packages/ffmpeg rev-parse --short HEAD");
+            ffmpeg_hash = ffmpeg_hash.trim();
+            const ffmpeg_name = `ffmpeg-${arch}-git-${ffmpeg_hash}`;
+            core.exportVariable( 'ffmpeg_name', ffmpeg_name );
+            await exec.exec(`7z a -m0=lzma2 -mx=9 -ms=on mpv-winbuild-cmake/release/${ffmpeg_name}.7z mpv-winbuild-cmake/build${{ matrix.bit }}/install/mingw/bin/ffmpeg.exe`)
 
       - name: upload mpv-debug
         uses: actions/upload-artifact@v3
-        if: ${{ env.mpv-debug-name && env.mpv-debug-path }}
+        if: ${{ env.mpv-debug_name && env.mpv-debug_path }}
         with:
-          name: ${{ env.mpv-debug-name }}
-          path: ${{ env.mpv-debug-path }}
+          name: ${{ env.mpv-debug_name }}
+          path: ${{ env.mpv-debug_path }}
       - name: upload mpv-dev
         uses: actions/upload-artifact@v3
-        if: ${{ env.mpv-dev-name && env.mpv-dev-path }}
+        if: ${{ env.mpv-dev_name && env.mpv-dev_path }}
         with:
-          name: ${{ env.mpv-dev-name }}
-          path: ${{ env.mpv-dev-path }}
+          name: ${{ env.mpv-dev_name }}
+          path: ${{ env.mpv-dev_path }}
       - name: upload mpv
         uses: actions/upload-artifact@v3
-        if: ${{ env.mpv-name && env.mpv-path }}
+        if: ${{ env.mpv_name && env.mpv_path }}
         with:
-          name: ${{ env.mpv-name }}
-          path: ${{ env.mpv-path }}
+          name: ${{ env.mpv_name }}
+          path: ${{ env.mpv_path }}
           
       - name: upload ffmpeg
         uses: actions/upload-artifact@v3
+        if: ${{ env.ffmpeg_name }}
         with:
-          name: ffmpeg_${{ env.arch_bit }}
-          path: mpv-winbuild-cmake/build${{ matrix.bit }}/install/mingw/bin/ffmpeg.exe
+          name: ${{ env.ffmpeg_name }}
+          path: mpv-winbuild-cmake/release/${{ env.ffmpeg_name }}.7z
 
   publish_release:
     name: Publish release
