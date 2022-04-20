@@ -152,7 +152,8 @@ jobs:
               }
             }
             
-            const { stdout: ffmpeg_hash } = await exec.getExecOutput("git -C mpv-winbuild-cmake/src_packages/ffmpeg rev-parse --short HEAD");
+            let { stdout: ffmpeg_hash } = await exec.getExecOutput("git -C mpv-winbuild-cmake/src_packages/ffmpeg rev-parse --short HEAD");
+            ffmpeg_hash = ffmpeg_hash.trim();
             const ffmpeg_name = `ffmpeg-${arch}-git-${ffmpeg_hash}`;
             core.exportVariable( 'ffmpeg_name', ffmpeg_name );
             await exec.exec(`7z a -m0=lzma2 -mx=9 -ms=on mpv-winbuild-cmake/release/${ffmpeg_name}.7z mpv-winbuild-cmake/build${{ matrix.bit }}/install/mingw/bin/ffmpeg.exe`)
