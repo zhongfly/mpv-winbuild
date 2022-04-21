@@ -36,14 +36,13 @@ build() {
     local bit=$1
     local arch=$2
     
-    cmake -DTARGET_ARCH=$arch-w64-mingw32 -DALWAYS_REMOVE_BUILDFILES=OFF -DSINGLE_SOURCE_LOCATION=$srcdir -G Ninja -H$gitdir -B$buildroot/build$bit
+    cmake -DTARGET_ARCH=$arch-w64-mingw32 -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -G Ninja -H$gitdir -B$buildroot/build$bit
     ninja -C $buildroot/build$bit download || true
-    if [[ "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
-        ninja -C $buildroot/build$bit update
-    else
+    if [[ ! "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
         ninja -C $buildroot/build$bit gcc
     fi
-    ninja -C $buildroot/build$bit mpv && ninja -C $buildroot/build$bit mpv-removebuild
+    ninja -C $buildroot/build$bit update
+    ninja -C $buildroot/build$bit mpv
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
         echo "Successfully compiled $bit-bit. Continue"
