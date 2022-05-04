@@ -126,14 +126,14 @@ jobs:
           cd mpv-winbuild-cmake
           bash ../build.sh '${{ matrix.bit }}' '${{ github.event.inputs.command }}'
       - name: Collect error logs
-        if: ${{ always() && steps.build.outcome == 'failure' }}
+        if: ${{ always() }}
         run: |
-          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*-*.log -r
+          sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*.log -r
       - name: upload error logs
         uses: actions/upload-artifact@master
-        if: ${{ always() && steps.build.outcome == 'failure' }}
+        if: ${{ always() }}
         with:
-          name: logs
+          name: ${{ matrix.bit }}bit_logs
           path: logs.7z
 
       - name: "Get artifacts' name and path"
@@ -227,7 +227,7 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "artifacts/*/*.7z"
+          artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z"
           commit: version
           name: "MPV ${{ env.long_time }}"
           body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
