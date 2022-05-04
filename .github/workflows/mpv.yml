@@ -5,6 +5,15 @@ on:
   #   - cron:  '0 12 * * *'
   workflow_dispatch:
     inputs:
+      build_target:
+        description: "Build target"
+        required: false
+        default: "64bit"
+        type: choice
+        options:
+        - 32bit
+        - 64bit
+        - 32 bit & 64 bit
       needclean:
         description: 'Delete cache and completely rebuild erverything'
         required: false
@@ -33,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       params: ${{ steps.env-vars.outputs.params }}
+      matrix: ${{ steps.script.outputs.matrix }}
     steps:
       - name: Install jq
         run: pip install jq
@@ -43,8 +53,7 @@ jobs:
           else
             echo "cache_id=$(echo $RANDOM | md5sum | head -c 20)" >> $GITHUB_ENV
           fi
-      - name: 'Get mpv latest commit sha'
-        id: get_sha
+      - id: script
         uses: actions/github-script@v6
         with:
           script: |
@@ -54,6 +63,24 @@ jobs:
               ref: `master`
             })
             core.exportVariable('sha', String(commit.data.sha))
+            
+            let matrix = {};
+            let build_target = "${{ github.event.inputs.build_target }}"
+            switch ( build_target ) {
+              case "32bit":
+                matrix.bit = ["32"];
+                break;
+              case "64bit":
+                matrix.bit = ["64"];
+                break;
+              case "32 bit & 64 bit":
+                matrix.bit = ["32","64"];
+                break;
+              default:
+                matrix.bit = ["x64"];
+                break;
+            }
+            core.setOutput("matrix",JSON.stringify(matrix));
       - id: env-vars
         name: Output environment variables
         run: echo "::set-output name=params::$(echo $(jq -n 'env'))"
@@ -65,8 +92,7 @@ jobs:
     container:
       image: archlinux:base-devel
     strategy:
-      matrix:
-        bit: [64]
+      matrix: ${{ fromJson(needs.params.outputs.matrix) }}
 
     steps:
       - name: Install Dependencies
