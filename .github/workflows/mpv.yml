@@ -77,7 +77,7 @@ jobs:
                 matrix.bit = ["32","64"];
                 break;
               default:
-                matrix.bit = ["x64"];
+                matrix.bit = ["64"];
                 break;
             }
             core.setOutput("matrix",JSON.stringify(matrix));
