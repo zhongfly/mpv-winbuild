@@ -83,6 +83,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libbs2b [![libbs2b](https://flat.badgen.net/github/last-commit/alexmarsev/libbs2b?scale=0.8&cache=1800)](https://github.com/alexmarsev/libbs2b)
     -   [libssh](https://git.libssh.org/projects/libssh.git)
     -   libsrt [![libsrt](https://flat.badgen.net/github/last-commit/Haivision/srt?scale=0.8&cache=1800)](https://github.com/Haivision/srt)
+    -   libmodplug [![libmodplug](https://flat.badgen.net/github/last-commit/Konstanty/libmodplug?scale=0.8&cache=1800)](https://github.com/Konstanty/libmodplug)
     -   libjxl (with [brotli](https://github.com/google/brotli), [highway](https://github.com/google/highway)) [![libjxl](https://flat.badgen.net/github/last-commit/libjxl/libjxl/main?scale=0.8&cache=1800)](https://github.com/libjxl/libjxl)
 
 -   Zip
@@ -94,7 +95,6 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [speex](https://ftp.osuosl.org/pub/xiph/releases/speex/) (1.2.0)
     -   [ogg](https://ftp.osuosl.org/pub/xiph/releases/ogg/) (1.3.5)
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
-    -   [libmodplug](https://sourceforge.net/projects/modplug-xmms/files/libmodplug/) (0.8.9.0)
     -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.6.2)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.16)
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
