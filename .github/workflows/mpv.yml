@@ -99,8 +99,8 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake meson ragel yasm nasm asciidoc enca gperf unzip p7zip gcc-multilib clang python-pip curl lib32-glib2 wget
-          pip3 install rst2pdf mako meson >/dev/null 2>&1
+          sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake ragel yasm nasm asciidoc enca gperf unzip p7zip gcc-multilib clang python-pip curl lib32-glib2 wget
+          pip3 install rst2pdf mako
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true

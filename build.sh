@@ -8,6 +8,7 @@ main() {
     userCommand=$2
 
     prepare
+    build_latest_meson
     if [ "$1" == "32" ]; then
         package "32" "i686"
     elif [ "$1" == "64" ]; then
@@ -50,6 +51,15 @@ build() {
         echo "Failed compiled $bit-bit. Stop"
         exit 1
     fi
+}
+
+build_latest_meson() {
+    if [[ ! -f "$srcdir/meson.pyz" ]]; then
+        git clone --depth 1 https://github.com/mesonbuild/meson.git /usr/local/src/meson
+        /usr/local/src/meson/packaging/create_zipapp.py --outfile $srcdir/meson.pyz --interpreter '/usr/bin/env python3' /usr/local/src/meson
+        rm -rf /usr/local/src/meson
+    fi
+    ln -sf $srcdir/meson.pyz /usr/local/bin/meson
 }
 
 zip() {
