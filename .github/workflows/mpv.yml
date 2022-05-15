@@ -212,6 +212,70 @@ jobs:
           name: ${{ env.ffmpeg_name }}
           path: mpv-winbuild-cmake/release/${{ env.ffmpeg_name }}.7z
 
+
+      - name: "Job summary"
+        uses: actions/github-script@v6
+        if: ${{ always() }}
+        with:
+          script: |
+            const path = require('path');
+            const { readdirSync,existsSync } = require('fs');
+            const myExec = async (command, args = null) => await exec.getExecOutput(command,args,{silent: true}).then(result => result.stdout.trim());
+            
+            const toolchainDir = path.resolve("mpv-winbuild-cmake");
+            const workdir = path.resolve(toolchainDir,"src_packages");
+            const isGitSync = dirname => existsSync(path.join(workdir, dirname, '.git'));
+            
+            const getGithubUrl = (hash,remote) => remote.replace(/\.git$/,"") + `/commit/${hash}`;
+            const getGitlabUrl = (hash,remote) => remote.replace(/\.git$/,"") + `/-/commit/${hash}`;
+            const getBitbucketUrl = (hash,remote) => remote.replace(/\.git$/,"") + `/commits/${hash}`;
+            const getGoogleSourceUrl = (hash,remote) => remote + `/+/${hash}`;
+            const getCgitUrl = (hash,remote) => remote + `/commit/?id=${hash}`;
+            function getCommitUrl(hash,remote) {
+                let url = "";
+                switch (true) {
+                  case /github\.com/.test(remote):
+                    url = getGithubUrl(hash,remote);
+                    break;
+                  case /(gitlab\.com|code\.videolan\.org|gitlab\.gnome\.org)/.test(remote):
+                    url = getGitlabUrl(hash,remote);
+                    break;
+                  case /bitbucket\.org/.test(remote):
+                    url = getBitbucketUrl(hash,remote);
+                    break;
+                  case /googlesource\.com/.test(remote):
+                    url = getGoogleSourceUrl(hash,remote);
+                    break;
+                  case /git\.libssh\.org/.test(remote):
+                    url = getCgitUrl(hash,remote);
+                    break;
+                  default:
+                    url = remote;
+                    break;
+                }
+                return url;
+            }
+            
+            const dirs = readdirSync(workdir, { withFileTypes: true }).filter(dirent => dirent.isDirectory() && isGitSync(dirent.name) ).map(dirent => path.join(workdir, dirent.name));
+            let packages_table = [[{data: 'Package', header: true}, {data: 'Hash', header: true}],];
+            for (let dir of dirs) {
+              let hash = await myExec(`git -C ${dir} rev-parse HEAD`);
+              let remote = await myExec(`git -C ${dir} config --get remote.origin.url`);
+              let url = getCommitUrl(hash, remote);
+              let package_name = path.basename(dir);
+              packages_table.push([package_name, `<a href="${url}">${hash}</a>`]);
+            }
+            let toolchain_hash = await myExec(`git -C ${toolchainDir} rev-parse HEAD`);
+            let toolchain_remote = await myExec(`git -C ${toolchainDir} config --get remote.origin.url`);
+            let toolchain_url = getCommitUrl(toolchain_hash, toolchain_remote);
+            
+            await core.summary
+            .addHeading('Basic Info')
+            .addRaw(`toolchain: <a href="${toolchain_url}">${toolchain_hash}</a>`,true)
+            .addHeading('Packages Version')
+            .addTable(packages_table)
+            .write();
+
   publish_release:
     name: Publish release
     needs: [build_mpv,params]
@@ -256,7 +320,7 @@ jobs:
           artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z"
           commit: version
           name: "MPV ${{ env.long_time }}"
-          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
+          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: false
