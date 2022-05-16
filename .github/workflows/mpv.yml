@@ -320,7 +320,7 @@ jobs:
           artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z"
           commit: version
           name: "MPV ${{ env.long_time }}"
-          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/zhongfly/mpv-winbuild/${{ env.short_time }}?cache=300)"
+          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.short_time }}?cache=300)"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           prerelease: false
