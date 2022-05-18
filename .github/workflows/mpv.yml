@@ -215,6 +215,7 @@ jobs:
 
       - name: "Job summary"
         uses: actions/github-script@v6
+        continue-on-error: true
         if: ${{ always() }}
         with:
           script: |
@@ -261,13 +262,16 @@ jobs:
             }
             
             const dirs = readdirSync(workdir, { withFileTypes: true }).filter(dirent => dirent.isDirectory() && isGitSync(dirent.name) ).map(dirent => path.join(workdir, dirent.name));
-            let packages_table = [[{data: 'Package', header: true}, {data: 'Hash', header: true}],];
+            let packages_table = [[{data: 'Package', header: true}, {data: 'Local commit', header: true}, {data: 'Status', header: true}, {data: 'Remote commit', header: true}]];
             for (let dir of dirs) {
-              let hash = await myExec(`git -C ${dir} rev-parse HEAD`);
+              let local_hash = await myExec(`git -C ${dir} rev-parse --short=7 HEAD`);
+              let remote_branch = await myExec(`git -C ${dir} rev-parse --abbrev-ref HEAD@{upstream}`);
+              let remote_hash = await myExec(`git -C ${dir} rev-parse ${remote_branch}`);
+              let status = await myExec(`git -C ${dir} status -sb`).then(s => s.split("\n",1)[0].replace(/^## */,""));
               let remote = await myExec(`git -C ${dir} config --get remote.origin.url`);
-              let url = getCommitUrl(hash, remote);
+              let url = getCommitUrl(remote_hash, remote);
               let package_name = path.basename(dir);
-              packages_table.push([package_name, `<a href="${url}">${hash}</a>`]);
+              packages_table.push([package_name, local_hash, status, `<a href="${url}">${remote_hash.slice(0,7)}</a>`]);
             }
             let toolchain_hash = await myExec(`git -C ${toolchainDir} rev-parse HEAD`);
             let toolchain_remote = await myExec(`git -C ${toolchainDir} config --get remote.origin.url`);
@@ -275,7 +279,7 @@ jobs:
             
             await core.summary
             .addHeading('Basic Info')
-            .addRaw(`toolchain: <a href="${toolchain_url}">${toolchain_hash}</a>`,true)
+            .addRaw(`toolchain: <a href="${toolchain_url}">${toolchain_hash.slice(0,7)}</a>`,true)
             .addHeading('Packages Version')
             .addTable(packages_table)
             .write();
