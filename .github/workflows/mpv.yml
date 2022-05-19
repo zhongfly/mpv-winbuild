@@ -144,13 +144,31 @@ jobs:
           cd mpv-winbuild-cmake
           rm -rf build${{ matrix.bit }} || true
           rm -rf src_packages || true
+      - name: Running custom command
+        if: ${{ github.event.inputs.command != '' }}
+        shell: bash
+        continue-on-error: true
+        run: |
+          cd mpv-winbuild-cmake
+          bit="${{ matrix.bit }}"
+          gitdir=$(pwd)
+          buildroot=$(pwd)
+          srcdir=$(pwd)/src_packages
+          builddir=$buildroot/build$bit
+          if [ $bit == "32" ]; then
+              arch="i686"
+          elif [ $bit == "64" ]; then
+              arch="x86_64"
+          fi
+          set -x
+          ${{ github.event.inputs.command }}
       - name: Build
         id: build
         shell: bash
         run: |
           chmod +x build.sh
           cd mpv-winbuild-cmake
-          bash ../build.sh '${{ matrix.bit }}' '${{ github.event.inputs.command }}'
+          bash ../build.sh '${{ matrix.bit }}'
       - name: Collect error logs
         if: ${{ always() }}
         run: |

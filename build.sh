@@ -5,7 +5,6 @@ main() {
     gitdir=$(pwd)
     buildroot=$(pwd)
     srcdir=$(pwd)/src_packages
-    userCommand=$2
 
     prepare
     if [ "$1" == "32" ]; then
@@ -23,9 +22,6 @@ package() {
     local bit=$1
     local arch=$2
 
-    if [ -n "$userCommand" ]; then
-        eval "$userCommand"
-    fi
     build $bit $arch
     zip $bit $arch
     sudo rm -rf $buildroot/build$bit/mpv-$arch*
@@ -94,4 +90,4 @@ prepare() {
     cd ../..
 }
 
-main "$1" "$2"
+main "$1"
