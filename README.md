@@ -78,7 +78,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libmfx [![libmfx](https://flat.badgen.net/github/last-commit/lu-zero/mfx_dispatch?scale=0.8&cache=1800)](https://github.com/lu-zero/mfx_dispatch)
     -   [aom](https://aomedia.googlesource.com/aom/)
     -   dav1d [![dav1d](https://flat.badgen.net/https/gitlab-latest-commit-rphv1x3zj2pi.runkit.sh/code.videolan.org/videolan/dav1d?scale=0.8&cache=1800)](https://code.videolan.org/videolan/dav1d/)
-    -   libplacebo (with libepoxy) [![libplacebo](https://flat.badgen.net/github/last-commit/haasn/libplacebo?scale=0.8&cache=1800)](https://github.com/haasn/libplacebo)
+    -   libplacebo (with [libepoxy](https://github.com/anholt/libepoxy)) [![libplacebo](https://flat.badgen.net/github/last-commit/haasn/libplacebo?scale=0.8&cache=1800)](https://github.com/haasn/libplacebo)
     -   fontconfig [![uchardet](https://flat.badgen.net/github/last-commit/freedesktop/fontconfig?scale=0.8&cache=1800)](https://github.com/freedesktop/fontconfig)
     -   libbs2b [![libbs2b](https://flat.badgen.net/github/last-commit/alexmarsev/libbs2b?scale=0.8&cache=1800)](https://github.com/alexmarsev/libbs2b)
     -   [libssh](https://git.libssh.org/projects/libssh.git)
