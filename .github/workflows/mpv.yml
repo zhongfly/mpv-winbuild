@@ -44,8 +44,6 @@ jobs:
       params: ${{ steps.env-vars.outputs.params }}
       matrix: ${{ steps.script.outputs.matrix }}
     steps:
-      - name: Install jq
-        run: pip install jq
       - name: Generate cache_id
         run: |
           if [ "${{ github.event.inputs.cache_id }}" ] ; then
@@ -105,8 +103,6 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
           git config --global fetch.prune true
-          git config --global --add safe.directory $(pwd)
-          git config --global --add safe.directory $(pwd)/mpv-winbuild-cmake
       - uses: actions/checkout@v3
       - name: Checkout toolchain
         uses: actions/checkout@v3
@@ -174,7 +170,7 @@ jobs:
         run: |
           sudo 7z a logs.7z mpv-winbuild-cmake/build${{ matrix.bit }}/*.log -r
       - name: upload error logs
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
           name: ${{ matrix.bit }}bit_logs
