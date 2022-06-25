@@ -49,7 +49,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libwebp [![libwebp](https://flat.badgen.net/github/last-commit/webmproject/libwebp?scale=0.8&cache=1800)](https://chromium.googlesource.com/webm/libwebp)
     -   libpng [![libpng](https://flat.badgen.net/github/last-commit/glennrp/libpng?scale=0.8&cache=1800)](https://github.com/glennrp/libpng)
     -   libsoxr [![libsoxr](https://flat.badgen.net/gitlab/last-commit/shinchiro/soxr?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/soxr)
-    -   libzimg [![libzimg](https://flat.badgen.net/github/last-commit/sekrit-twc/zimg?scale=0.8&cache=1800)](https://github.com/sekrit-twc/zimg)
+    -   libzimg (with [graphengine](https://github.com/sekrit-twc/graphengine)) [![libzimg](https://flat.badgen.net/github/last-commit/sekrit-twc/zimg?scale=0.8&cache=1800)](https://github.com/sekrit-twc/zimg)
     -   libdvdread [![libdvdread](https://flat.badgen.net/https/gitlab-latest-commit-rphv1x3zj2pi.runkit.sh/code.videolan.org/videolan/libdvdread?scale=0.8&cache=1800)](https://code.videolan.org/videolan/libdvdread)
     -   libdvdnav [![libdvdnav](https://flat.badgen.net/https/gitlab-latest-commit-rphv1x3zj2pi.runkit.sh/code.videolan.org/videolan/libdvdnav?scale=0.8&cache=1800)](https://code.videolan.org/videolan/libdvdnav)
     -   libdvdcss [![libdvdcss](https://flat.badgen.net/https/gitlab-latest-commit-rphv1x3zj2pi.runkit.sh/code.videolan.org/videolan/libdvdcss?scale=0.8&cache=1800)](https://code.videolan.org/videolan/libdvdcss)
