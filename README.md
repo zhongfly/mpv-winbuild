@@ -40,7 +40,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   x264 [![x264](https://flat.badgen.net/https/gitlab-latest-commit-rphv1x3zj2pi.runkit.sh/code.videolan.org/videolan/x264?scale=0.8&cache=1800)](https://code.videolan.org/videolan/x264)
     -   x265 (multilib) [![x265](https://flat.badgen.net/https/bitbucket-ft1l4pi7n5hp.runkit.sh/multicoreware/x265_git?scale=0.8&cache=1800)](https://bitbucket.org/multicoreware/x265_git)
     -   uchardet [![uchardet](https://flat.badgen.net/github/last-commit/freedesktop/uchardet?scale=0.8&cache=1800)](https://github.com/freedesktop/uchardet)
-    -   rubberband [![rubberband](https://flat.badgen.net/github/last-commit/lachs0r/rubberband?scale=0.8&cache=1800)](https://github.com/lachs0r/rubberband)
+    -   rubberband [![rubberband](https://flat.badgen.net/github/last-commit/breakfastquay/rubberband/default?scale=0.8&cache=1800)](https://github.com/breakfastquay/rubberband)
     -   opus [![opus](https://flat.badgen.net/github/last-commit/xiph/opus?scale=0.8&cache=1800)](https://github.com/xiph/opus)
     -   openal-soft [![openal-soft](https://flat.badgen.net/github/last-commit/kcat/openal-soft?scale=0.8&cache=1800)](https://github.com/kcat/openal-soft)
     -   mpv [![mpv](https://flat.badgen.net/github/last-commit/mpv-player/mpv?scale=0.8&cache=1800)](https://github.com/mpv-player/mpv)
