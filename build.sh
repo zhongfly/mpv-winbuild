@@ -8,31 +8,46 @@ main() {
 
     prepare
     if [ "$1" == "32" ]; then
-        package "32" "i686"
+        package "32"
     elif [ "$1" == "64" ]; then
-        package "64" "x86_64"
+        package "64"
+    elif [ "$1" == "64-v3" ]; then
+        package "64-v3"
+    elif [ "$1" == "all-64" ]; then
+        package "64"
+        package "64-v3"
     else [ "$1" == "all" ];
-        package "32" "i686"
-        package "64" "x86_64"
+        package "32"
+        package "64"
+        package "64-v3"
     fi
     rm -rf ./release/mpv-packaging-master
 }
 
 package() {
     local bit=$1
-    local arch=$2
+    if [ $bit == "32" ]; then
+        local arch="i686"
+    elif [ $bit == "64" ]; then
+        local arch="x86_64"
+    elif [ $bit == "64-v3" ]; then
+        local arch="x86_64"
+        local gcc_arch="-DGCC_ARCH=x86-64-v3"
+        local x86_64_level="-v3"
+    fi
 
-    build $bit $arch
-    zip $bit $arch
-    sudo rm -rf $buildroot/build$bit/mpv-$arch*
+    build $bit $arch $gcc_arch
+    zip $bit $arch $x86_64_level
+    sudo rm -rf $buildroot/build$bit/mpv-*
     sudo chmod -R a+rwx $buildroot/build$bit
 }
 
 build() {
     local bit=$1
     local arch=$2
+    local gcc_arch=$3
     
-    cmake -DTARGET_ARCH=$arch-w64-mingw32 -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -G Ninja -H$gitdir -B$buildroot/build$bit
+    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -G Ninja -H$gitdir -B$buildroot/build$bit
     ninja -C $buildroot/build$bit download || true
     if [[ ! "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
         ninja -C $buildroot/build$bit gcc
@@ -52,12 +67,13 @@ build() {
 zip() {
     local bit=$1
     local arch=$2
+    local x86_64_level=$3
 
     mv $buildroot/build$bit/mpv-* $gitdir/release
     cd ./release/mpv-packaging-master
-    cp -r ./mpv-root/* ./$arch/d3dcompiler_43.dll ../mpv-$arch*
+    cp -r ./mpv-root/* ./$arch/d3dcompiler_43.dll ../mpv-$arch$x86_64_level*
     cd ..
-    for dir in ./mpv*$arch*; do
+    for dir in ./mpv*$arch$x86_64_level*; do
         if [ -d $dir ]; then
             7z a -m0=lzma2 -mx=9 -ms=on $dir.7z $dir/* -x!*.7z
             rm -rf $dir

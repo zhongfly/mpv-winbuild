@@ -8,12 +8,14 @@ on:
       build_target:
         description: "Build target"
         required: false
-        default: "64bit"
+        default: "all-64bit"
         type: choice
         options:
         - 32bit
         - 64bit
-        - 32 bit & 64 bit
+        - 64bit-v3
+        - all-64bit
+        - all
       needclean:
         description: 'Delete cache and completely rebuild erverything'
         required: false
@@ -71,11 +73,17 @@ jobs:
               case "64bit":
                 matrix.bit = ["64"];
                 break;
-              case "32 bit & 64 bit":
-                matrix.bit = ["32","64"];
+              case "64bit-v3":
+                matrix.bit = ["64-v3"];
+                break;
+              case "all-64bit":
+                matrix.bit = ["64","64-v3"];
+                break;
+              case "all":
+                matrix.bit = ["32","64","64-v3"];
                 break;
               default:
-                matrix.bit = ["64"];
+                matrix.bit = ["64","64-v3"];
                 break;
             }
             core.setOutput("matrix",JSON.stringify(matrix));
@@ -89,6 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux/archlinux:base-devel
+    continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
 
@@ -158,6 +167,10 @@ jobs:
               arch="i686"
           elif [ $bit == "64" ]; then
               arch="x86_64"
+          elif [ $bit == "64-v3" ]; then
+              arch="x86_64"
+              gcc_arch=-DGCC_ARCH=x86-64-v3
+              x86_64_level=-v3
           fi
           set -x
           ${{ github.event.inputs.command }}
@@ -176,7 +189,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ always() }}
         with:
-          name: ${{ matrix.bit }}bit_logs
+          name: ${{ matrix.bit }}_logs
           path: logs.7z
 
       - name: "Get artifacts' name and path"
@@ -186,7 +199,18 @@ jobs:
           script: |
             const path = require('path');
             const types = ["mpv-debug", "mpv-dev", "mpv"];
-            const arch = ${{ matrix.bit }} == "64" ? "x86_64" : "i686";
+            let arch="";
+            switch ( "${{ matrix.bit }}" ) {
+              case "32":
+                arch = "i686";
+                break;
+              case "64":
+                arch = "x86_64";
+                break;
+              case "64-v3":
+                arch = "x86_64-v3";
+                break;
+            }
             for (let type of types) {
               const globber = await glob.create(`mpv-winbuild-cmake/release/${type}-${arch}-*.7z`);
               const files = await globber.glob();
