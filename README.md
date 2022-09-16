@@ -99,7 +99,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.6.4)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
-    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R59)
+    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R60)
     -   [libsdl2](https://www.libsdl.org/release/) (2.0.22)
     -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.2.1)
     -   ~~[libressl](https://cdn.openbsd.org/pub/OpenBSD/LibreSSL/) (3.1.5)~~
