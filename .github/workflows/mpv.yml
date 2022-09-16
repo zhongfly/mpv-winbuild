@@ -114,6 +114,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
+          git config --global rebase.autoStash true
           git config --global fetch.prune true
       - uses: actions/checkout@v3
       - name: Checkout toolchain
