@@ -340,6 +340,16 @@ jobs:
         with:
           path: artifacts
     
+      - name: "Check artifacts"
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const globber = await glob.create(`artifacts/*/mpv*.7z`);
+            const files = await globber.glob();
+            if ( files.length == 0 ) {
+              core.setFailed("Artifact does not exist!");
+            }
+
       - name: Get current time
         run: |
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
