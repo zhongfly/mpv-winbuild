@@ -264,7 +264,7 @@ jobs:
           script: |
             const path = require('path');
             const { readdirSync,existsSync } = require('fs');
-            const myExec = async (command, args = null) => await exec.getExecOutput(command,args,{silent: true}).then(result => result.stdout.trim()).catch(e) ?? '';
+            const myExec = async (command, args = null) => await exec.getExecOutput(command,args,{silent: true}).then(result => result.stdout.trim()).catch(err => '');
             
             const toolchainDir = path.resolve("mpv-winbuild-cmake");
             const workdir = path.resolve(toolchainDir,"src_packages");
