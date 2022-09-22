@@ -1,0 +1,78 @@
+From ce29f760971426bdd04da3f8c9f380057c364d97 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Thu, 22 Sep 2022 20:51:01 +0800
+Subject: [PATCH 2/2] libssh: rebase patch
+
+---
+ ...libssh-0001-install-modified-pc-file.patch | 48 +++++++------------
+ 1 file changed, 16 insertions(+), 32 deletions(-)
+
+diff --git a/packages/libssh-0001-install-modified-pc-file.patch b/packages/libssh-0001-install-modified-pc-file.patch
+index 45d8af1..a31855e 100644
+--- a/packages/libssh-0001-install-modified-pc-file.patch
++++ b/packages/libssh-0001-install-modified-pc-file.patch
+@@ -5,45 +5,29 @@ Subject: [PATCH] Install modified .pc file
+ 
+ for mbedtls support
+ ---
+- CMakeLists.txt  |  2 +-
+- libssh.pc.cmake | 16 +++++++++++-----
+- 2 files changed, 12 insertions(+), 6 deletions(-)
++ libssh.pc.cmake | 8 +++++---
++ 1 file changed, 5 insertions(+), 3 deletions(-)
+ 
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 32172d9..a295551 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -125,7 +125,7 @@ add_subdirectory(src)
+- 
+- # pkg-config file
+- if (UNIX OR MINGW)
+--configure_file(libssh.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libssh.pc)
+-+configure_file(libssh.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libssh.pc @ONLY)
+- install(
+-   FILES
+-     ${CMAKE_CURRENT_BINARY_DIR}/libssh.pc
+ diff --git a/libssh.pc.cmake b/libssh.pc.cmake
+-index b37cb3f..a4e1b2b 100644
++index f288b94d..bf9c00e2 100644
+ --- a/libssh.pc.cmake
+ +++ b/libssh.pc.cmake
+-@@ -1,6 +1,12 @@
+--Name: ${PROJECT_NAME}
+--Description: The SSH Library
+--Version: ${PROJECT_VERSION}
+--Libs: -L${CMAKE_INSTALL_FULL_LIBDIR} -lssh
+--Cflags: -I${CMAKE_INSTALL_FULL_INCLUDEDIR}
+-+prefix=@CMAKE_INSTALL_PREFIX@
+-+exec_prefix=${prefix}
++@@ -1,10 +1,12 @@
++ prefix=@CMAKE_INSTALL_PREFIX@
++ exec_prefix=${prefix}
++-libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++-includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++-
+ +libdir=${exec_prefix}/lib
+ +includedir=${prefix}/include/libssh
+- 
+-+Name: @PROJECT_NAME@
+-+Description: The SSH Library
+-+Version: @PROJECT_VERSION@
+-+Libs: -L${libdir} -lssh
+++ 
++ Name: @PROJECT_NAME@
++ Description: The SSH Library
++ Version: @PROJECT_VERSION@
++ Libs: -L${libdir} -lssh
+ +Libs.private: -lmbedtls -lmbedx509 -lmbedcrypto -lz -lwsock32 -lws2_32 -lpthread
+-+Cflags: -I${includedir}
++ Cflags: -I${includedir}
+ +Cflags.private: -DLIBSSH_STATIC
+ -- 
+-2.36.0
++2.37.3
+ 
+-- 
+2.37.1.windows.1
+

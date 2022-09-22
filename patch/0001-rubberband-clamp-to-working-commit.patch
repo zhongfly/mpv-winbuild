@@ -1,7 +1,7 @@
-From 9807daec1bf091dbd4be5a3a1887aa65395ffad7 Mon Sep 17 00:00:00 2001
+From 942031f3e82f32bb795ea1d9fa0c148dd4cee983 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Thu, 22 Sep 2022 13:27:50 +0800
-Subject: [PATCH] [PATCH] rubberband: clamp to working commit
+Subject: [PATCH 1/2] rubberband: clamp to working commit
 
 ---
  packages/rubberband.cmake | 4 +---
@@ -23,5 +23,5 @@ index 22be92e..9755ff1 100644
      CONFIGURE_COMMAND ${EXEC} meson <BINARY_DIR> <SOURCE_DIR>
          --prefix=${MINGW_INSTALL_PREFIX}
 -- 
-2.37.3
+2.37.1.windows.1
 
