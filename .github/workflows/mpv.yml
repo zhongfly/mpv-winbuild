@@ -181,6 +181,7 @@ jobs:
         run: |
           chmod +x build.sh
           cd mpv-winbuild-cmake
+          git am --3way ../patch/*.patch
           bash ../build.sh '${{ matrix.bit }}'
       - name: Collect logs
         if: ${{ always() }}
@@ -263,7 +264,7 @@ jobs:
           script: |
             const path = require('path');
             const { readdirSync,existsSync } = require('fs');
-            const myExec = async (command, args = null) => await exec.getExecOutput(command,args,{silent: true}).then(result => result.stdout.trim());
+            const myExec = async (command, args = null) => await exec.getExecOutput(command,args,{silent: true}).then(result => result.stdout.trim()).catch(err => '');
             
             const toolchainDir = path.resolve("mpv-winbuild-cmake");
             const workdir = path.resolve(toolchainDir,"src_packages");
