@@ -1,19 +1,22 @@
-From 6b22613df58b0c6987f52aaf6c44ac6b339c9923 Mon Sep 17 00:00:00 2001
+From 9d62dc38742f4f9ef4b5594ee3984b3d52c4483d Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Thu, 22 Sep 2022 13:27:50 +0800
 Subject: [PATCH] [PATCH] rubberband: clamp to working commit
 
 ---
- packages/rubberband.cmake | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ packages/rubberband.cmake | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/packages/rubberband.cmake b/packages/rubberband.cmake
-index 22be92e..af1dcbf 100644
+index 22be92e..6376626 100644
 --- a/packages/rubberband.cmake
 +++ b/packages/rubberband.cmake
-@@ -3,7 +3,7 @@ ExternalProject_Add(rubberband
+@@ -1,9 +1,9 @@
+ ExternalProject_Add(rubberband
+     GIT_REPOSITORY https://github.com/breakfastquay/rubberband.git
      SOURCE_DIR ${SOURCE_LOCATION}
-     GIT_SHALLOW 1
+-    GIT_SHALLOW 1
++    GIT_SHALLOW 0
      GIT_REMOTE_NAME origin
 -    GIT_TAG default
 +    GIT_TAG 2eb9a200525461f30fe3d21f399d91f525a09ba2
