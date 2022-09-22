@@ -181,6 +181,7 @@ jobs:
         run: |
           chmod +x build.sh
           cd mpv-winbuild-cmake
+          git am --3way ../patch/*.patch
           bash ../build.sh '${{ matrix.bit }}'
       - name: Collect logs
         if: ${{ always() }}
