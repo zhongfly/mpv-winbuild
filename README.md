@@ -88,7 +88,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libjxl (with [brotli](https://github.com/google/brotli), [highway](https://github.com/google/highway)) [![libjxl](https://flat.badgen.net/github/last-commit/libjxl/libjxl/main?scale=0.8&cache=1800)](https://github.com/libjxl/libjxl)
 
 -   Zip
-    -   [expat](https://github.com/libexpat/libexpat) (2.4.8)
+    -   [expat](https://github.com/libexpat/libexpat) (2.4.9)
     -   [bzip](https://sourceware.org/pub/bzip2/) (1.0.8)
     -   [zlib](https://github.com/madler/zlib/) (1.2.12)
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7)
@@ -96,10 +96,10 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [speex](https://ftp.osuosl.org/pub/xiph/releases/speex/) (1.2.1)
     -   [ogg](https://ftp.osuosl.org/pub/xiph/releases/ogg/) (1.3.5)
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
-    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.6.4)
+    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.6.5)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R60)
-    -   [libsdl2](https://www.libsdl.org/release/) (2.0.22)
+    -   [libsdl2](https://www.libsdl.org/release/) (2.24.0)
     -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.2.1)
     -   ~~[libressl](https://cdn.openbsd.org/pub/OpenBSD/LibreSSL/) (3.1.5)~~
