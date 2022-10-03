@@ -129,7 +129,7 @@ jobs:
           echo "cache_id=${{ fromJson(needs.params.outputs.params).cache_id }}" >> $GITHUB_ENV
 
       - name: Cache Sources
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.10
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: ${{ runner.os }}-source-${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}
@@ -138,7 +138,7 @@ jobs:
             ${{ runner.os }}-source-${{ env.short_time }}
             ${{ runner.os }}-source
       - name: Cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.10
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}
