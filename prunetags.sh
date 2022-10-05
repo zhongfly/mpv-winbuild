@@ -38,7 +38,7 @@ done
 
 for TAG in ${TAGS[@]}; do
     echo "Deleting ${TAG}"
-    gh release delete "${TAG}"
+    gh release delete "${TAG}" || true
     git tag -d "${TAG}"
 done
 
