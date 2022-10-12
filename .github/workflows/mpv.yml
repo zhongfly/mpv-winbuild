@@ -89,7 +89,7 @@ jobs:
             core.setOutput("matrix",JSON.stringify(matrix));
       - id: env-vars
         name: Output environment variables
-        run: echo "::set-output name=params::$(echo $(jq -n 'env'))"
+        run: echo "params=$(echo $(jq -n 'env'))" >> $GITHUB_OUTPUT
 
   build_mpv:
     name: Build MPV
