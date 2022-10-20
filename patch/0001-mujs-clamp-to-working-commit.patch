@@ -1,0 +1,24 @@
+From 145fe3852b7bb1a96a67506d59109d35852b8823 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Thu, 20 Oct 2022 21:39:11 +0800
+Subject: [PATCH] mujs: clamp to working commit
+
+---
+ packages/mujs.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/mujs.cmake b/packages/mujs.cmake
+index a5fbc50..4018841 100644
+--- a/packages/mujs.cmake
++++ b/packages/mujs.cmake
+@@ -9,6 +9,7 @@ host=mingw")
+ 
+ ExternalProject_Add(mujs
+     GIT_REPOSITORY https://github.com/ccxvii/mujs.git
++    GIT_TAG d592c785c0b2f9fea982ac3fe7b88fdd7c4817fc
+     SOURCE_DIR ${SOURCE_LOCATION}
+     PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/mujs-*.patch
+     UPDATE_COMMAND ""
+-- 
+2.37.1.windows.1
+
