@@ -90,7 +90,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   davs2 [![davs2](https://flat.badgen.net/github/last-commit/pkuvcl/davs2?scale=0.8&cache=1800)](https://github.com/pkuvcl/davs2)  
 
 -   Zip
-    -   [expat](https://github.com/libexpat/libexpat) (2.4.9)
+    -   [expat](https://github.com/libexpat/libexpat) (2.5.0)
     -   [bzip](https://sourceware.org/pub/bzip2/) (1.0.8)
     -   [zlib](https://github.com/madler/zlib/) (1.2.13)
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7)
