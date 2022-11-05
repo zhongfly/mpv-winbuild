@@ -1,0 +1,25 @@
+From 20b4f0577d8af3f8e24ec239e84185aa63f89a73 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 5 Nov 2022 11:12:39 +0000
+Subject: [PATCH] highway: fix x86_64 build
+
+---
+ packages/highway.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/packages/highway.cmake b/packages/highway.cmake
+index d2fe302..02734af 100644
+--- a/packages/highway.cmake
++++ b/packages/highway.cmake
+@@ -2,6 +2,8 @@ ExternalProject_Add(highway
+     GIT_REPOSITORY https://github.com/google/highway.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_SHALLOW 1
++    GIT_REMOTE_NAME origin
++    GIT_TAG test_486159541
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -DCMAKE_BUILD_TYPE=Release
+-- 
+2.38.1
+
