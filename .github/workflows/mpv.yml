@@ -189,7 +189,7 @@ jobs:
             fi
           }
           set -x
-          retry-tool { ${{ github.event.inputs.command }} ; }
+          retry-tool "${{ github.event.inputs.command }}"
       - name: Build
         id: build
         shell: bash
