@@ -176,11 +176,9 @@ jobs:
           retry-tool() {
             local RETRY_COUNTER=0
             local MAX_RETRY=10
-            local CUR_TIMEOUT=120
             while [[ $RETRY_COUNTER -lt $MAX_RETRY ]]; do
-                timeout $CUR_TIMEOUT "$@" && break || sleep 5
+                $@ && break || sleep 5
                 RETRY_COUNTER=$(( $RETRY_COUNTER + 1 ))
-                CUR_TIMEOUT=$(( $CUR_TIMEOUT + 60 ))
                 echo "Retry $RETRY_COUNTER..."
             done
             if [[ $RETRY_COUNTER -ge $MAX_RETRY ]]; then
@@ -189,7 +187,7 @@ jobs:
             fi
           }
           set -x
-          retry-tool "${{ github.event.inputs.command }}"
+          retry-tool ${{ github.event.inputs.command }}
       - name: Build
         id: build
         shell: bash
