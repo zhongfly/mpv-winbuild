@@ -1,0 +1,72 @@
+From 6e70b8ef761d9ba64eaf22e3799535082cf84576 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 17 Dec 2022 11:18:52 +0000
+Subject: [PATCH] brotli: : clamp to working commit
+
+---
+ ...01-remove-static-from-library-s-name.patch | 38 +++++++++++++++++++
+ packages/brotli.cmake                         |  2 +
+ 2 files changed, 40 insertions(+)
+ create mode 100644 packages/brotli-0001-remove-static-from-library-s-name.patch
+
+diff --git a/packages/brotli-0001-remove-static-from-library-s-name.patch b/packages/brotli-0001-remove-static-from-library-s-name.patch
+new file mode 100644
+index 0000000..84d5b8e
+--- /dev/null
++++ b/packages/brotli-0001-remove-static-from-library-s-name.patch
+@@ -0,0 +1,38 @@
++From af5f65d04767e3decfaeaf34139813505dbc8bce Mon Sep 17 00:00:00 2001
++From: shinchiro <shinchiro@users.noreply.github.com>
++Date: Tue, 23 Aug 2022 18:00:20 +0800
++Subject: [PATCH] remove -static from library's name
++
++---
++ CMakeLists.txt | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e86b13b..aa0873c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -219,6 +219,13 @@ if(BROTLI_PARENT_DIRECTORY)
++   set(BROTLI_LIBRARIES "${BROTLI_LIBRARIES}" PARENT_SCOPE)
++ endif()
++ 
+++# Remove -static in library's names
+++if (NOT WIN32 OR MINGW)
+++  set_target_properties(brotlicommon-static PROPERTIES OUTPUT_NAME "brotlicommon")
+++  set_target_properties(brotlidec-static PROPERTIES OUTPUT_NAME "brotlidec")
+++  set_target_properties(brotlienc-static PROPERTIES OUTPUT_NAME "brotlienc")
+++endif()
+++
++ # Build the brotli executable
++ add_executable(brotli ${BROTLI_CLI_C})
++ target_link_libraries(brotli ${BROTLI_LIBRARIES_STATIC})
++@@ -230,7 +237,7 @@ if(NOT BROTLI_BUNDLED_MODE)
++     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
++   )
++ 
++-  if(NOT BROTLI_EMSCRIPTEN)
+++  if(NOT BROTLI_EMSCRIPTEN AND BUILD_SHARED_LIBS)
++     install(
++       TARGETS ${BROTLI_LIBRARIES_CORE}
++       ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++-- 
++2.37.2
+diff --git a/packages/brotli.cmake b/packages/brotli.cmake
+index f63e629..5b9907c 100644
+--- a/packages/brotli.cmake
++++ b/packages/brotli.cmake
+@@ -2,7 +2,9 @@ ExternalProject_Add(brotli
+     GIT_REPOSITORY https://github.com/google/brotli.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_SHALLOW 1
++    GIT_TAG 3914999fcc1fda92e750ef9190aa6db9bf7bdb07
+     UPDATE_COMMAND ""
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/brotli-*.patch
+     CONFIGURE_COMMAND ${EXEC} cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
+         -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE}
+-- 
+2.25.1
+
