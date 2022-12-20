@@ -1,0 +1,58 @@
+From 095b04c58fdbf7d1bf6926a79c6fbe79593eb658 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 20 Dec 2022 22:55:49 +0800
+Subject: [PATCH] ffmpeg: add patch
+
+---
+ ...fmpeg-0001-Update-for-vulkan-1.3.238.patch | 26 +++++++++++++++++++
+ packages/ffmpeg.cmake                         |  1 +
+ 2 files changed, 27 insertions(+)
+ create mode 100644 packages/ffmpeg-0001-Update-for-vulkan-1.3.238.patch
+
+diff --git a/packages/ffmpeg-0001-Update-for-vulkan-1.3.238.patch b/packages/ffmpeg-0001-Update-for-vulkan-1.3.238.patch
+new file mode 100644
+index 0000000..23d4196
+--- /dev/null
++++ b/packages/ffmpeg-0001-Update-for-vulkan-1.3.238.patch
+@@ -0,0 +1,26 @@
++From 74aa4c883a6501c1fb339021c241f91c564a20f5 Mon Sep 17 00:00:00 2001
++From: zhongfly <11155705+zhongfly@users.noreply.github.com>
++Date: Tue, 20 Dec 2022 19:28:49 +0800
++Subject: [PATCH] update for Vulkan 1.3.238
++
++---
++ libavutil/hwcontext_vulkan.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libavutil/hwcontext_vulkan.c b/libavutil/hwcontext_vulkan.c
++index f1db1c7291f1..8537988f5ff5 100644
++--- a/libavutil/hwcontext_vulkan.c
+++++ b/libavutil/hwcontext_vulkan.c
++@@ -364,8 +364,8 @@ static const VulkanOptExtension optional_device_exts[] = {
++     { VK_KHR_VIDEO_DECODE_QUEUE_EXTENSION_NAME,               FF_VK_EXT_NO_FLAG                },
++     { VK_KHR_VIDEO_ENCODE_QUEUE_EXTENSION_NAME,               FF_VK_EXT_NO_FLAG                },
++     { VK_EXT_VIDEO_ENCODE_H264_EXTENSION_NAME,                FF_VK_EXT_NO_FLAG                },
++-    { VK_EXT_VIDEO_DECODE_H264_EXTENSION_NAME,                FF_VK_EXT_NO_FLAG                },
++-    { VK_EXT_VIDEO_DECODE_H265_EXTENSION_NAME,                FF_VK_EXT_NO_FLAG                },
+++    { VK_KHR_VIDEO_DECODE_H264_EXTENSION_NAME,                FF_VK_EXT_NO_FLAG                },
+++    { VK_KHR_VIDEO_DECODE_H265_EXTENSION_NAME,                FF_VK_EXT_NO_FLAG                },
++ };
++ 
++ /* Converts return values to strings */
++-- 
++2.25.1
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index 5ee04d4..e00c75d 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -38,6 +38,7 @@ ExternalProject_Add(ffmpeg
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_SHALLOW 1
+     UPDATE_COMMAND ""
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg-*.patch
+     CONFIGURE_COMMAND ${EXEC} <SOURCE_DIR>/configure
+         --cross-prefix=${TARGET_ARCH}-
+         --prefix=${MINGW_INSTALL_PREFIX}
+-- 
+2.38.1
+
