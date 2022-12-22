@@ -34,7 +34,7 @@ You can go to the the **[Action](https://github.com/zhongfly/mpv-winbuild/action
 same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://flat.badgen.net/github/last-commit/shinchiro/mpv-winbuild-cmake?cache=1800)](https://github.com/shinchiro/mpv-winbuild-cmake)
 
 -   Git/Hg
-    -   ANGLE [![ANGLE](https://flat.badgen.net/gitlab/last-commit/shinchiro/angle?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/angle)
+    -   ANGLE [![ANGLE](https://flat.badgen.net/gitlab/last-commit/shinchiro/angle/main?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/angle)
     -   FFmpeg [![FFmpeg](https://flat.badgen.net/github/last-commit/FFmpeg/FFmpeg?scale=0.8&cache=1800)](https://github.com/FFmpeg/FFmpeg)
     -   xz [![xz](https://flat.badgen.net/gitlab/last-commit/shinchiro/xz?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/xz)
     -   x264 [![x264](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/code.videolan.org/videolan/x264?scale=0.8&cache=1800)](https://code.videolan.org/videolan/x264)
@@ -103,5 +103,5 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R61)
     -   [libsdl2](https://www.libsdl.org/release/) (2.24.1)
-    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.2.1)
-    -   ~~[libressl](https://cdn.openbsd.org/pub/OpenBSD/LibreSSL/) (3.1.5)~~
+    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.3.0)
+
