@@ -17,7 +17,7 @@ on:
         - all-64bit
         - all
       needclean:
-        description: 'Delete cache and completely rebuild erverything'
+        description: 'Build without cache'
         required: false
         default: 'false'
         type: boolean
@@ -127,32 +127,27 @@ jobs:
           echo "sha=${{ fromJson(needs.params.outputs.params).sha }}" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
           echo "cache_id=${{ fromJson(needs.params.outputs.params).cache_id }}" >> $GITHUB_ENV
+          echo "cache_suffix=${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}" >> $GITHUB_ENV
 
-      - name: Cache Sources
-        uses: actions/cache@v3.2.1
+      - name: Restore Source Cache
+        if: ${{ github.event.inputs.needclean != 'true' }}
+        uses: actions/cache/restore@v3.2.2
+        id: cache_source
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
-          key: ${{ runner.os }}-source-${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}
+          key: ${{ runner.os }}-source-${{ env.cache_suffix }}
           restore-keys: |
-            ${{ runner.os }}-source-${{ env.short_time }}-${{ env.sha }}
-            ${{ runner.os }}-source-${{ env.short_time }}
             ${{ runner.os }}-source
-      - name: Cache
-        uses: actions/cache@v3.2.1
+      - name: Restore Build Cache
+        if: ${{ github.event.inputs.needclean != 'true' }}
+        uses: actions/cache/restore@v3.2.2
+        id: cache_build
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ env.sha }}-${{ env.cache_id }}
+          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.cache_suffix }}
           restore-keys: |
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}-${{ env.sha }}
-            ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.short_time }}
             ${{ runner.os }}-mpv-build${{ matrix.bit }}
-      - name: Clean Cache
-        if: ${{ github.event.inputs.needclean == 'true' }}
-        shell: bash
-        run: |
-          cd mpv-winbuild-cmake
-          rm -rf build${{ matrix.bit }} || true
-          rm -rf src_packages || true
+
       - name: Running custom command
         if: ${{ github.event.inputs.command != '' }}
         shell: bash
@@ -270,6 +265,18 @@ jobs:
           name: ${{ env.ffmpeg_name }}
           path: mpv-winbuild-cmake/release/${{ env.ffmpeg_name }}.7z
 
+      - name: Save Sources Cache
+        if: ${{ github.ref_name == 'main' }}
+        uses: actions/cache/save@v3.2.2
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
+          key: ${{ runner.os }}-source-${{ env.cache_suffix }}
+      - name: Save Build Cache
+        if: ${{ github.ref_name == 'main' }}
+        uses: actions/cache/save@v3.2.2
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
+          key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.cache_suffix }}
 
       - name: "Job summary"
         uses: actions/github-script@v6
