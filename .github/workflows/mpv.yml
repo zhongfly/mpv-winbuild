@@ -131,7 +131,7 @@ jobs:
 
       - name: Restore Source Cache
         if: ${{ github.event.inputs.needclean != 'true' }}
-        uses: actions/cache/restore@v3.2.2
+        uses: actions/cache/restore@v3.2.3
         id: cache_source
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
@@ -140,7 +140,7 @@ jobs:
             ${{ runner.os }}-source
       - name: Restore Build Cache
         if: ${{ github.event.inputs.needclean != 'true' }}
-        uses: actions/cache/restore@v3.2.2
+        uses: actions/cache/restore@v3.2.3
         id: cache_build
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
@@ -267,13 +267,13 @@ jobs:
 
       - name: Save Sources Cache
         if: ${{ github.ref_name == 'main' }}
-        uses: actions/cache/save@v3.2.2
+        uses: actions/cache/save@v3.2.3
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: ${{ runner.os }}-source-${{ env.cache_suffix }}
       - name: Save Build Cache
         if: ${{ github.ref_name == 'main' }}
-        uses: actions/cache/save@v3.2.2
+        uses: actions/cache/save@v3.2.3
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.cache_suffix }}
