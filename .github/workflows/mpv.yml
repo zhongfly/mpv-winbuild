@@ -1,4 +1,5 @@
 name: MPV
+run-name: ${{ github.event.inputs.run_name }}
 
 on: 
   # schedule:
@@ -31,6 +32,9 @@ on:
         required: false
       cache_id:
         description: 'input cache_id if you want to renew cache'
+        required: false
+      run_name:
+        description: 'The name displayed in the list of workflow runs'
         required: false
 
 # Workflow level env does not work properly in all fields.
