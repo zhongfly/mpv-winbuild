@@ -1,5 +1,5 @@
 name: MPV
-run-name: ${{ github.event.inputs.run_name }}
+run-name: ${{ inputs.run_name }}
 
 on: 
   # schedule:
@@ -20,12 +20,12 @@ on:
       needclean:
         description: 'Build without cache'
         required: false
-        default: 'false'
+        default: false
         type: boolean
       release:
         description: "Publish a release"
         required: false
-        default: 'false'
+        default: false
         type: boolean
       command:
         description: 'input command you want to run before build'
@@ -52,8 +52,8 @@ jobs:
     steps:
       - name: Generate cache_id
         run: |
-          if [ "${{ github.event.inputs.cache_id }}" ] ; then
-            echo "cache_id=${{ github.event.inputs.cache_id }}" >> $GITHUB_ENV
+          if [ "${{ inputs.cache_id }}" ] ; then
+            echo "cache_id=${{ inputs.cache_id }}" >> $GITHUB_ENV
           else
             echo "cache_id=$(echo $RANDOM | md5sum | head -c 20)" >> $GITHUB_ENV
           fi
@@ -69,7 +69,7 @@ jobs:
             core.exportVariable('sha', String(commit.data.sha))
             
             let matrix = {};
-            let build_target = "${{ github.event.inputs.build_target }}"
+            let build_target = "${{ inputs.build_target }}"
             switch ( build_target ) {
               case "32bit":
                 matrix.bit = ["32"];
@@ -134,7 +134,7 @@ jobs:
           echo "cache_suffix=$(date "+%Y-%m-%d")-${{ fromJson(needs.params.outputs.params).sha }}-${{ fromJson(needs.params.outputs.params).cache_id }}" >> $GITHUB_ENV
 
       - name: Restore Source Cache
-        if: ${{ github.event.inputs.needclean != 'true' }}
+        if: ${{ inputs.needclean != true }}
         uses: actions/cache/restore@v3.2.2
         id: cache_source
         with:
@@ -153,7 +153,7 @@ jobs:
             ${{ runner.os }}-mpv-build${{ matrix.bit }}
 
       - name: Running custom command
-        if: ${{ github.event.inputs.command != '' }}
+        if: ${{ inputs.command != '' }}
         shell: bash
         continue-on-error: true
         run: |
@@ -185,7 +185,7 @@ jobs:
             fi
           }
           set -x
-          ${{ github.event.inputs.command }}
+          ${{ inputs.command }}
       - name: Build
         id: build
         shell: bash
@@ -355,7 +355,7 @@ jobs:
   publish_release:
     name: Publish release
     needs: [build_mpv,params]
-    if: ${{ (github.event.inputs.release != null && github.event.inputs.release == 'true') || (github.event.inputs.release == null && fromJson(needs.params.outputs.params).release ) }}
+    if: ${{ (inputs.release != null && inputs.release == true) || (inputs.release == null && fromJson(needs.params.outputs.params).release ) }}
     runs-on: ubuntu-latest
 
     steps:
