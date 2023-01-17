@@ -134,7 +134,7 @@ jobs:
           echo "cache_suffix=$(date "+%Y-%m-%d")-${{ fromJson(needs.params.outputs.params).sha }}-${{ fromJson(needs.params.outputs.params).cache_id }}" >> $GITHUB_ENV
 
       - name: Restore Source Cache
-        if: ${{ inputs.needclean != true }}
+        if: ${{ github.event.inputs.needclean != 'true' }}
         uses: actions/cache/restore@v3.2.2
         id: cache_source
         with:
@@ -355,7 +355,7 @@ jobs:
   publish_release:
     name: Publish release
     needs: [build_mpv,params]
-    if: ${{ (inputs.release != null && inputs.release == true) || (inputs.release == null && fromJson(needs.params.outputs.params).release ) }}
+    if: ${{ (github.event.inputs.release != null && github.event.inputs.release == 'true') || (github.event.inputs.release == null && fromJson(needs.params.outputs.params).release ) }}
     runs-on: ubuntu-latest
 
     steps:
