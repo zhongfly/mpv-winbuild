@@ -14,9 +14,9 @@ Builds run daily at 12:00 UTC (trigger by [pipedream](https://pipedream.com/)) a
 
 This repo only provides 64-bit version. If you need a 32-bit version, you can fork this repo and edit mpv.yml.
 
-> `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `mpv-2.dll` file.
+> `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `libmpv-2.dll` file.
 > 
-> Some media players based on libmpv use `mpv-2.dll`.You can upgrade their libmpv version by overwriting mpv-2.dll.
+> Some media players based on libmpv use `libmpv-2.dll` or `mpv-2.dll`.You can upgrade their libmpv version by overwriting this dll.
 
 ### Release Retention Policy
 
