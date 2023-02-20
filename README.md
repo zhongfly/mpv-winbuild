@@ -87,10 +87,11 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libjxl (with [brotli](https://github.com/google/brotli), [highway](https://github.com/google/highway)) [![libjxl](https://flat.badgen.net/github/last-commit/libjxl/libjxl/main?scale=0.8&cache=1800)](https://github.com/libjxl/libjxl)
     -   libmodplug [![libmodplug](https://flat.badgen.net/github/last-commit/Konstanty/libmodplug?scale=0.8&cache=1800)](https://github.com/Konstanty/libmodplug)
     -   uavs3d [![uavs3d](https://flat.badgen.net/github/last-commit/uavs3/uavs3d?scale=0.8&cache=1800)](https://github.com/uavs3/uavs3d)
-    -   davs2 [![davs2](https://flat.badgen.net/github/last-commit/pkuvcl/davs2?scale=0.8&cache=1800)](https://github.com/pkuvcl/davs2)  
+    -   davs2 [![davs2](https://flat.badgen.net/github/last-commit/pkuvcl/davs2?scale=0.8&cache=1800)](https://github.com/pkuvcl/davs2)
+    -   libdovi [![libdovi](https://img.shields.io/github/last-commit/quietvoid/dovi_tool?style=flat-square)](https://github.com/quietvoid/dovi_tool) 
 
 -   Zip
-    -   [expat](https://github.com/libexpat/libexpat) (2.5.0)
+    -   [expat](https://github.com/libexpat/libexpat) (2.5.0) 
     -   [bzip](https://sourceware.org/pub/bzip2/) (1.0.8)
     -   [zlib](https://github.com/madler/zlib/) (1.2.13)
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7)
