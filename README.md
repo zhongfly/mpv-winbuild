@@ -88,8 +88,9 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libmodplug [![libmodplug](https://flat.badgen.net/github/last-commit/Konstanty/libmodplug?scale=0.8&cache=1800)](https://github.com/Konstanty/libmodplug)
     -   uavs3d [![uavs3d](https://flat.badgen.net/github/last-commit/uavs3/uavs3d?scale=0.8&cache=1800)](https://github.com/uavs3/uavs3d)
     -   davs2 [![davs2](https://flat.badgen.net/github/last-commit/pkuvcl/davs2?scale=0.8&cache=1800)](https://github.com/pkuvcl/davs2)
-    -   libdovi [![libdovi](https://img.shields.io/github/last-commit/quietvoid/dovi_tool?style=flat-square)](https://github.com/quietvoid/dovi_tool) 
+    -   libdovi [![libdovi](https://flat.badgen.net/github/last-commit/quietvoid/dovi_tool/main?style=flat-square)](https://github.com/quietvoid/dovi_tool) 
     -   libva [![libva](https://flat.badgen.net/github/last-commit/intel/libva?scale=0.8&cache=1800)](https://github.com/intel/libva)
+    -   aribb24 [![aribb24](https://flat.badgen.net/github/last-commit/nkoriyama/aribb24?scale=0.8&cache=1800)](https://github.com/nkoriyama/aribb24)
 
 -   Zip
     -   [expat](https://github.com/libexpat/libexpat) (2.5.0) ![](https://img.shields.io/github/v/release/libexpat/libexpat?style=flat-square)
