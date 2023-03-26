@@ -40,8 +40,6 @@ package() {
     zip $bit $arch $x86_64_level
     sudo rm -rf $buildroot/build$bit/mpv-*
     sudo chmod -R a+rwx $buildroot/build$bit
-    rm -rf $buildroot/install_rustup/.cargo/registry/{cache,src}
-    rm -rf $buildroot/install_rustup/.cargo/git/checkouts
 }
 
 build() {
@@ -67,6 +65,8 @@ build() {
         echo "Failed compiled $bit-bit. Stop"
         exit 1
     fi
+    
+    ninja -C $buildroot/build$bit cargo-clean
 }
 
 zip() {
