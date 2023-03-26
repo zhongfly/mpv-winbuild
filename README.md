@@ -92,6 +92,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libva [![libva](https://flat.badgen.net/github/last-commit/intel/libva?scale=0.8&cache=1800)](https://github.com/intel/libva)
     -   aribb24 [![aribb24](https://flat.badgen.net/github/last-commit/nkoriyama/aribb24?scale=0.8&cache=1800)](https://github.com/nkoriyama/aribb24)
     -   libzvbi [![libzvbi](https://flat.badgen.net/github/last-commit/zapping-vbi/zvbi/main?scale=0.8&cache=1800)](https://github.com/zapping-vbi/zvbi)
+    -   rav1e [![rav1e](https://flat.badgen.net/github/last-commit/xiph/rav1e?scale=0.8&cache=1800)](https://github.com/xiph/rav1e)
 
 -   Zip
     -   [expat](https://github.com/libexpat/libexpat) (2.5.0) ![](https://img.shields.io/github/v/release/libexpat/libexpat?style=flat-square)
