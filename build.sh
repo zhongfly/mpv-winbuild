@@ -56,7 +56,6 @@ build() {
         ninja -C $buildroot/build$bit rustup
     fi
     ninja -C $buildroot/build$bit update
-    ninja -C $buildroot/build$bit mpv-fullclean && ninja -C $buildroot/build$bit libssh-removeprefix
     ninja -C $buildroot/build$bit mpv
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
