@@ -114,7 +114,7 @@ jobs:
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2201-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
-          pip3 install -U setuptools rst2pdf mako jsonschema https://github.com/mesonbuild/meson/archive/refs/tags/1.0.1.zip
+          pip3 install -U setuptools rst2pdf mako jsonschema meson
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
