@@ -106,7 +106,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.6.7)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
-    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R61)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
+    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R62)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
     -   [libsdl2](https://www.libsdl.org/release/) (2.26.2)  ![](https://img.shields.io/github/v/release/libsdl-org/SDL?style=flat-square)
     -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.3.0) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
 
