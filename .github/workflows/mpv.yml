@@ -202,7 +202,9 @@ jobs:
           chmod +x build.sh
           cd mpv-winbuild-cmake
           if [[ "$(ls -A ../patch/*.patch)" ]]; then
-            git am --3way ../patch/*.patch
+            for patch in ../patch/*.patch ; do
+              git am --3way "$patch" || git am --abort
+            done
           fi
           bash ../build.sh '${{ matrix.bit }}'
       - name: Collect logs
