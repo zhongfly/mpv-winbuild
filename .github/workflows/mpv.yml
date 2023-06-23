@@ -112,7 +112,7 @@ jobs:
           sudo pacman -Syu --noconfirm
           sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang python-pip curl lib32-glib2 wget python-cairo
           mkdir -p /home/opt/7zip
-          wget -qO - https://www.7-zip.org/a/7z2201-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
           pip3 install -U --break-system-packages setuptools rst2pdf mako jsonschema meson
           git config --global user.name "github-actions[bot]"
