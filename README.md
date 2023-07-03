@@ -103,10 +103,10 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [speex](https://ftp.osuosl.org/pub/xiph/releases/speex/) (1.2.1) ![](https://img.shields.io/github/v/release/xiph/speex?style=flat-square)
     -   [ogg](https://ftp.osuosl.org/pub/xiph/releases/ogg/) (1.3.5) ![](https://img.shields.io/github/v/release/xiph/ogg?style=flat-square)
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
-    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.6.9)
+    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.2)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [gmp](https://gmplib.org/download/gmp/) (6.2.1)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R63)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
-    -   [libsdl2](https://www.libsdl.org/release/) (2.26.4)  ![](https://img.shields.io/github/v/release/libsdl-org/SDL?style=flat-square)
+    -   [libsdl2](https://www.libsdl.org/release/) (2.28.0)  ![](https://img.shields.io/github/v/release/libsdl-org/SDL?style=flat-square)
     -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.4.0) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
 
