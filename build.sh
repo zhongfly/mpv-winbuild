@@ -55,6 +55,7 @@ build() {
         ninja -C $buildroot/build$bit rustup-fullclean
         ninja -C $buildroot/build$bit rustup
     fi
+    ninja -C $buildroot/build$bit libzvbi-removeprefix
     ninja -C $buildroot/build$bit update
     ninja -C $buildroot/build$bit mpv-fullclean
     ninja -C $buildroot/build$bit mpv
