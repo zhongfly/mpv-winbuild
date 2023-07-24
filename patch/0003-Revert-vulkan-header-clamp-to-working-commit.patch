@@ -1,0 +1,25 @@
+From 9983a90453e8a2d9ec63dce8aa9863a47daa094b Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 25 Jul 2023 19:06:37 +0800
+Subject: [PATCH] Revert "vulkan-header: clamp to working commit"
+
+This reverts commit b0c879ee169f0938264c7ce3e7d4ac9bce25bcb4.
+---
+ packages/vulkan-header.cmake | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/packages/vulkan-header.cmake b/packages/vulkan-header.cmake
+index 603e0d0..c248fc2 100644
+--- a/packages/vulkan-header.cmake
++++ b/packages/vulkan-header.cmake
+@@ -5,7 +5,6 @@ ExternalProject_Add(vulkan-header
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
+-    GIT_RESET 9c37439a7952c204150863fc35569dd864dbd599
+     CMAKE_ARGS
+         -DCMAKE_BUILD_TYPE=Release
+         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
+-- 
+2.41.0.windows.1
+

@@ -1,0 +1,24 @@
+From 9e91f7d6bdf973575c76729194013da8e3f28e2d Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Mon, 24 Jul 2023 21:40:34 +0800
+Subject: [PATCH] luajit: reset to working commit
+
+---
+ packages/luajit.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/luajit.cmake b/packages/luajit.cmake
+index 08347d8..bc6cc80 100644
+--- a/packages/luajit.cmake
++++ b/packages/luajit.cmake
+@@ -34,6 +34,7 @@ ExternalProject_Add(luajit
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     GIT_REMOTE_NAME origin
+     GIT_TAG v2.1-agentzh
++    GIT_RESET df15b79172df3b143d68ee09271e0ea0ea188b96
+     PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/luajit-*.patch
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ""
+-- 
+2.41.0.windows.1
+
