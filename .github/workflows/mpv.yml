@@ -308,8 +308,8 @@ jobs:
             const { readdirSync,existsSync } = require('fs');
             const myExec = async (command, args = null) => await exec.getExecOutput(command,args,{silent: true}).then(result => result.stdout.trim()).catch(err => '');
             
-            const toolchainDir = path.resolve("mpv-winbuild-cmake");
-            const workdir = path.resolve(toolchainDir,"src_packages");
+            const upstreamDir = path.resolve("mpv-winbuild-cmake");
+            const workdir = path.resolve(upstreamDir,"src_packages");
             const isGitSync = dirname => existsSync(path.join(workdir, dirname, '.git'));
             
             const getGithubUrl = (hash,remote) => remote.replace(/\.git$/,"") + `/commit/${hash}`;
@@ -346,25 +346,31 @@ jobs:
                 return url;
             }
             
-            const dirs = readdirSync(workdir, { withFileTypes: true }).filter(dirent => dirent.isDirectory() && isGitSync(dirent.name) ).map(dirent => path.join(workdir, dirent.name));
-            let packages_table = [[{data: 'Package', header: true}, {data: 'Local commit', header: true}, {data: 'Status', header: true}, {data: 'Remote commit', header: true}]];
-            for (let dir of dirs) {
-              let local_hash = await myExec(`git -C ${dir} rev-parse --short=7 HEAD`);
-              let remote_branch = await myExec(`git -C ${dir} rev-parse --abbrev-ref HEAD@{upstream}`);
-              let remote_hash = await myExec(`git -C ${dir} rev-parse ${remote_branch}`);
-              let status = await myExec(`git -C ${dir} status -sb`).then(s => s.split("\n",1)[0].replace(/^## */,""));
-              let remote = await myExec(`git -C ${dir} config --get remote.origin.url`);
-              let url = getCommitUrl(remote_hash, remote);
-              let package_name = path.basename(dir);
-              packages_table.push([package_name, local_hash, status, `<a href="${url}">${remote_hash.slice(0,7)}</a>`]);
+            function generateGitInfoTable(targetDir){
+              const dirs = readdirSync(targetDir, { withFileTypes: true })
+                .filter(dirent => dirent.isDirectory() && isGitSync(dirent.name) )
+                .map(dirent => path.join(targetDir, dirent.name));
+              let info_table = [[{data: 'Package', header: true}, {data: 'Local commit', header: true}, {data: 'Status', header: true}, {data: 'Remote commit', header: true}]];
+              for (let dir of dirs) {
+                let local_hash = await myExec(`git -C ${dir} rev-parse --short=7 HEAD`);
+                let remote_branch = await myExec(`git -C ${dir} rev-parse --abbrev-ref HEAD@{upstream}`);
+                let remote_hash = await myExec(`git -C ${dir} rev-parse ${remote_branch}`);
+                let status = await myExec(`git -C ${dir} status -sb`).then(s => s.split("\n",1)[0].replace(/^## */,""));
+                let remote = await myExec(`git -C ${dir} config --get remote.origin.url`);
+                let url = getCommitUrl(remote_hash, remote);
+                let package_name = path.basename(dir);
+                info_table.push([package_name, local_hash, status, `<a href="${url}">${remote_hash.slice(0,7)}</a>`]);
+              }
+              return info_table;
             }
-            let toolchain_hash = await myExec(`git -C ${toolchainDir} rev-parse HEAD`);
-            let toolchain_remote = await myExec(`git -C ${toolchainDir} config --get remote.origin.url`);
-            let toolchain_url = getCommitUrl(toolchain_hash, toolchain_remote);
+
+            const packages_table = generateGitInfoTable(workdir);
+            const upstream_hash = await myExec(`git -C ${upstreamDir} rev-parse HEAD`);
+            const upstream_remote = await myExec(`git -C ${upstreamDir} config --get remote.origin.url`);
+            const upstream_url = getCommitUrl(upstream_hash, upstream_remote);
             
             await core.summary
-            .addHeading('Basic Info')
-            .addRaw(`toolchain: <a href="${toolchain_url}">${toolchain_hash.slice(0,7)}</a>`,true)
+            .addRaw(`mpv-winbuild-cmake: <a href="${upstream_url}">${upstream_hash.slice(0,7)}</a>`,true)
             .addHeading('Packages Version')
             .addTable(packages_table)
             .write();
