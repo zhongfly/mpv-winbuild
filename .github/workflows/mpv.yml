@@ -425,7 +425,7 @@ jobs:
                 return url;
             }
             
-            function generateGitInfoTable(targetDir){
+            async function generateGitInfoTable(targetDir){
               const dirs = readdirSync(targetDir, { withFileTypes: true })
                 .filter(dirent => dirent.isDirectory() && isGitSync(dirent.name) )
                 .map(dirent => path.join(targetDir, dirent.name));
@@ -443,7 +443,7 @@ jobs:
               return info_table;
             }
 
-            const packages_table = generateGitInfoTable(workdir);
+            const packages_table = await generateGitInfoTable(workdir);
             const upstream_hash = await myExec(`git -C ${upstreamDir} rev-parse HEAD`);
             const upstream_remote = await myExec(`git -C ${upstreamDir} config --get remote.origin.url`);
             const upstream_url = getCommitUrl(upstream_hash, upstream_remote);
