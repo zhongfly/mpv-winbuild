@@ -417,13 +417,25 @@ jobs:
           fi
           git checkout main
 
+      - name: "Generate release note"
+        id: note
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const sha = `${{fromJson(needs.params.outputs.params).sha}}`;
+            let note = `**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${sha}\n`;
+            note+="**Build Time**: ${{ env.long_time }}\n";
+            note+="**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n";
+            note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.short_time }}?cache=300)";
+            core.setOutput("note",note);
+
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z"
           commit: version
           name: "MPV ${{ env.long_time }}"
-          body: "**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${{ fromJson(needs.params.outputs.params).sha }}\n**Build Time**: ${{ env.long_time }}\n**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.short_time }}?cache=300)"
+          body: "${{ steps.note.outputs.note }}"
           tag: "${{ env.short_time }}"
           allowUpdates: true
           artifactErrorsFailBuild: true
