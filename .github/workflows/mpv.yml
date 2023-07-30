@@ -33,6 +33,9 @@ on:
       cache_id:
         description: 'input cache_id if you want to renew cache'
         required: false
+      prs:
+        description: "Input the pr numbers of mpv,split items by comma(',')"
+        required: false
       run_name:
         description: 'The name displayed in the list of workflow runs'
         required: false
@@ -49,6 +52,7 @@ jobs:
     outputs:
       params: ${{ steps.env-vars.outputs.params }}
       matrix: ${{ steps.script.outputs.matrix }}
+      patch_note: ${{ steps.script.outputs.patch_note }}
     steps:
       - name: Generate cache_id
         run: |
@@ -91,9 +95,57 @@ jobs:
                 break;
             }
             core.setOutput("matrix",JSON.stringify(matrix));
+
+            const fs = require('fs/promises');
+            let prs = "${{ inputs.prs }}".split(',');
+            let i = 1;
+            let patch_note = "";
+
+            for (const pr of prs) {
+              let pr_number = parseInt(pr);
+              if (isNaN(pr_number)) {
+                console.warn(`'${pr}' is not a number.`);
+                continue;
+              }
+              
+              try {
+                const res = await github.rest.pulls.get({
+                  owner: "mpv-player",
+                  repo: "mpv",
+                  pull_number: pr_number,
+                });
+                if( res.data.merged || !res.data.mergeable ) {
+                  console.warn(`Pr#${pr_number} can't merged because it has been merged or has conflicts with the base branch.}`);
+                  continue;
+                }
+                const {status,data:content} = await github.request(res.data.patch_url);
+                const name = res.data.title.replace(/[/\\?%*:|"<> ]/g,'-').replace(/--+/g,'-');
+                await fs.writeFile(`mpv-${String(i).padStart(4,'0')}-#${pr_number}-${name}.patch`, content)
+                  .then( ()=>{ i++; patch_note+=`- [#${pr_number}](${res.data.html_url}): ${res.data.title}\n`; })
+                  .catch(err => console.log(err));
+                console.log(`Download patch of #${pr_number}: ${res.data.title}.`)
+              } catch(error) {
+                if (error?.response) {
+                  console.warn(`Get pr#${pr_number} failed: ${error.response.data.message}.`);
+                } else {
+                  console.warn(error);
+                }
+                continue;
+              };
+            }
+
+            core.setOutput("patch_note",patch_note);
+
       - id: env-vars
         name: Output environment variables
         run: echo "params=$(echo $(jq -n 'env'))" >> $GITHUB_OUTPUT
+      
+      - name: upload patch
+        uses: actions/upload-artifact@v3
+        if: ${{ steps.script.outputs.patch_note }}
+        with:
+          name: mpv-patch
+          path: "*.patch"
 
   build_mpv:
     name: Build MPV
@@ -160,6 +212,33 @@ jobs:
           key: ${{ runner.os }}-mpv-build${{ matrix.bit }}-${{ env.cache_suffix }}
           restore-keys: |
             ${{ runner.os }}-mpv-build${{ matrix.bit }}
+
+      - name: Download mpv patch
+        if: ${{ needs.params.outputs.patch_note }}
+        uses: actions/download-artifact@v3
+        with:
+          name: mpv-patch
+          path: mpv-patch
+      - name: Apply mpv pr releated patch
+        if: ${{ needs.params.outputs.patch_note }}
+        run: |
+          shopt -s globstar
+          cp mpv-patch/*.patch mpv-winbuild-cmake/packages
+          ls mpv-winbuild-cmake/packages/mpv-*.patch
+          cd mpv-winbuild-cmake
+          if [[ "$(ls -A ../patch_pr/0000-*.patch)" ]]; then
+            for patch in ../patch_pr/0000-*.patch ; do
+              git am --3way "$patch" || git am --abort
+            done
+          fi
+          for patch in packages/mpv-*.patch ; do
+            pr="$(echo ${patch#*#} | cut -d- -f1)"
+            if [[ "$(ls -A ../patch_pr/#${pr}-*.patch)" ]]; then
+              for p in ../patch_pr/#${pr}-*.patch ; do
+                git am --3way "$p" || git am --abort
+              done
+            fi
+          done
 
       - name: Running custom command
         if: ${{ inputs.command != '' }}
@@ -369,11 +448,16 @@ jobs:
             const upstream_remote = await myExec(`git -C ${upstreamDir} config --get remote.origin.url`);
             const upstream_url = getCommitUrl(upstream_hash, upstream_remote);
             
-            await core.summary
-            .addRaw(`mpv-winbuild-cmake: <a href="${upstream_url}">${upstream_hash.slice(0,7)}</a>`,true)
-            .addHeading('Packages Version')
-            .addTable(packages_table)
-            .write();
+            let summary = await core.summary
+              .addRaw(`mpv-winbuild-cmake: <a href="${upstream_url}">${upstream_hash.slice(0,7)}</a>`,true);
+            const patch_note = `${{ needs.params.outputs.patch_note }}`;
+            if (patch_note) {
+              summary.addHeading('Merged Prs');
+              summary.addRaw(patch_note.replace(/- \[(?<pr>#\d+)\]\((?<url>.*)\)/g,"<a href='$<url>'>$<pr></a>"));
+            }
+            summary.addHeading('Packages Version')
+              .addTable(packages_table)
+              .write();
 
   publish_release:
     name: Publish release
@@ -432,6 +516,9 @@ jobs:
             let note = `**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${sha}\n`;
             note+="**Build Time**: ${{ env.long_time }}\n";
             note+="**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n";
+            if (patch_note) {
+              note+=`Merged Prs:\n${patch_note}\n`;
+            }
             note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.short_time }}?cache=300)";
             core.setOutput("note",note);
 
