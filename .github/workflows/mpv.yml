@@ -516,6 +516,7 @@ jobs:
             let note = `**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${sha}\n`;
             note+="**Build Time**: ${{ env.long_time }}\n";
             note+="**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n";
+            const patch_note = `${{ needs.params.outputs.patch_note }}` ;
             if (patch_note) {
               note+=`Merged Prs:\n${patch_note}\n`;
             }
