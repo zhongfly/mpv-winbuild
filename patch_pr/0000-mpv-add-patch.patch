@@ -1,23 +1,26 @@
-From c7b969e525e5806453d7b9ab0b0e8881c85de76b Mon Sep 17 00:00:00 2001
+From 8cc7c6b072090a486ffab24e394cefa4a913a2b1 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Thu, 27 Jul 2023 18:59:46 +0800
+Date: Thu, 3 Aug 2023 07:38:57 +0800
 Subject: [PATCH] mpv: add patch
 
 ---
- packages/mpv.cmake | 1 +
- 1 file changed, 1 insertion(+)
+ packages/mpv.cmake | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index 546365f..b2e6792 100644
+index b0271bb..fd14973 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
-@@ -25,6 +25,7 @@ ExternalProject_Add(mpv
+@@ -24,7 +24,8 @@ ExternalProject_Add(mpv
+         libsdl2
      GIT_REPOSITORY https://github.com/mpv-player/mpv.git
      SOURCE_DIR ${SOURCE_LOCATION}
-     GIT_CLONE_FLAGS "--filter=tree:0"
+-    GIT_CLONE_FLAGS "--filter=tree:0"
++    GIT_CLONE_FLAGS ""
 +    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/mpv-*.patch
      UPDATE_COMMAND ""
      CONFIGURE_COMMAND ${EXEC} meson <BINARY_DIR> <SOURCE_DIR>
          --prefix=${MINGW_INSTALL_PREFIX}
 -- 
 2.41.0
+
