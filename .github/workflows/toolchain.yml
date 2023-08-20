@@ -100,7 +100,7 @@ jobs:
       - name: Get Params
         id: params
         run: |
-          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}:${{ github.run_attempt }}""
+          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}:${{ github.run_attempt }}"
           echo "cache_suffix=$cache_suffix" >> $GITHUB_ENV
           echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
 
@@ -173,7 +173,7 @@ jobs:
 
   trigger:
     needs: [build,params]
-    if: ${{ github.event.inputs.no_save_cache != 'false' }}
+    if: ${{ github.event.inputs.trigger_build != 'false' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -198,9 +198,9 @@ jobs:
               let success=cache.data.actions_caches.filter((i) => i.key.endsWith(cache_suffix));
               for(const i of success){
                 for(const [key, value] of Object.entries(targets)){
-                  if (i.key.includes(key) {
+                  if (i.key.includes(key)) {
                     build_target.add(value);
-                    contiune;
+                    continue;
                   }
                 }
               }
