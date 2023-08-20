@@ -1,0 +1,232 @@
+name: toolchain
+run-name: ${{ inputs.run_name }}
+
+on: 
+  # schedule:
+  #   - cron:  '0 12 * * *'
+  workflow_dispatch:
+    inputs:
+      build_target:
+        description: "Build target"
+        required: false
+        default: "all-64bit"
+        type: choice
+        options:
+        - 32bit
+        - 64bit
+        - 64bit-v3
+        - all-64bit
+        - all
+      no_save_cache:
+        description: "Don't save caches after success build"
+        required: false
+        default: false
+        type: boolean
+      trigger_build:
+        description: "Trigger mpv build action after success build"
+        required: false
+        default: true
+        type: boolean
+      run_name:
+        description: 'The name displayed in the list of workflow runs'
+        required: false
+
+jobs:
+  params:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.script.outputs.matrix }}
+    steps:
+      - id: script
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let matrix = {};
+            let build_target = "${{ inputs.build_target }}"
+            switch ( build_target ) {
+              case "32bit":
+                matrix.bit = ["32"];
+                break;
+              case "64bit":
+                matrix.bit = ["64"];
+                break;
+              case "64bit-v3":
+                matrix.bit = ["64-v3"];
+                break;
+              case "all-64bit":
+                matrix.bit = ["64","64-v3"];
+                break;
+              case "all":
+                matrix.bit = ["32","64","64-v3"];
+                break;
+              default:
+                matrix.bit = ["64","64-v3"];
+                break;
+            }
+            core.setOutput("matrix",JSON.stringify(matrix));
+
+  build:
+    name: Build Toolchain
+    needs: params
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux/archlinux:base-devel
+    continue-on-error: true
+    outputs:
+      cache_suffix: ${{ steps.params.outputs.cache_suffix }}
+    strategy:
+      matrix: ${{ fromJson(needs.params.outputs.matrix) }}
+
+    steps:
+      - name: Install Dependencies
+        run: |
+          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang python-pip curl lib32-glib2 wget python-cairo
+          mkdir -p /home/opt/7zip
+          wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
+          pip3 install -U --break-system-packages setuptools rst2pdf mako jsonschema meson
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global pull.rebase true
+          git config --global rebase.autoStash true
+          git config --global fetch.prune true
+      - name: Checkout toolchain
+        uses: actions/checkout@v3
+        with:
+          repository: shinchiro/mpv-winbuild-cmake
+          path: mpv-winbuild-cmake
+      - name: Get Params
+        id: params
+        run: |
+          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}:${{ github.run_attempt }}""
+          echo "cache_suffix=$cache_suffix" >> $GITHUB_ENV
+          echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
+
+      - name: Build Toolchain
+        shell: bash
+        run: |
+          cd mpv-winbuild-cmake
+          bit="${{ matrix.bit }}"
+          gitdir=$(pwd)
+          buildroot=$(pwd)
+          srcdir=$(pwd)/src_packages
+          builddir=$buildroot/build$bit
+          if [ $bit == "32" ]; then
+              arch="i686"
+          elif [ $bit == "64" ]; then
+              arch="x86_64"
+          elif [ $bit == "64-v3" ]; then
+              arch="x86_64"
+              gcc_arch=-DGCC_ARCH=x86-64-v3
+              x86_64_level=-v3
+          fi
+          set -x
+          if [[ "$(ls -A ../patch/*.patch)" ]]; then
+            for patch in ../patch/*.patch ; do
+              git am --3way "$patch" || git am --abort
+            done
+          fi
+          cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$builddir
+          set +x
+          stdbuf -oL ninja -C $buildroot/build$bit gcc | 
+            while IFS= read -r line
+            do
+              echo "$line"
+              if grep -q "ninja: build stopped" <<< "$line"; then
+                exit 1
+              fi
+            done
+
+      - name: Save Toolchain Cache
+        if: ${{ github.event.inputs.no_save_cache != 'true' }}
+        uses: actions/cache/save@v3.3.1
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
+          key: toolchain-gcc-build${{ matrix.bit }}-${{ env.cache_suffix }}
+
+      - name: Save Rust Cache
+        if: ${{ github.event.inputs.no_save_cache != 'true' }}
+        uses: actions/cache/save@v3.3.1
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
+          key: rust-${{ env.cache_suffix }} 
+      - name: Save Sources Cache
+        if: ${{ github.event.inputs.no_save_cache != 'true' }}
+        uses: actions/cache/save@v3.3.1
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
+          key: source-${{ env.cache_suffix }}
+          
+      - name: Collect logs
+        if: ${{ always() }}
+        run: |
+          sudo 7z a logs.7z $(find mpv-winbuild-cmake/build${{ matrix.bit }} -type f -iname "*-*.log" -or -wholename "*/ffbuild/config.log")
+      - name: upload logs
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: ${{ matrix.bit }}_logs
+          path: logs.7z
+
+
+  trigger:
+    needs: [build,params]
+    if: ${{ github.event.inputs.no_save_cache != 'false' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger mpv build workflow
+        uses: actions/github-script@v6
+        with:
+          retries: 3
+          script: |
+            let build_target=new Set();
+            const targets = {"build64-v3":"64bit-v3","build64":"64bit","build32":"32bit"}
+            const repo="${{github.repository}}".split('/')[1];
+            const cache_suffix="${{needs.build.outputs.cache_suffix}}";
+            const cache = await github.rest.actions.getActionsCacheList({
+              owner: '${{github.repository_owner}}',
+              repo,
+              ref: '${{github.ref}}',
+              key: 'toolchain-',
+              sort: 'created_at',
+              per_page: 20,
+            })
+            if(cache?.data?.actions_caches){
+              let success=cache.data.actions_caches.filter((i) => i.key.endsWith(cache_suffix));
+              for(const i of success){
+                for(const [key, value] of Object.entries(targets)){
+                  if (i.key.includes(key) {
+                    build_target.add(value);
+                    contiune;
+                  }
+                }
+              }
+            }
+            if(build_target.size>0){
+              if(build_target.has("64bit-v3") && build_target.has("64bit")) {
+                build_target.delete("64bit-v3");
+                build_target.delete("64bit");
+                build_target.add("all-64bit");
+              }
+              if(build_target.has("all-64bit") && build_target.has("32bit")) {
+                build_target.delete("all-64bit");
+                build_target.delete("32bit");
+                build_target.add("all");
+              }
+              for (const t of build_target){
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: '${{github.repository_owner}}',
+                  repo,
+                  ref: '${{github.ref}}',
+                  workflow_id: 'mpv.yml',
+                  inputs: {
+                    build_target: t,
+                    needclean: true,
+                    run_name: `CI Build: ${t} toolchain cache update`
+                  }
+                })
+              }
+            }
