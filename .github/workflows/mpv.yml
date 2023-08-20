@@ -179,33 +179,83 @@ jobs:
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
           echo "cache_suffix=$(date "+%Y-%m-%d")-${{ github.run_id }}:${{ github.run_attempt }}" >> $GITHUB_ENV
 
-      - name: Restore Source Cache
-        if: ${{ github.event.inputs.needclean != 'true' }}
+      - name: Lookup Toolchain Cache
+        id: lookup_toolchain
         uses: actions/cache/restore@v3.3.1
-        id: cache_source
         with:
-          path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
-          key: source-${{ env.cache_suffix }}
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
+          key: toolchain-gcc-build${{ matrix.bit }}-${{ env.cache_suffix }}
           restore-keys: |
-            source-
-      - name: Restore Rust Cache
-        if: ${{ github.event.inputs.needclean != 'true' }}
+            toolchain-gcc-build${{ matrix.bit }}-
+          lookup-only: true
+      - name: Lookup Build Cache
+        id: lookup_build
         uses: actions/cache/restore@v3.3.1
-        id: cache_rust
-        with:
-          path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
-          key: rust-${{ env.cache_suffix }}
-          restore-keys: |
-            rust-
-      - name: Restore Build Cache
-        if: ${{ github.event.inputs.needclean != 'true' }}
-        uses: actions/cache/restore@v3.3.1
-        id: cache_build
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: build${{ matrix.bit }}-${{ env.cache_suffix }}
           restore-keys: |
             build${{ matrix.bit }}-
+          lookup-only: true
+          
+      - name: Generate cache key
+        id: generate_key
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let toolchain_restore_key="${{ steps.lookup_toolchain.outputs.cache-matched-key }}";
+            let build_restore_key="${{ steps.lookup_build.outputs.cache-matched-key }}";
+            let build_save_key="build${{ matrix.bit }}-${{ env.cache_suffix }}";
+            let key_suffix= "${{ env.cache_suffix }}"
+            let restore_suffix= ""; // if only want to match primaryKey, set a value which make restore-keys can't hit
+            
+            // If toolchain cache exist, compare version of toolchain and build
+            if (toolchain_restore_key) {
+              const toolchain_version = toolchain_restore_key.split("-build${{ matrix.bit }}-").at(-1);
+              build_save_key += `(${toolchain_version})`;
+              // If build cache version is not same as toolchain or needclean=true, don't restore build cache.
+              // Else, don't restore toolchain cache and use build cache.
+              if ( !build_restore_key.includes(toolchain_version) || ${{ github.event.inputs.needclean == 'true' }} ) {
+                build_restore_key="";
+                key_suffix=toolchain_version;  // only use same version cache as toolchain-version
+                restore_suffix="-only-use-primaryKey-";  // make restore-keys can't hit
+              } else {
+                toolchain_restore_key="";
+              }
+            }
+            core.exportVariable( `toolchain_restore_key`, toolchain_restore_key );
+            core.exportVariable( `build_restore_key`, build_restore_key );
+            core.exportVariable( `build_save_key`, build_save_key );
+            core.exportVariable( `key_suffix`, key_suffix );
+            core.exportVariable( `restore_suffix`, restore_suffix );
+
+      - name: Restore Rust Cache
+        uses: actions/cache/restore@v3.3.1
+        id: cache_rust
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
+          key: rust-${{ env.key_suffix }}
+          restore-keys: |
+            rust-${{ env.restore_suffix }}
+      - name: Restore Source Cache
+        uses: actions/cache/restore@v3.3.1
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
+          key: source-${{ env.key_suffix }}
+          restore-keys: |
+            source-${{ env.restore_suffix }}
+      - name: Restore Toolchain Cache
+        if: ${{ env.toolchain_restore_key != '' }}
+        uses: actions/cache/restore@v3.3.1
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
+          key: ${{ env.toolchain_restore_key }}
+      - name: Restore Build Cache
+        if: ${{ github.event.inputs.needclean != 'true' && env.build_restore_key != '' }}
+        uses: actions/cache/restore@v3.3.1
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
+          key: ${{ env.build_restore_key }}
 
       - name: Download mpv patch
         if: ${{ needs.params.outputs.patch_note }}
@@ -370,7 +420,7 @@ jobs:
         uses: actions/cache/save@v3.3.1
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: build${{ matrix.bit }}-${{ env.cache_suffix }}
+          key: ${{ env.build_save_key }}
 
       - name: "Job summary"
         uses: actions/github-script@v6
