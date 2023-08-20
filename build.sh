@@ -52,7 +52,8 @@ build() {
     ninja -C $buildroot/build$bit download || true
     if [[ ! "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
         ninja -C $buildroot/build$bit gcc
-    elif [[ ! "$(ls -A $buildroot/install_rustup/.cargo/bin)" ]]; then
+    fi
+    if [[ ! "$(ls -A $buildroot/install_rustup/.cargo/bin)" ]]; then
         ninja -C $buildroot/build$bit rustup-fullclean
         ninja -C $buildroot/build$bit rustup
     fi
