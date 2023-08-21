@@ -100,7 +100,7 @@ jobs:
       - name: Get Params
         id: params
         run: |
-          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}:${{ github.run_attempt }}"
+          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}-${{ github.run_attempt }}"
           echo "cache_suffix=$cache_suffix" >> $GITHUB_ENV
           echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
 
