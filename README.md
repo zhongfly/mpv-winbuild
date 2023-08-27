@@ -102,5 +102,5 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [gmp](https://gmplib.org/download/gmp/) (6.3.0)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R63)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
     -   [libsdl2](https://www.libsdl.org/release/) (2.28.2)  ![](https://img.shields.io/github/v/release/libsdl-org/SDL?style=flat-square)
-    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.4.0) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
+    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.4.1) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
 
