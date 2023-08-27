@@ -9,30 +9,32 @@ set -e
 git fetch --tags
 TAGS=( $(git tag | sort -r) )
 
-KEEP_LATEST=14
-KEEP_MONTHLY=12
+KEEP_DAILY=30
 
-LATEST_TAGS=()
-MONTHLY_TAGS=()
+DAILY_TAGS=()
+KEEP_TAGS=()
 
 CUR_MONTH="-1"
+CUR_DAY="-1"
 
 for TAG in ${TAGS[@]}; do
-    if [[ ${#LATEST_TAGS[@]} -lt ${KEEP_LATEST} ]]; then
-        LATEST_TAGS+=( "$TAG" )
-    fi
-
-    if [[ ${#MONTHLY_TAGS[@]} -lt ${KEEP_MONTHLY} ]]; then
+    if [[ ${#DAILY_TAGS[@]} -lt ${KEEP_DAILY} ]]; then
         TAG_MONTH="$(echo $TAG | cut -d- -f2)"
-
+        TAG_DAY="$(echo $TAG | cut -d- -f3)"
+        KEEP_TAGS+=( "$TAG" )
         if [[ ${TAG_MONTH} != ${CUR_MONTH} ]]; then
             CUR_MONTH="${TAG_MONTH}"
-            MONTHLY_TAGS+=( "$TAG" )
+            CUR_DAILY="-1"
+        fi
+        if [[ ${TAG_DAY} != ${CUR_DAY} ]]; then
+            CUR_DAY="${TAG_DAY}"
+            DAILY_TAGS+=( "$TAG" )
         fi
     fi
 done
 
-for TAG in ${LATEST_TAGS[@]} ${MONTHLY_TAGS[@]}; do
+for TAG in ${KEEP_TAGS[@]}; do
+    echo "Keep ${TAG}"
     TAGS=( "${TAGS[@]/$TAG}" )
 done
 

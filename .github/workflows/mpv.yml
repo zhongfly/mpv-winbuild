@@ -536,19 +536,20 @@ jobs:
       - name: Commit version & remove existing tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ env.short_time }}-${{fromJson(needs.params.outputs.params).sha}}
         shell: bash
         run: |
           git fetch --tags
           git checkout version || git checkout -b version origin/version || ( git checkout --orphan version && git rm -rf . )
-          echo -e "${{ env.short_time }}" > version
+          echo -e "${tag_name}" > version
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add version
-          git diff-index --quiet HEAD || ( git commit -m "${{ env.short_time }}" && git push origin version )
-          if [ $(git tag -l "${{ env.short_time }}") ] ;then
-            gh release delete "${{ env.short_time }}" || true
-            git push --delete origin "${{ env.short_time }}" || true
-            git tag -d "${{ env.short_time }}" || true
+          git diff-index --quiet HEAD || ( git commit -m "${tag_name}" && git push origin version )
+          if [ $(git tag -l "${tag_name}") ] ;then
+            gh release delete "${tag_name}" || true
+            git push --delete origin "${tag_name}" || true
+            git tag -d "${tag_name}" || true
           fi
           git checkout main
 
@@ -573,9 +574,9 @@ jobs:
         with:
           artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z"
           commit: version
-          name: "MPV ${{ env.long_time }}"
+          name: "${{ env.long_time }}"
           body: "${{ steps.note.outputs.note }}"
-          tag: "${{ env.short_time }}"
+          tag: "${{ env.short_time }}-${{fromJson(needs.params.outputs.params).sha}}"
           allowUpdates: true
           artifactErrorsFailBuild: true
           prerelease: false

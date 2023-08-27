@@ -10,24 +10,18 @@ Based on <https://github.com/shinchiro/mpv-winbuild-cmake>.
 
 ## Auto-Builds
 
-Builds run daily at 12:00 UTC (trigger by [pipedream](https://pipedream.com/)) and are automatically released on success.
+Checks the mpv repository every hour for updates. If there is an update and it is relevant to the windows build, it will automatically run the compilation and **release it on success**.
 
-This repo only provides 64-bit version. If you need a 32-bit version, you can fork this repo and edit mpv.yml.
+This repo only provides 64-bit version. If you need a 32-bit version, you can fork this repo and run `MPV` workflow by yourself.
 
+> [!NOTE]
 > `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `libmpv-2.dll` file.
 > 
 > Some media players based on libmpv use `libmpv-2.dll` or `mpv-2.dll`.You can upgrade their libmpv version by overwriting this dll.
 
 ### Release Retention Policy
 
--   The last build of each month is kept for one year.
--   The last 14 daily builds are kept.
-
-### CI Builds
-
-Every hour, check whether there is a new commit in mpv repo, if there is a new commit, builds will run automatically but will not be released.
-
-You can go to the the **[Action](https://github.com/zhongfly/mpv-winbuild/actions)** tab in this repo,and download artifact from any successful action.
+-   The last 30 days of builds will be retained.
 
 ## Information about packages
 
