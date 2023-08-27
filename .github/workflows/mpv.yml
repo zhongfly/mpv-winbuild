@@ -532,11 +532,12 @@ jobs:
         run: |
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+          echo "tag_name=$(date "+%Y-%m-%d")-$(head -c 7 <<< "${{fromJson(needs.params.outputs.params).sha}}")"  >> $GITHUB_ENV
 
       - name: Commit version & remove existing tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.short_time }}-${{fromJson(needs.params.outputs.params).sha}}
+          tag_name: ${{ env.tag_name }}
         shell: bash
         run: |
           git fetch --tags
@@ -566,7 +567,7 @@ jobs:
             if (patch_note) {
               note+=`Merged Prs:\n${patch_note}\n`;
             }
-            note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.short_time }}?cache=300)";
+            note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.tag_name }}?cache=300)";
             core.setOutput("note",note);
 
       - name: Create release
@@ -576,7 +577,7 @@ jobs:
           commit: version
           name: "${{ env.long_time }}"
           body: "${{ steps.note.outputs.note }}"
-          tag: "${{ env.short_time }}-${{fromJson(needs.params.outputs.params).sha}}"
+          tag: "${{ env.tag_name }}"
           allowUpdates: true
           artifactErrorsFailBuild: true
           prerelease: false
