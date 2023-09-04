@@ -167,9 +167,9 @@ jobs:
           git config --global pull.rebase true
           git config --global rebase.autoStash true
           git config --global fetch.prune true
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Checkout toolchain
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: shinchiro/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
@@ -512,7 +512,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
