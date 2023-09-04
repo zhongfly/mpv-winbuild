@@ -1,0 +1,26 @@
+From dacb8c5ff7faf7276a0b2f73813b7a9d6b1d2cca Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Mon, 4 Sep 2023 21:07:03 +0800
+Subject: [PATCH] libplacebo: revert to working commit
+
+---
+ packages/libplacebo.cmake | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/packages/libplacebo.cmake b/packages/libplacebo.cmake
+index b59dc6a..0ae793c 100644
+--- a/packages/libplacebo.cmake
++++ b/packages/libplacebo.cmake
+@@ -11,6 +11,9 @@ ExternalProject_Add(libplacebo
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     GIT_SUBMODULES ""
+     UPDATE_COMMAND ""
++    GIT_REMOTE_NAME origin
++    GIT_TAG master
++    GIT_RESET 7737933d2a73e9f9798b602b50d1baa949038cb7
+     CONFIGURE_COMMAND ""
+     COMMAND bash -c "rm -rf <SOURCE_DIR>/3rdparty/glad"
+     COMMAND bash -c "ln -s ${src_glad} <SOURCE_DIR>/3rdparty/glad"
+-- 
+2.41.0
+
