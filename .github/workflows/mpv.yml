@@ -181,7 +181,7 @@ jobs:
 
       - name: Lookup Toolchain Cache
         id: lookup_toolchain
-        uses: actions/cache/restore@v3.3.1
+        uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: toolchain-gcc-build${{ matrix.bit }}-${{ env.cache_suffix }}
@@ -190,7 +190,7 @@ jobs:
           lookup-only: true
       - name: Lookup Build Cache
         id: lookup_build
-        uses: actions/cache/restore@v3.3.1
+        uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: build${{ matrix.bit }}-${{ env.cache_suffix }}
@@ -230,7 +230,7 @@ jobs:
             core.exportVariable( `restore_suffix`, restore_suffix );
 
       - name: Restore Rust Cache
-        uses: actions/cache/restore@v3.3.1
+        uses: actions/cache/restore@v3.3.2
         id: cache_rust
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
@@ -238,7 +238,7 @@ jobs:
           restore-keys: |
             rust-${{ env.restore_suffix }}
       - name: Restore Source Cache
-        uses: actions/cache/restore@v3.3.1
+        uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: source-${{ env.key_suffix }}
@@ -246,13 +246,13 @@ jobs:
             source-${{ env.restore_suffix }}
       - name: Restore Toolchain Cache
         if: ${{ env.toolchain_restore_key != '' }}
-        uses: actions/cache/restore@v3.3.1
+        uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.toolchain_restore_key }}
       - name: Restore Build Cache
         if: ${{ github.event.inputs.needclean != 'true' && env.build_restore_key != '' }}
-        uses: actions/cache/restore@v3.3.1
+        uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.build_restore_key }}
@@ -405,19 +405,19 @@ jobs:
 
       - name: Save Sources Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
-        uses: actions/cache/save@v3.3.1
+        uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: source-${{ env.cache_suffix }}
       - name: Save Rust Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
-        uses: actions/cache/save@v3.3.1
+        uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
           key: rust-${{ env.cache_suffix }}
       - name: Save Build Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
-        uses: actions/cache/save@v3.3.1
+        uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.build_save_key }}

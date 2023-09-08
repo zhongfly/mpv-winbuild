@@ -141,20 +141,20 @@ jobs:
 
       - name: Save Toolchain Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
-        uses: actions/cache/save@v3.3.1
+        uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: toolchain-gcc-build${{ matrix.bit }}-${{ env.cache_suffix }}
 
       - name: Save Rust Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
-        uses: actions/cache/save@v3.3.1
+        uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
           key: rust-${{ env.cache_suffix }} 
       - name: Save Sources Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
-        uses: actions/cache/save@v3.3.1
+        uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: source-${{ env.cache_suffix }}
