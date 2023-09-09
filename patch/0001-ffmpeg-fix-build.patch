@@ -1,0 +1,56 @@
+From 3fe5d3e5ef3218dbe715da8238b7e992d370a555 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 9 Sep 2023 20:03:30 +0800
+Subject: [PATCH] ffmpeg: fix build
+
+---
+ ...avformat-vapourSynth-include-frame.h.patch | 24 +++++++++++++++++++
+ packages/ffmpeg.cmake                         |  1 +
+ 2 files changed, 25 insertions(+)
+ create mode 100644 packages/ffmpeg-0001-avformat-vapourSynth-include-frame.h.patch
+
+diff --git a/packages/ffmpeg-0001-avformat-vapourSynth-include-frame.h.patch b/packages/ffmpeg-0001-avformat-vapourSynth-include-frame.h.patch
+new file mode 100644
+index 0000000..bb8909d
+--- /dev/null
++++ b/packages/ffmpeg-0001-avformat-vapourSynth-include-frame.h.patch
+@@ -0,0 +1,24 @@
++From 5955fcd6c98fe60930c9ef42e5a4010bbc1cac21 Mon Sep 17 00:00:00 2001
++From: zhongfly <11155705+zhongfly@users.noreply.github.com>
++Date: Sat, 9 Sep 2023 11:56:35 +0000
++Subject: [PATCH] avformat/vapourSynth: include frame.h
++
++---
++ libavformat/vapoursynth.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libavformat/vapoursynth.c b/libavformat/vapoursynth.c
++index 1578a6ac771..965d36dc2ee 100644
++--- a/libavformat/vapoursynth.c
+++++ b/libavformat/vapoursynth.c
++@@ -31,6 +31,7 @@
++ #include "libavutil/avassert.h"
++ #include "libavutil/avstring.h"
++ #include "libavutil/eval.h"
+++#include "libavutil/frame.h"
++ #include "libavutil/imgutils.h"
++ #include "libavutil/opt.h"
++ #include "libavutil/pixdesc.h"
++-- 
++2.42.0
++
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index aeada10..af7a6a5 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -44,6 +44,7 @@ ExternalProject_Add(ffmpeg
+     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg-*.patch
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} <SOURCE_DIR>/configure
+         --cross-prefix=${TARGET_ARCH}-
+-- 
+2.41.0
+
