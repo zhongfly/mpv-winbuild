@@ -87,11 +87,11 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libzvbi [![libzvbi](https://flat.badgen.net/github/last-commit/zapping-vbi/zvbi/main?scale=0.8&cache=1800)](https://github.com/zapping-vbi/zvbi)
     -   rav1e [![rav1e](https://flat.badgen.net/github/last-commit/xiph/rav1e?scale=0.8&cache=1800)](https://github.com/xiph/rav1e)
     -   libaribcaption [![libaribcaption](https://flat.badgen.net/github/last-commit/xqq/libaribcaption?scale=0.8&cache=1800)](https://github.com/xqq/libaribcaption)
+    -   zlib [![zlib](https://flat.badgen.net/github/last-commit/madler/zlib?scale=0.8&cache=1800)](https://github.com/madler/zlib)
 
 -   Zip
     -   [expat](https://github.com/libexpat/libexpat) (2.5.0) ![](https://img.shields.io/github/v/release/libexpat/libexpat?style=flat-square)
     -   [bzip](https://sourceware.org/pub/bzip2/) (1.0.8) ![](https://img.shields.io/github/v/tag/libarchive/bzip2?style=flat-square)
-    -   [zlib](https://github.com/madler/zlib/) (1.2.13) ![](https://img.shields.io/github/v/release/madler/zlib?style=flat-square)
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7) 
     -   [vorbis](https://xiph.org/downloads/) (1.3.7) ![](https://img.shields.io/github/v/release/xiph/vorbis?style=flat-square)
     -   [speex](https://ftp.osuosl.org/pub/xiph/releases/speex/) (1.2.1) ![](https://img.shields.io/github/v/release/xiph/speex?style=flat-square)
