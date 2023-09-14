@@ -1,0 +1,23 @@
+From e4be3f6edba1c99e8a14c911a8413250bc74a0bc Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Thu, 14 Sep 2023 14:41:19 +0800
+Subject: [PATCH] vulkan: clamp to working commit
+
+---
+ packages/vulkan.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/vulkan.cmake b/packages/vulkan.cmake
+index 1350157..0a20932 100644
+--- a/packages/vulkan.cmake
++++ b/packages/vulkan.cmake
+@@ -6,6 +6,7 @@ ExternalProject_Add(vulkan
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET e2e3cb97b889826405ca0d82089cc5079e6bf6d3
+     PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/vulkan-*.patch
+     CONFIGURE_COMMAND ${EXEC} cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -DCMAKE_BUILD_TYPE=Release
+-- 
+2.39.0
