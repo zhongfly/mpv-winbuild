@@ -27,6 +27,11 @@ on:
         required: false
         default: true
         type: boolean
+      release:
+        description: "Publish a release"
+        required: false
+        default: false
+        type: boolean
       run_name:
         description: 'The name displayed in the list of workflow runs'
         required: false
@@ -183,6 +188,7 @@ jobs:
           retries: 3
           script: |
             let build_target=new Set();
+            const release = "${{ github.event.inputs.release }}" == 'true' ? true : false;
             const targets = {"build64-v3":"64bit-v3","build64":"64bit","build32":"32bit"}
             const repo="${{github.repository}}".split('/')[1];
             const cache_suffix="${{needs.build.outputs.cache_suffix}}";
@@ -225,6 +231,7 @@ jobs:
                   inputs: {
                     build_target: t,
                     needclean: true,
+                    release: release,
                     run_name: `CI Build: ${t} toolchain cache update`
                   }
                 })
