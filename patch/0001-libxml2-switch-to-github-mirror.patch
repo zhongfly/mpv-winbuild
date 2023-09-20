@@ -1,0 +1,23 @@
+From 8df9fb7f48fc84982a59dfe6e3953dd0e3daa777 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 20 Sep 2023 16:34:33 +0800
+Subject: [PATCH] libxml2: switch to github mirror
+
+---
+ packages/libxml2.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/libxml2.cmake b/packages/libxml2.cmake
+index 5586736..d54969f 100644
+--- a/packages/libxml2.cmake
++++ b/packages/libxml2.cmake
+@@ -1,5 +1,5 @@
+ ExternalProject_Add(libxml2
+-    GIT_REPOSITORY https://gitlab.gnome.org/GNOME/libxml2.git
++    GIT_REPOSITORY https://github.com/GNOME/libxml2.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     UPDATE_COMMAND ""
+-- 
+2.39.0
+
