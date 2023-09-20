@@ -173,7 +173,6 @@ jobs:
         with:
           repository: shinchiro/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
-          ref: 8fddf33a850592b570bb01466fd25f6a7f877fac
       - name: Get Params
         run: |
           echo "sha=${{ fromJson(needs.params.outputs.params).sha }}" >> $GITHUB_ENV
