@@ -17,6 +17,13 @@ on:
         - 64bit-v3
         - all-64bit
         - all
+      compiler:
+        required: false
+        default: "gcc"
+        type: choice
+        options:
+        - gcc
+        - clang
       no_save_cache:
         description: "Don't save caches after success build"
         required: false
@@ -87,7 +94,7 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang python-pip curl lib32-glib2 wget python-cairo
+          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
@@ -114,6 +121,7 @@ jobs:
         run: |
           cd mpv-winbuild-cmake
           bit="${{ matrix.bit }}"
+          compiler="${{ inputs.compiler }}"
           gitdir=$(pwd)
           buildroot=$(pwd)
           srcdir=$(pwd)/src_packages
@@ -133,9 +141,14 @@ jobs:
               git am --3way "$patch" || git am --abort
             done
           fi
-          cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$builddir
+          cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$builddir
+          if [ "$compiler" == "gcc" ]; then
+            command="ninja -C $buildroot/build$bit gcc"
+          elif [ "$compiler" == "clang" ]; then
+            command="ninja -C $buildroot/build$bit llvm && ninja -C $buildroot/build$bit llvm-clang"
+          fi
           set +x
-          stdbuf -oL ninja -C $buildroot/build$bit gcc | 
+          stdbuf -oL bash -c "$command" | 
             while IFS= read -r line
             do
               echo "$line"
@@ -149,7 +162,7 @@ jobs:
         uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: toolchain-gcc-build${{ matrix.bit }}-${{ env.cache_suffix }}
+          key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
 
       - name: Save Rust Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
@@ -196,7 +209,7 @@ jobs:
               owner: '${{github.repository_owner}}',
               repo,
               ref: '${{github.ref}}',
-              key: 'toolchain-',
+              key: 'toolchain-${{ inputs.compiler }}-',
               sort: 'created_at',
               per_page: 20,
             })
@@ -230,6 +243,7 @@ jobs:
                   workflow_id: 'mpv.yml',
                   inputs: {
                     build_target: t,
+                    compiler: "${{ inputs.compiler }}",
                     needclean: true,
                     release: release,
                     run_name: `CI Build: ${t} toolchain cache update`

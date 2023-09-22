@@ -17,6 +17,13 @@ on:
         - 64bit-v3
         - all-64bit
         - all
+      compiler:
+        required: false
+        default: "gcc"
+        type: choice
+        options:
+        - gcc
+        - clang
       needclean:
         description: 'Build without cache'
         required: false
@@ -157,7 +164,7 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp mercurial subversion ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang python-pip curl lib32-glib2 wget python-cairo
+          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
@@ -184,18 +191,18 @@ jobs:
         uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: toolchain-gcc-build${{ matrix.bit }}-${{ env.cache_suffix }}
+          key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
           restore-keys: |
-            toolchain-gcc-build${{ matrix.bit }}-
+            toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-
           lookup-only: true
       - name: Lookup Build Cache
         id: lookup_build
         uses: actions/cache/restore@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: build${{ matrix.bit }}-${{ env.cache_suffix }}
+          key: ${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
           restore-keys: |
-            build${{ matrix.bit }}-
+            ${{ inputs.compiler }}-build${{ matrix.bit }}-
           lookup-only: true
           
       - name: Generate cache key
@@ -205,7 +212,7 @@ jobs:
           script: |
             let toolchain_restore_key="${{ steps.lookup_toolchain.outputs.cache-matched-key }}";
             let build_restore_key="${{ steps.lookup_build.outputs.cache-matched-key }}";
-            let build_save_key="build${{ matrix.bit }}-${{ env.cache_suffix }}";
+            let build_save_key="${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}";
             let key_suffix= "${{ env.cache_suffix }}"
             let restore_suffix= ""; // if only want to match primaryKey, set a value which make restore-keys can't hit
             
@@ -292,6 +299,7 @@ jobs:
         run: |
           cd mpv-winbuild-cmake
           bit="${{ matrix.bit }}"
+          compiler="${{ inputs.compiler }}"
           gitdir=$(pwd)
           buildroot=$(pwd)
           srcdir=$(pwd)/src_packages
@@ -330,7 +338,7 @@ jobs:
               git am --3way "$patch" || git am --abort
             done
           fi
-          bash ../build.sh '${{ matrix.bit }}'
+          bash ../build.sh -t '${{ matrix.bit }}' -c '${{ inputs.compiler }}'
       - name: Collect logs
         if: ${{ always() }}
         run: |
@@ -375,7 +383,9 @@ jobs:
             ffmpeg_hash = ffmpeg_hash.trim();
             const ffmpeg_name = `ffmpeg-${arch}-git-${ffmpeg_hash}`;
             core.exportVariable( 'ffmpeg_name', ffmpeg_name );
-            await exec.exec(`7z a -m0=lzma2 -mx=9 -ms=on mpv-winbuild-cmake/release/${ffmpeg_name}.7z ./mpv-winbuild-cmake/build${{ matrix.bit }}/install/mingw/bin/ffmpeg.exe`)
+            const globber = await glob.create(`./mpv-winbuild-cmake/build${{ matrix.bit }}/**/ffmpeg.exe`);
+            const ffmpeg_path = (await globber.glob())[0]
+            await exec.exec(`7z a -m0=lzma2 -mx=9 -ms=on mpv-winbuild-cmake/release/${ffmpeg_name}.7z ${ffmpeg_path}`)
 
       - name: upload mpv-debug
         uses: actions/upload-artifact@v3
@@ -469,6 +479,14 @@ jobs:
                 }
                 return url;
             }
+            async function repo_info(dir){
+              let local_hash = await myExec(`git -C ${dir} rev-parse --short=7 HEAD`);
+              let remote_branch = await myExec(`git -C ${dir} rev-parse --abbrev-ref HEAD@{upstream}`);
+              let remote_hash = await myExec(`git -C ${dir} rev-parse ${remote_branch}`);
+              let status = await myExec(`git -C ${dir} status -sb`).then(s => s.split("\n",1)[0].replace(/^## */,""));
+              let remote = await myExec(`git -C ${dir} config --get remote.origin.url`);
+              return [local_hash, remote_hash, status, remote]
+            }
             
             async function generateGitInfoTable(targetDir){
               const dirs = readdirSync(targetDir, { withFileTypes: true })
@@ -476,11 +494,7 @@ jobs:
                 .map(dirent => path.join(targetDir, dirent.name));
               let info_table = [[{data: 'Package', header: true}, {data: 'Local commit', header: true}, {data: 'Status', header: true}, {data: 'Remote commit', header: true}]];
               for (let dir of dirs) {
-                let local_hash = await myExec(`git -C ${dir} rev-parse --short=7 HEAD`);
-                let remote_branch = await myExec(`git -C ${dir} rev-parse --abbrev-ref HEAD@{upstream}`);
-                let remote_hash = await myExec(`git -C ${dir} rev-parse ${remote_branch}`);
-                let status = await myExec(`git -C ${dir} status -sb`).then(s => s.split("\n",1)[0].replace(/^## */,""));
-                let remote = await myExec(`git -C ${dir} config --get remote.origin.url`);
+                [local_hash, remote_hash, status, remote] = await repo_info(dir)
                 let url = getCommitUrl(remote_hash, remote);
                 let package_name = path.basename(dir);
                 info_table.push([package_name, local_hash, status, `<a href="${url}">${remote_hash.slice(0,7)}</a>`]);
@@ -489,12 +503,12 @@ jobs:
             }
 
             const packages_table = await generateGitInfoTable(workdir);
-            const upstream_hash = await myExec(`git -C ${upstreamDir} rev-parse HEAD`);
-            const upstream_remote = await myExec(`git -C ${upstreamDir} config --get remote.origin.url`);
-            const upstream_url = getCommitUrl(upstream_hash, upstream_remote);
+            [upstream_local_hash, upstream_remote_hash, upstream_status, upstream_remote] = await repo_info(upstreamDir)
+            const upstream_url = getCommitUrl(upstream_remote_hash, upstream_remote);
             
             let summary = await core.summary
-              .addRaw(`mpv-winbuild-cmake: <a href="${upstream_url}">${upstream_hash.slice(0,7)}</a>`,true);
+              .addRaw(`mpv-winbuild-cmake: ${upstream_status} (remote:<a href="${upstream_url}">${upstream_remote_hash.slice(0,7)}</a>)`,true)
+              .addRaw(`Compiler: ${{ inputs.compiler }}`,true);
             const patch_note = `${{ needs.params.outputs.patch_note }}`;
             if (patch_note) {
               summary.addHeading('Merged Prs');

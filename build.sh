@@ -5,18 +5,20 @@ main() {
     gitdir=$(pwd)
     buildroot=$(pwd)
     srcdir=$(pwd)/src_packages
+    local target=$1
+    compiler=$2
 
     prepare
-    if [ "$1" == "32" ]; then
-        package "32"
-    elif [ "$1" == "64" ]; then
+    if [ "$target" == "32" ]; then
+        package "32" 
+    elif [ "$target" == "64" ]; then
         package "64"
-    elif [ "$1" == "64-v3" ]; then
+    elif [ "$target" == "64-v3" ]; then
         package "64-v3"
-    elif [ "$1" == "all-64" ]; then
+    elif [ "$target" == "all-64" ]; then
         package "64"
         package "64-v3"
-    else [ "$1" == "all" ];
+    else [ "$target" == "all" ];
         package "32"
         package "64"
         package "64-v3"
@@ -47,11 +49,15 @@ build() {
     local arch=$2
     local gcc_arch=$3
     
-    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
+    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
     ninja -C $buildroot/build$bit {libzvbi,libopenmpt}-removeprefix || true
     ninja -C $buildroot/build$bit download || true
     if [[ ! "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
-        ninja -C $buildroot/build$bit gcc
+        if [ "$compiler" == "gcc" ]; then
+            ninja -C $buildroot/build$bit gcc
+        elif [ "$compiler" == "clang" ]; then
+            ninja -C $buildroot/build$bit llvm && ninja -C $buildroot/build$bit llvm-clang
+        fi
     fi
     if [[ ! "$(ls -A $buildroot/install_rustup/.cargo/bin)" ]]; then
         ninja -C $buildroot/build$bit rustup-fullclean
@@ -113,4 +119,12 @@ prepare() {
     cd ../..
 }
 
-main "$1"
+while getopts t:c: flag
+do
+    case "${flag}" in
+        t) target=${OPTARG};;
+        c) compiler=${OPTARG};;
+    esac
+done
+
+main "${target:-all-64}" "${compiler:-gcc}"
