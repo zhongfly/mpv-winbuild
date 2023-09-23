@@ -3,6 +3,7 @@ set -x
 
 main() {
     gitdir=$(pwd)
+    clang_root=$(pwd)/clang_root
     buildroot=$(pwd)
     srcdir=$(pwd)/src_packages
     local target=$1
@@ -49,7 +50,11 @@ build() {
     local arch=$2
     local gcc_arch=$3
     
-    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
+    if [ "$compiler" == "clang" ]; then
+        clang_option="-DCMAKE_INSTALL_PREFIX=$clang_root -DMINGW_INSTALL_PREFIX=$buildroot/build$bit/install/$arch-w64-mingw32"
+    fi
+    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler $clang_option -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
+
     ninja -C $buildroot/build$bit {libzvbi,libopenmpt}-removeprefix || true
     ninja -C $buildroot/build$bit download || true
     if [[ ! "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
