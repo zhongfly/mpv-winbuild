@@ -48,6 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.script.outputs.matrix }}
+      cache_suffix: ${{ steps.suffix.outputs.cache_suffix }}
     steps:
       - id: script
         uses: actions/github-script@v6
@@ -77,6 +78,11 @@ jobs:
             }
             core.setOutput("matrix",JSON.stringify(matrix));
 
+      - id: suffix
+        run: |
+          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}-${{ github.run_attempt }}"
+          echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build Toolchain
     needs: params
@@ -84,8 +90,6 @@ jobs:
     container:
       image: archlinux/archlinux:base-devel
     continue-on-error: true
-    outputs:
-      cache_suffix: ${{ steps.params.outputs.cache_suffix }}
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
 
@@ -109,12 +113,6 @@ jobs:
         with:
           repository: shinchiro/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
-      - name: Get Params
-        id: params
-        run: |
-          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}-${{ github.run_attempt }}"
-          echo "cache_suffix=$cache_suffix" >> $GITHUB_ENV
-          echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
 
       - name: Build Toolchain
         shell: bash
@@ -162,20 +160,20 @@ jobs:
         uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
+          key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ needs.params.outputs.cache_suffix }}
 
       - name: Save Rust Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
         uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
-          key: rust-${{ env.cache_suffix }} 
+          key: rust-${{ needs.params.outputs.cache_suffix }} 
       - name: Save Sources Cache
         if: ${{ github.event.inputs.no_save_cache != 'true' }}
         uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
-          key: source-${{ env.cache_suffix }}
+          key: source-${{ needs.params.outputs.cache_suffix }}
           
       - name: Collect logs
         if: ${{ always() }}
@@ -204,7 +202,7 @@ jobs:
             const release = "${{ github.event.inputs.release }}" == 'true' ? true : false;
             const targets = {"build64-v3":"64bit-v3","build64":"64bit","build32":"32bit"}
             const repo="${{github.repository}}".split('/')[1];
-            const cache_suffix="${{needs.build.outputs.cache_suffix}}";
+            const cache_suffix="${{ needs.params.outputs.cache_suffix }}";
             const cache = await github.rest.actions.getActionsCacheList({
               owner: '${{github.repository_owner}}',
               repo,
