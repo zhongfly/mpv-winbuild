@@ -57,13 +57,13 @@ build() {
 
     ninja -C $buildroot/build$bit {libzvbi,libopenmpt}-removeprefix || true
     ninja -C $buildroot/build$bit download || true
-    if [[ ! "$(ls -A $buildroot/build$bit/install/bin)" ]]; then
-        if [ "$compiler" == "gcc" ]; then
-            ninja -C $buildroot/build$bit gcc
-        elif [ "$compiler" == "clang" ]; then
-            ninja -C $buildroot/build$bit llvm && ninja -C $buildroot/build$bit llvm-clang
-        fi
+
+    if [ "$compiler" == "gcc" ] && [ ! "$(ls -A $buildroot/build$bit/install/bin)" ]; then
+        ninja -C $buildroot/build$bit gcc
+    elif [ "$compiler" == "clang" ] && [ ! "$(ls -A $clang_root/bin)" ]; then
+        ninja -C $buildroot/build$bit llvm && ninja -C $buildroot/build$bit llvm-clang
     fi
+
     if [[ ! "$(ls -A $buildroot/install_rustup/.cargo/bin)" ]]; then
         ninja -C $buildroot/build$bit rustup-fullclean
         ninja -C $buildroot/build$bit rustup
