@@ -217,7 +217,7 @@ jobs:
                 for(const [key, value] of Object.entries(targets)){
                   if (i.key.includes(key)) {
                     build_target.add(value);
-                    continue;
+                    break;
                   }
                 }
               }
