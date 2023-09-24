@@ -315,6 +315,7 @@ jobs:
                 for(const [key, value] of Object.entries(targets)){
                   if (i.key.includes(key)) {
                     build_target.add(value);
+                    core.info(`Found success ${value} build cache: ${i.key}.`)
                     break;
                   }
                 }
@@ -346,4 +347,6 @@ jobs:
                   }
                 })
               }
+            } else {
+              core.setFailed("Don't find any success build cache");
             }
