@@ -29,6 +29,11 @@ on:
         required: false
         default: false
         type: boolean
+      skip_llvm_build:
+        description: "Skip building llvm if compiler is clang"
+        required: false
+        default: false
+        type: boolean
       trigger_build:
         description: "Trigger mpv build action after success build"
         required: false
@@ -86,7 +91,8 @@ jobs:
   build_llvm:
     name: Build LLVM
     needs: params
-    if: ${{ inputs.compiler =='clang' }}
+    if: ${{ inputs.compiler =='clang' && inputs.skip_llvm_build != true }}
+    continue-on-error: true
     runs-on: ubuntu-latest
     container:
       image: archlinux/archlinux:base-devel
@@ -163,7 +169,7 @@ jobs:
   build:
     name: Build Toolchain
     needs: [params,build_llvm]
-    if: ${{ (inputs.compiler =='clang' && success() ) || ( inputs.compiler =='gcc' && always() ) }}
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
     container:
       image: archlinux/archlinux:base-devel
@@ -201,7 +207,7 @@ jobs:
             mpv-winbuild-cmake/clang_root
           key: llvm-${{ needs.params.outputs.cache_suffix }}
           restore-keys: |
-            llvm-${{ needs.params.outputs.cache_suffix }}
+            llvm-
 
       - name: Build Toolchain
         shell: bash
@@ -248,20 +254,20 @@ jobs:
           ninja -C $buildroot/build$bit cargo-clean
 
       - name: Save Toolchain Cache
-        if: ${{ github.event.inputs.no_save_cache != 'true' }}
+        if: ${{ inputs.no_save_cache != true }}
         uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ needs.params.outputs.cache_suffix }}
 
       - name: Save clang_root cache
-        if: ${{ inputs.compiler =='clang' }}
+        if: ${{ inputs.compiler =='clang' && inputs.no_save_cache != true }}
         uses: actions/cache/save@v3.3.2
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: clang_root-${{ needs.params.outputs.cache_suffix }}
       - name: Save Rust Cache
-        if: ${{ github.event.inputs.no_save_cache != 'true' }}
+        if: ${{ inputs.no_save_cache != true }}
         uses: actions/cache/save@v3.3.2
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
@@ -281,7 +287,7 @@ jobs:
 
   trigger:
     needs: [build,params]
-    if: ${{ github.event.inputs.trigger_build != 'false' && always() }}
+    if: ${{ always() && inputs.trigger_build != false && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
 
     steps:
@@ -291,7 +297,7 @@ jobs:
           retries: 3
           script: |
             let build_target=new Set();
-            const release = "${{ github.event.inputs.release }}" == 'true' ? true : false;
+            const release = ${{ inputs.release }};
             const targets = {"build64-v3":"64bit-v3","build64":"64bit","build32":"32bit"}
             const repo="${{github.repository}}".split('/')[1];
             const cache_suffix="${{ needs.params.outputs.cache_suffix }}";
