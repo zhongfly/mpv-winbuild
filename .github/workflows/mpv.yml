@@ -236,6 +236,15 @@ jobs:
           restore-keys: |
             clang_root-${{ env.toolchain_version }}
           lookup-only: true
+      - name: Keep llvm cache alive
+        if: ${{ inputs.compiler =='clang' }}
+        uses: actions/cache/restore@v3.3.2
+        with: 
+          path: mpv-winbuild-cmake/clang_root
+          key: llvm-${{ env.toolchain_version }}
+          restore-keys: |
+            llvm-
+          lookup-only: true
       - name: Restore clang sysroot cache
         if: ${{ inputs.compiler =='clang' }}
         uses: actions/cache/restore@v3.3.2
