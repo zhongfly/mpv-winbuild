@@ -87,7 +87,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libzvbi [![libzvbi](https://flat.badgen.net/github/last-commit/zapping-vbi/zvbi/main?scale=0.8&cache=1800)](https://github.com/zapping-vbi/zvbi)
     -   rav1e [![rav1e](https://flat.badgen.net/github/last-commit/xiph/rav1e?scale=0.8&cache=1800)](https://github.com/xiph/rav1e)
     -   libaribcaption [![libaribcaption](https://flat.badgen.net/github/last-commit/xqq/libaribcaption?scale=0.8&cache=1800)](https://github.com/xqq/libaribcaption)
-    -   zlib [![zlib](https://flat.badgen.net/github/last-commit/madler/zlib?scale=0.8&cache=1800)](https://github.com/madler/zlib)
+    -   zlib [![zlib](https://flat.badgen.net/github/last-commit/zlib-ng/zlib-ng?scale=0.8&cache=1800)](https://github.com/zlib-ng/zlib-ng)
 
 -   Zip
     -   [expat](https://github.com/libexpat/libexpat) (2.5.0) ![](https://img.shields.io/github/v/release/libexpat/libexpat?style=flat-square)
@@ -100,7 +100,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.2)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [gmp](https://gmplib.org/download/gmp/) (6.3.0)
-    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R63)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
+    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R64)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
     -   [libsdl2](https://www.libsdl.org/release/) (2.28.2)  ![](https://img.shields.io/github/v/release/libsdl-org/SDL?style=flat-square)
-    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.4.1) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
+    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.5.0) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
 
