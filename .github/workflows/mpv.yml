@@ -97,7 +97,7 @@ jobs:
               while (count<5) {
                 count = count + 1;
                 const res = await github.rest.pulls.get(o);
-                # If the 'mergeable' is 'null', waiting for GitHub to compute the mergeability
+                // If the 'mergeable' is 'null', waiting for GitHub to compute the mergeability
                 if (res.data.merged || res.data.mergeable != null) return res;
                 if (count<5) await sleep(300*2**count);
               }
