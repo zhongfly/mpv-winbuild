@@ -120,7 +120,7 @@ jobs:
                   pull_number: pr_number,
                 });
                 if( res === undefined || res.data.merged || !res.data.mergeable ) {
-                  console.warn(`Pr#${pr_number} can't merged because it has been merged or has conflicts with the base branch.}`);
+                  console.warn(`Pr#${pr_number} can't merged because it has been merged or has conflicts with the base branch.`);
                   continue;
                 }
                 const {status,data:content} = await github.request(res.data.patch_url);
