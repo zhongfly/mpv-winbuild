@@ -443,7 +443,7 @@ jobs:
           path: mpv-winbuild-cmake/release/${{ env.ffmpeg_name }}.7z
 
       - name: Save clang sysroot cache
-        if: ${{ inputs.compiler =='clang' }}
+        if: ${{ inputs.compiler =='clang' && inputs.no_save_cache != true }}
         uses: actions/cache/save@v3.3.2
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
