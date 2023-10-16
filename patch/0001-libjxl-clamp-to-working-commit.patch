@@ -1,0 +1,24 @@
+From 7cf1d4257f626657cdef5c90d422a031d194f863 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Mon, 16 Oct 2023 21:27:37 +0800
+Subject: [PATCH] libjxl: clamp to working commit
+
+---
+ packages/libjxl.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/libjxl.cmake b/packages/libjxl.cmake
+index cca5ddf..c62ddfd 100644
+--- a/packages/libjxl.cmake
++++ b/packages/libjxl.cmake
+@@ -14,6 +14,7 @@ ExternalProject_Add(libjxl
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET c6a7bc2b079666ebfde3ca66afb0d17915cc634a
+     GIT_SUBMODULES ""
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ""
+-- 
+2.41.0
+
