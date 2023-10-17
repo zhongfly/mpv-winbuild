@@ -124,7 +124,7 @@ jobs:
                   continue;
                 }
                 const {status,data:content} = await github.request(res.data.patch_url);
-                const name = res.data.title.replace(/[/\\?%*:|"<> ]/g,'-').replace(/--+/g,'-');
+                const name = res.data.title.replace(/[/\\?%*:|`'"<> ]/g,'-').replace(/--+/g,'-');
                 await fs.writeFile(`mpv-${String(i).padStart(4,'0')}-#${pr_number}-${name}.patch`, content)
                   .then( ()=>{ i++; patch_note+=`- [#${pr_number}](${res.data.html_url}): ${res.data.title}\n`; })
                   .catch(err => console.log(err));
