@@ -51,11 +51,11 @@ build() {
     local gcc_arch=$3
     
     if [ "$compiler" == "clang" ]; then
-        clang_option="-DLLVM_ENABLE_LTO=Thin -DCMAKE_INSTALL_PREFIX=$clang_root -DMINGW_INSTALL_PREFIX=$buildroot/build$bit/install/$arch-w64-mingw32"
+        clang_option=(-DLLVM_ENABLE_LTO=Thin -DCMAKE_INSTALL_PREFIX=$clang_root -DMINGW_INSTALL_PREFIX=$buildroot/build$bit/install/$arch-w64-mingw32)
     fi
-    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler $clang_option -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
+    cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler "${clang_option[@]}" -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
 
-    ninja -C $buildroot/build$bit {libzvbi,libopenmpt}-removeprefix || true
+    ninja -C $buildroot/build$bit {libzvbi,libopenmpt}-removeprefix || rm -rf $srcdir/{libzvbi,libopenmpt} || true
     ninja -C $buildroot/build$bit download || true
 
     if [ "$compiler" == "gcc" ] && [ ! "$(ls -A $buildroot/build$bit/install/bin)" ]; then
@@ -70,6 +70,11 @@ build() {
     fi
     ninja -C $buildroot/build$bit update
     ninja -C $buildroot/build$bit mpv-fullclean
+    
+    if [ "$compiler" == "clang" ]; then
+        clang_option+=('-DCLANG_FLAGS=-fdata-sections -ffunction-sections' '-DLLD_FLAGS=--gc-sections')
+        cmake -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler "${clang_option[@]}" -DALWAYS_REMOVE_BUILDFILES=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
+    fi
     ninja -C $buildroot/build$bit mpv
 
     if [ -d $buildroot/build$bit/mpv-$arch* ] ; then
