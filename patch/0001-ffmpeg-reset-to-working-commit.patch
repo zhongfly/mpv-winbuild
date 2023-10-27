@@ -1,0 +1,26 @@
+From e6cbe14f95b132aa6eb2c2ffd1683782288a2b45 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 27 Oct 2023 23:12:31 +0800
+Subject: [PATCH] ffmpeg: reset to working commit
+
+---
+ packages/ffmpeg.cmake | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index 9226dd1..54f1a30 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -45,6 +45,9 @@ ExternalProject_Add(ffmpeg
+     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
++    GIT_REMOTE_NAME origin
++    GIT_TAG master
++    GIT_RESET ba6a5e7a3d4c372a98f910dda7e4d65847eda817
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} <SOURCE_DIR>/configure
+         --cross-prefix=${TARGET_ARCH}-
+-- 
+2.41.0
+
