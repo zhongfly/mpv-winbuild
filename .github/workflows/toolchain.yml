@@ -19,7 +19,7 @@ on:
         - all
       compiler:
         required: false
-        default: "gcc"
+        default: "clang"
         type: choice
         options:
         - gcc
