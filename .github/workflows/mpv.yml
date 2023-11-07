@@ -603,7 +603,7 @@ jobs:
           fi
           git checkout main
 
-      - name: "Generate release note"
+      - name: "Generate release note & sha256"
         id: note
         uses: actions/github-script@v6
         with:
@@ -620,10 +620,26 @@ jobs:
             note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.tag_name }}?cache=300)";
             core.setOutput("note",note);
 
+            const os = require('os'); 
+            const { basename } = require('path');
+            const { createHash } = require('crypto');
+            const { readFileSync,writeFileSync } = require('fs');
+            const globber = await glob.create([`artifacts/*/mpv*.7z`,`artifacts/*/ffmpeg*.7z`].join('\n'));
+            const files = await globber.glob();
+            if ( files.length > 0 ) {
+              let sha256="";
+              for (let file of files) {
+                const buff = readFileSync(file);
+                const hash = createHash("sha256").update(buff).digest("hex");
+                sha256+=`${hash} ${basename(file)}${os.EOL}`;
+              }
+              writeFileSync('sha256.txt', sha256.trim(), { flag: 'w+' });
+            }
+
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z"
+          artifacts: "artifacts/*/mpv*.7z,artifacts/*/ffmpeg*.7z,sha256.txt"
           commit: version
           name: "${{ env.long_time }}"
           body: "${{ steps.note.outputs.note }}"
