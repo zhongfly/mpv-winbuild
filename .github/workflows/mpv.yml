@@ -126,7 +126,7 @@ jobs:
                 const {status,data:content} = await github.request(res.data.patch_url);
                 const name = res.data.title.replace(/[/\\?%*:|`'"<> ]/g,'-').replace(/--+/g,'-');
                 await fs.writeFile(`mpv-${String(i).padStart(4,'0')}-#${pr_number}-${name}.patch`, content)
-                  .then( ()=>{ i++; patch_note+=`- [#${pr_number}](${res.data.html_url}): ${res.data.title}\n`; })
+                  .then( ()=>{ i++; patch_note+=`- [#${pr_number}](${res.data.html_url}): ${res.data.title.replace(/`/g, '\\`')}\n`; })
                   .catch(err => console.log(err));
                 console.log(`Download patch of #${pr_number}: ${res.data.title}.`)
               } catch(error) {
@@ -139,7 +139,7 @@ jobs:
               };
             }
 
-            core.setOutput("patch_note",patch_note);
+            core.setOutput("patch_note",patch_note.trim());
       
       - name: upload patch
         uses: actions/upload-artifact@v3
@@ -547,7 +547,7 @@ jobs:
             const patch_note = `${{ needs.params.outputs.patch_note }}`;
             if (patch_note) {
               summary.addHeading('Merged Prs');
-              summary.addRaw(patch_note.replace(/- \[(?<pr>#\d+)\]\((?<url>.*)\)/g,"<a href='$<url>'>$<pr></a>"));
+              summary.addList(patch_note.replace(/- \[(?<pr>#\d+)\]\((?<url>.*)\)/g,"<a href='$<url>'>$<pr></a>").replace(/`(?<code>[^`]+)`/g, '<code>$<code></code>').split('\n'));
             }
             summary.addHeading('Packages Version')
               .addTable(packages_table)
