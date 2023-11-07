@@ -1,0 +1,168 @@
+From 7aa77e9561a7752f743f5ed7b6012207eb9b7237 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 7 Nov 2023 09:33:06 +0800
+Subject: [PATCH] vulkan: rebase patch
+
+---
+ ...1-cross-compile-static-linking-hacks.patch | 130 ++----------------
+ 1 file changed, 8 insertions(+), 122 deletions(-)
+
+diff --git a/packages/vulkan-0001-cross-compile-static-linking-hacks.patch b/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
+index b674b0e..8e12ce3 100644
+--- a/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
++++ b/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
+@@ -1,143 +1,29 @@
+-From 858635b5bc44e5076c3344cffb82a3a9a9dc04f3 Mon Sep 17 00:00:00 2001
++From 4cb9fa1ae452a7a0b44973e681a1ae28ab089ba2 Mon Sep 17 00:00:00 2001
+ From: shinchiro <shinchiro@users.noreply.github.com>
+ Date: Tue, 10 Oct 2023 21:45:54 +0800
+ Subject: [PATCH] loader: cross-compile & static linking hacks
+ 
+ ---
+- loader/CMakeLists.txt       |  9 +++++----
+- loader/loader.h             |  2 ++
+- loader/loader.rc.in         |  4 ++++
+- loader/loader_windows.c     |  4 ++++
+- loader/vk_loader_platform.h |  3 ++-
+- loader/vulkan_own.pc.in     | 11 +++++++++++
+- 6 files changed, 28 insertions(+), 5 deletions(-)
++ loader/CMakeLists.txt   |  1 +
++ loader/vulkan_own.pc.in | 11 +++++++++++
++ 2 files changed, 12 insertions(+)
+  create mode 100644 loader/vulkan_own.pc.in
+ 
+ diff --git a/loader/CMakeLists.txt b/loader/CMakeLists.txt
+-index c6366ee..df42608 100644
++index d57d6d7e8..a70613717 100644
+ --- a/loader/CMakeLists.txt
+ +++ b/loader/CMakeLists.txt
+-@@ -20,8 +20,9 @@
++@@ -20,6 +20,7 @@
+  add_library(loader_specific_options INTERFACE)
+  target_link_libraries(loader_specific_options INTERFACE loader_common_options Vulkan::Headers)
+  target_include_directories(loader_specific_options INTERFACE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/generated ${CMAKE_CURRENT_BINARY_DIR})
+ +configure_file("vulkan_own.pc.in" "vulkan_own.pc" @ONLY)
+  
+--if(WIN32)
+-+if(WIN32 AND NOT MINGW)
++ if(WIN32 AND NOT MINGW)
+  
+-     if(ENABLE_WIN10_ONECORE)
+-         # Note: When linking your app or driver to OneCore.lib, be sure to remove any links to non-umbrella libs (such as
+-@@ -293,7 +294,7 @@ if(USE_ASSEMBLY_FALLBACK)
+-     endif()
+- endif()
+- 
+--if(WIN32)
+-+if(MSVC)
+-     add_library(loader-opt STATIC ${OPT_LOADER_SRCS})
+-     target_link_libraries(loader-opt PUBLIC loader_specific_options)
+-     add_dependencies(loader-opt loader_asm_gen_files)
+-@@ -339,7 +340,7 @@ if(WIN32)
+-     add_dependencies(vulkan loader_asm_gen_files)
+- 
+- else()
+--    if(APPLE AND BUILD_STATIC_LOADER)
+-+    if(BUILD_STATIC_LOADER)
+-         add_library(vulkan STATIC ${NORMAL_LOADER_SRCS} ${OPT_LOADER_SRCS})
+-         target_compile_definitions(vulkan PRIVATE BUILD_STATIC_LOADER)
+-     else()
+-@@ -422,7 +423,7 @@ endif()
+- target_link_libraries(vulkan PRIVATE Vulkan::Headers)
+- add_library(Vulkan::Loader ALIAS vulkan)
+- 
+--if (APPLE AND BUILD_STATIC_LOADER)
+-+if (APPLE OR BUILD_STATIC_LOADER)
+-     # When exporting a static library all linked libraries - private or not - need to be exported.
+-     message(NOTICE "vulkan.pc and VulkanLoaderConfig.cmake not generated for STATIC Apple builds!")
+-     return()
+-diff --git a/loader/loader.h b/loader/loader.h
+-index 93346a9..6e3f867 100644
+---- a/loader/loader.h
+-+++ b/loader/loader.h
+-@@ -33,7 +33,9 @@
+- #include "cJSON.h"
+- 
+- // Declare the once_init variable
+-+#if defined(_WIN32) && !defined(LOADER_DYNAMIC_LIB)
+- LOADER_PLATFORM_THREAD_ONCE_EXTERN_DEFINITION(once_init)
+-+#endif
+- 
+- static inline VkPhysicalDevice loader_unwrap_physical_device(VkPhysicalDevice physicalDevice) {
+-     struct loader_physical_device_tramp *phys_dev = (struct loader_physical_device_tramp *)physicalDevice;
+-diff --git a/loader/loader.rc.in b/loader/loader.rc.in
+-index 0dc4227..e7fcea0 100644
+---- a/loader/loader.rc.in
+-+++ b/loader/loader.rc.in
+-@@ -19,7 +19,11 @@
+- // Author: Charles Giessen <charles@lunarg.com>
+- //
+- 
+-+#ifdef __MINGW64__
+-+#include <winresrc.h>
+-+#else // MSVC
+- #include "winres.h"
+-+#endif
+- 
+- // All set through CMake
+- #define VER_FILE_VERSION ${LOADER_VER_FILE_VERSION}
+-diff --git a/loader/loader_windows.c b/loader/loader_windows.c
+-index 0f6c2c8..55afa40 100644
+---- a/loader/loader_windows.c
+-+++ b/loader/loader_windows.c
+-@@ -47,6 +47,8 @@
+- #include <strsafe.h>
+- #if defined(__MINGW32__)
+- #undef strcpy  // fix error with redfined strcpy when building with MinGW-w64
+-+#define CM_GETIDLIST_FILTER_PRESENT            (0x00000100)
+-+#define CM_GETIDLIST_FILTER_CLASS              (0x00000200)
+- #endif
+- #include <dxgi1_6.h>
+- #include "adapters.h"
+-@@ -95,6 +97,7 @@ void windows_initialization(void) {
+- #endif
+- }
+- 
+-+#if defined(LOADER_DYNAMIC_LIB)
+- BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
+-     (void)hinst;
+-     switch (reason) {
+-@@ -112,6 +115,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
+-     }
+-     return TRUE;
+- }
+-+#endif
+- 
+- bool windows_add_json_entry(const struct loader_instance *inst,
+-                             char **reg_data,    // list of JSON files
+-diff --git a/loader/vk_loader_platform.h b/loader/vk_loader_platform.h
+-index 3a8cafb..5baff1c 100644
+---- a/loader/vk_loader_platform.h
+-+++ b/loader/vk_loader_platform.h
+-@@ -69,6 +69,7 @@
+- #include <io.h>
+- #include <shlwapi.h>
+- #include <direct.h>
+-+#include <pthread.h> // for mingw
+- #endif  // defined(_WIN32)
+- 
+- #include "stack_allocation.h"
+-@@ -227,7 +228,7 @@ static inline bool loader_platform_is_path(const char *path) { return strchr(pat
+- // resources allocated by anything allocated by once init. This isn't a problem for static libraries, but it is for dynamic
+- // ones. When building a DLL, we use DllMain() instead to allow properly cleaning up resources.
+- 
+--#if defined(__APPLE__) && defined(BUILD_STATIC_LOADER)
+-+#if defined(BUILD_STATIC_LOADER)
+- static inline void loader_platform_thread_once_fn(pthread_once_t *ctl, void (*func)(void)) {
+-     assert(func != NULL);
+-     assert(ctl != NULL);
+ diff --git a/loader/vulkan_own.pc.in b/loader/vulkan_own.pc.in
+ new file mode 100644
+-index 0000000..ed2f30b
++index 000000000..ed2f30bb2
+ --- /dev/null
+ +++ b/loader/vulkan_own.pc.in
+ @@ -0,0 +1,11 @@
+-- 
+2.42.0
+
