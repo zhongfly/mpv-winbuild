@@ -88,6 +88,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   rav1e [![rav1e](https://flat.badgen.net/github/last-commit/xiph/rav1e?scale=0.8&cache=1800)](https://github.com/xiph/rav1e)
     -   libaribcaption [![libaribcaption](https://flat.badgen.net/github/last-commit/xqq/libaribcaption?scale=0.8&cache=1800)](https://github.com/xqq/libaribcaption)
     -   zlib [![zlib](https://flat.badgen.net/github/last-commit/zlib-ng/zlib-ng?scale=0.8&cache=1800)](https://github.com/zlib-ng/zlib-ng)
+    -   openssl [![openssl](https://flat.badgen.net/github/last-commit/openssl/openssl?scale=0.8&cache=1800)](https://github.com/openssl/openssl)
 
 -   Zip
     -   [expat](https://github.com/libexpat/libexpat) (2.5.0) ![](https://img.shields.io/github/v/release/libexpat/libexpat?style=flat-square)
@@ -102,5 +103,5 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [gmp](https://gmplib.org/download/gmp/) (6.3.0)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R65)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
     -   [libsdl2](https://www.libsdl.org/release/) (2.28.4)  ![](https://img.shields.io/github/v/release/libsdl-org/SDL?style=flat-square)
-    -   [mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.5.0) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)
+    -   ~~[mbedtls](https://github.com/Mbed-TLS/mbedtls) (3.5.0) ![](https://img.shields.io/github/v/release/Mbed-TLS/mbedtls?style=flat-square)~~
 
