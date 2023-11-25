@@ -1,26 +1,33 @@
-From 8cc7c6b072090a486ffab24e394cefa4a913a2b1 Mon Sep 17 00:00:00 2001
-From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Thu, 3 Aug 2023 07:38:57 +0800
+From f84628079eabf6f5d1dfa98ca9578c36245ee4f0 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Sat, 25 Nov 2023 13:21:29 +0000
 Subject: [PATCH] mpv: add patch
 
 ---
- packages/mpv.cmake | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ packages/mpv.cmake | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index b0271bb..fd14973 100644
+index d32a09c..8dec75b 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
-@@ -24,7 +24,8 @@ ExternalProject_Add(mpv
+@@ -24,8 +24,9 @@ ExternalProject_Add(mpv
          libsdl2
      GIT_REPOSITORY https://github.com/mpv-player/mpv.git
      SOURCE_DIR ${SOURCE_LOCATION}
 -    GIT_CLONE_FLAGS "--filter=tree:0"
 +    GIT_CLONE_FLAGS ""
-+    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/mpv-*.patch
      UPDATE_COMMAND ""
-     CONFIGURE_COMMAND ${EXEC} meson <BINARY_DIR> <SOURCE_DIR>
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/mpv-*.patch
+     CONFIGURE_COMMAND ${EXEC} CONF=1 meson <BINARY_DIR> <SOURCE_DIR>
          --prefix=${MINGW_INSTALL_PREFIX}
--- 
-2.41.0
-
+         --libdir=${MINGW_INSTALL_PREFIX}/lib
+@@ -55,7 +56,7 @@ ExternalProject_Add(mpv
+         -Degl-angle=enabled
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ""
+-    LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
++    LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_PATCH 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
+ 
+ ExternalProject_Add_Step(mpv strip-binary
