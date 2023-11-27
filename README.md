@@ -30,7 +30,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
 -   Git/Hg
     -   amf-headers [![amf-headers](https://flat.badgen.net/github/last-commit/GPUOpen-LibrariesAndSDKs/AMF?scale=0.8&cache=1800)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/tree/master/amf/public/include)
     -   ANGLE [![ANGLE](https://flat.badgen.net/github/last-commit/google/angle/main?scale=0.8&cache=1800)](https://github.com/google/angle)
-    -   [aom](https://aomedia.googlesource.com/aom/)
+    -   aom [![aom](https://flat.badgen.net/github/last-commit/m-ab-s/aom?scale=0.8&cache=1800)](https://aomedia.googlesource.com/aom)
     -   avisynth-headers [![avisynth-headers](https://flat.badgen.net/github/last-commit/AviSynth/AviSynthPlus?scale=0.8&cache=1800)](https://github.com/AviSynth/AviSynthPlus)
     -   bzip2 [![bzip2](https://flat.badgen.net/gitlab/last-commit/bzip2/bzip2?scale=0.8&cache=1800)](https://gitlab.com/bzip2/bzip2)
     -   dav1d [![dav1d](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/code.videolan.org/videolan/dav1d?scale=0.8&cache=1800)](https://code.videolan.org/videolan/dav1d/)
