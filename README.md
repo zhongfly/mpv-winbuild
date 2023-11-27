@@ -62,7 +62,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libsdl2 [![libpng](https://flat.badgen.net/github/last-commit/libsdl-org/SDL/main?scale=0.8&cache=1800)](https://github.com/libsdl-org/SDL)
     -   libsoxr [![libsoxr](https://flat.badgen.net/gitlab/last-commit/shinchiro/soxr?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/soxr)
     -   libsrt [![libsrt](https://flat.badgen.net/github/last-commit/Haivision/srt?scale=0.8&cache=1800)](https://github.com/Haivision/srt)
-    -   [libssh](https://git.libssh.org/projects/libssh.git)
+    -   libssh [![libssh](https://flat.badgen.net/gitlab/last-commit/libssh/libssh-mirror?scale=0.8&cache=1800)](https://git.libssh.org/projects/libssh.git)
     -   libudfread [![libdvdcss](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/code.videolan.org/videolan/libudfread?scale=0.8&cache=1800)](https://code.videolan.org/videolan/libudfread)
     -   libunibreak [![libunibreak](https://flat.badgen.net/github/last-commit/adah1972/libunibreak?scale=0.8&cache=1800)](https://github.com/adah1972/libunibreak)
     -   libva [![libva](https://flat.badgen.net/github/last-commit/intel/libva?scale=0.8&cache=1800)](https://github.com/intel/libva)
