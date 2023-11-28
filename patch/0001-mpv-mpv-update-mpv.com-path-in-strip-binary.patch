@@ -1,0 +1,25 @@
+From 1d53ed06703f08d47fbd5b6c5325615c02e6e11a Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 28 Nov 2023 18:59:39 +0800
+Subject: [PATCH] mpv: update mpv.com path in strip-binary
+
+---
+ packages/mpv.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/mpv.cmake b/packages/mpv.cmake
+index 4406671..0bc9aca 100644
+--- a/packages/mpv.cmake
++++ b/packages/mpv.cmake
+@@ -62,7 +62,7 @@ ExternalProject_Add_Step(mpv strip-binary
+     DEPENDEES build
+     ${mpv_add_debuglink}
+     COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/mpv.exe
+-    COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/player/mpv.com
++    COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/mpv.com
+     COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/libmpv-2.dll
+     COMMENT "Stripping mpv binaries"
+ )
+-- 
+2.42.0
+
