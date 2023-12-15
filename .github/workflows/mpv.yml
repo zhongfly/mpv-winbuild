@@ -142,7 +142,7 @@ jobs:
             core.setOutput("patch_note",patch_note.trim());
       
       - name: upload patch
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ steps.script.outputs.patch_note }}
         with:
           name: mpv-patch
@@ -373,7 +373,7 @@ jobs:
         run: |
           sudo 7z a logs.7z $(find mpv-winbuild-cmake/build${{ matrix.bit }} -type f -iname "*-*.log" -or -wholename "*/ffbuild/config.log")
       - name: upload logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: ${{ matrix.bit }}_logs
@@ -417,26 +417,26 @@ jobs:
             await exec.exec(`7z a -m0=lzma2 -mx=9 -ms=on mpv-winbuild-cmake/release/${ffmpeg_name}.7z ${ffmpeg_path}`)
 
       - name: upload mpv-debug
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ env.mpv-debug_name && env.mpv-debug_path }}
         with:
           name: ${{ env.mpv-debug_name }}
           path: ${{ env.mpv-debug_path }}
       - name: upload mpv-dev
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ env.mpv-dev_name && env.mpv-dev_path }}
         with:
           name: ${{ env.mpv-dev_name }}
           path: ${{ env.mpv-dev_path }}
       - name: upload mpv
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ env.mpv_name && env.mpv_path }}
         with:
           name: ${{ env.mpv_name }}
           path: ${{ env.mpv_path }}
           
       - name: upload ffmpeg
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ env.ffmpeg_name }}
         with:
           name: ${{ env.ffmpeg_name }}
