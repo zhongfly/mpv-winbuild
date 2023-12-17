@@ -101,7 +101,7 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo
+          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo mimalloc
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
@@ -182,7 +182,7 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo
+          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo mimalloc
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
