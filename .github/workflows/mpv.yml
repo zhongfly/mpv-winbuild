@@ -163,7 +163,7 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo mimalloc
+          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo mimalloc ccache
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
@@ -179,11 +179,13 @@ jobs:
         with:
           repository: shinchiro/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
-      - name: Get Params
+      - name: Prepare
         run: |
           echo "sha=${{ needs.params.outputs.sha }}" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
           echo "cache_suffix=$(date "+%Y-%m-%d")-${{ github.run_id }}-${{ github.run_attempt }}" >> $GITHUB_ENV
+          sed -i '/ccache_conf.in/d'  mpv-winbuild-cmake/CMakeLists.txt
+          sed -i '/ccache/d' mpv-winbuild-cmake/exec.in
 
       - name: Lookup Toolchain Cache
         id: lookup_toolchain
@@ -292,6 +294,18 @@ jobs:
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.build_restore_key }}
+
+      - name: Set up ccache
+        uses: zhongfly/setup-ccache-action@dist
+        with:
+          update_packager_index: false
+          install_ccache: false
+          override_cache_key: ccache-build${{ matrix.bit }}-${{ inputs.compiler }}
+          ccache_options: |
+            cache_dir=$GITHUB_WORKSPACE/.ccache
+            max_size=500M
+            sloppiness=locale,time_macros
+            compiler_check=none
 
       - name: Download mpv patch
         if: ${{ needs.params.outputs.patch_note }}
