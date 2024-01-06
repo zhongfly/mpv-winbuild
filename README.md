@@ -15,9 +15,13 @@ Checks the mpv repository every hour for updates. If there is an update and it i
 This repo only provides 64-bit version. If you need a 32-bit version, you can fork this repo and run `MPV` workflow by yourself.
 
 > [!NOTE]
-> `mpv-dev-x86_64-xxxx.7z` is 64-bit libmpv version, including the `libmpv-2.dll` file.
+> `mpv-dev-xxxx.7z` is libmpv, including the `libmpv-2.dll` file.
+>
+> Some media players based on libmpv use `libmpv-2.dll` or `mpv-2.dll`.You can upgrade their libmpv by overwriting this dll.
+>
+> `mpv-dev-lgpl-xxxx.7z` is libmpv under LGPLv2.1+ license, which disables LGPLv2.1+ incompatible packages and statically links to ffmpeg under LGPLv3.
 > 
-> Some media players based on libmpv use `libmpv-2.dll` or `mpv-2.dll`.You can upgrade their libmpv version by overwriting this dll.
+> I'm not a lawyer and can't guarantee that I've disabled all LGPL-incompatible packages, use at your own risk.
 
 ### Release Retention Policy
 
