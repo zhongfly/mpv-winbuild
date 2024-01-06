@@ -1,0 +1,186 @@
+From 4047039e61712a1d9cc2ad55e8d13ed547e6a6b5 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 5 Jan 2024 22:32:10 +0800
+Subject: [PATCH] packages: compile lgpl libmpv
+
+---
+ packages/ffmpeg.cmake | 20 --------------------
+ packages/mpv.cmake    | 31 ++++++++-----------------------
+ 2 files changed, 8 insertions(+), 43 deletions(-)
+
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index b2a0d40..53a1890 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -1,14 +1,11 @@
+ ExternalProject_Add(ffmpeg
+     DEPENDS
+         amf-headers
+-        avisynth-headers
+         nvcodec-headers
+         bzip2
+         lame
+         lcms2
+         openssl
+-        libssh
+-        libsrt
+         libass
+         libbluray
+         libmodplug
+@@ -24,24 +21,18 @@ ExternalProject_Add(ffmpeg
+         opus
+         speex
+         vorbis
+-        x264
+-        ${ffmpeg_x265}
+-        xvidcore
+         libxml2
+         libvpl
+         libopenmpt
+         libjxl
+         shaderc
+         libplacebo
+-        libzvbi
+         libaribcaption
+         aom
+         rav1e
+         dav1d
+         vapoursynth
+         uavs3d
+-        davs2
+-        rubberband
+         libva
+     GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+@@ -56,11 +47,8 @@ ExternalProject_Add(ffmpeg
+         --enable-cross-compile
+         --enable-runtime-cpudetect
+         ${ffmpeg_hardcoded_tables}
+-        --enable-gpl
+         --enable-version3
+-        --enable-nonfree
+         --enable-postproc
+-        --enable-avisynth
+         --enable-vapoursynth
+         --enable-libass
+         --enable-libbluray
+@@ -77,28 +65,20 @@ ExternalProject_Add(ffmpeg
+         --enable-libspeex
+         --enable-libvorbis
+         --enable-libbs2b
+-        --enable-librubberband
+         --enable-libvpx
+         --enable-libwebp
+-        --enable-libx264
+-        --enable-libx265
+         --enable-libaom
+         --enable-librav1e
+         --enable-libdav1d
+-        --enable-libdavs2
+         --enable-libuavs3d
+-        --enable-libxvid
+         --enable-libzimg
+         --enable-openssl
+         --enable-libxml2
+         --enable-libmysofa
+-        --enable-libssh
+-        --enable-libsrt
+         --enable-libvpl
+         --enable-libjxl
+         --enable-libplacebo
+         --enable-libshaderc
+-        --enable-libzvbi
+         --enable-libaribcaption
+         --enable-cuda-llvm
+         --enable-cuvid
+diff --git a/packages/mpv.cmake b/packages/mpv.cmake
+index 9d789ed..c471b01 100644
+--- a/packages/mpv.cmake
++++ b/packages/mpv.cmake
+@@ -6,15 +6,11 @@ ExternalProject_Add(mpv
+         lcms2
+         libarchive
+         libass
+-        libdvdnav
+-        libdvdread
+         libiconv
+         libjpeg
+         libpng
+         luajit
+-        rubberband
+         uchardet
+-        openal-soft
+         mujs
+         vulkan
+         shaderc
+@@ -32,23 +28,25 @@ ExternalProject_Add(mpv
+         --cross-file=${MESON_CROSS}
+         --default-library=shared
+         --prefer-static
++        -Dgpl=false
+         -Ddebug=true
+         -Db_ndebug=true
+         -Doptimization=3
+         -Db_lto=true
+         ${mpv_lto_mode}
++        -Dcplayer=false
+         -Dlibmpv=true
+-        -Dpdf-build=enabled
++        -Dpdf-build=disabled
+         -Dlua=enabled
+         -Djavascript=enabled
+         -Dsdl2=enabled
+         -Dlibarchive=enabled
+         -Dlibbluray=enabled
+-        -Ddvdnav=enabled
++        -Ddvdnav=disabled
+         -Duchardet=enabled
+-        -Drubberband=enabled
++        -Drubberband=disabled
+         -Dlcms2=enabled
+-        -Dopenal=enabled
++        -Dopenal=disabled
+         -Dspirv-cross=enabled
+         -Dvulkan=enabled
+         -Dvapoursynth=enabled
+@@ -60,20 +58,12 @@ ExternalProject_Add(mpv
+ 
+ ExternalProject_Add_Step(mpv strip-binary
+     DEPENDEES build
+-    ${mpv_add_debuglink}
+-    COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/mpv.exe
+-    COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/mpv.com
+     COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/libmpv-2.dll
+     COMMENT "Stripping mpv binaries"
+ )
+ 
+ ExternalProject_Add_Step(mpv copy-binary
+     DEPENDEES strip-binary
+-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.exe                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv.exe
+-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.com                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv.com
+-    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.pdf                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/doc/manual.pdf
+-    COMMAND ${CMAKE_COMMAND} -E copy ${MINGW_INSTALL_PREFIX}/etc/fonts/fonts.conf   ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv/fonts.conf
+-    ${mpv_copy_debug}
+     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv-2.dll          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv-2.dll
+     COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv.dll.a          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv.dll.a
+     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/libmpv/client.h       ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/include/mpv/client.h
+@@ -93,14 +83,9 @@ mv $2 $2-git-\${GIT}")
+ ExternalProject_Add_Step(mpv copy-package-dir
+     DEPENDEES copy-binary
+     COMMAND chmod 755 ${RENAME}
+-    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/mpv-package ${CMAKE_BINARY_DIR}/mpv-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
+-    COMMAND ${RENAME} <SOURCE_DIR> ${CMAKE_BINARY_DIR}/mpv-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
+ 
+-    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/mpv-debug ${CMAKE_BINARY_DIR}/mpv-debug-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
+-    COMMAND ${RENAME} <SOURCE_DIR> ${CMAKE_BINARY_DIR}/mpv-debug-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
+-
+-    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev ${CMAKE_BINARY_DIR}/mpv-dev-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
+-    COMMAND ${RENAME} <SOURCE_DIR> ${CMAKE_BINARY_DIR}/mpv-dev-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
++    COMMAND mv ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev ${CMAKE_BINARY_DIR}/mpv-dev-lgpl-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
++    COMMAND ${RENAME} <SOURCE_DIR> ${CMAKE_BINARY_DIR}/mpv-dev-lgpl-${TARGET_CPU}${x86_64_LEVEL}-${BUILDDATE}
+     COMMENT "Moving mpv package folder"
+     LOG 1
+ )
+-- 
+2.43.0
+
