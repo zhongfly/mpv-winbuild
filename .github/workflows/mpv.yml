@@ -309,7 +309,7 @@ jobs:
         with:
           update_packager_index: false
           install_ccache: false
-          store_cache: ${{ matrix.lgpl != true }}
+          store_cache: ${{ matrix.lgpl != true && inputs.no_save_cache != true }}
           override_cache_key: ccache-build${{ matrix.bit }}-${{ inputs.compiler }}
           ccache_options: |
             cache_dir=$GITHUB_WORKSPACE/.ccache
