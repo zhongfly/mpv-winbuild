@@ -74,7 +74,7 @@ build() {
     
     ninja -C $buildroot/build$bit mpv
 
-    if [ -n $(find $buildroot/build$bit -maxdepth 1 -type d -name 'mpv*$arch*' -print -quit) ] ; then
+    if [ -n "$(find $buildroot/build$bit -maxdepth 1 -type d -name "mpv*$arch*" -print -quit)" ] ; then
         echo "Successfully compiled $bit-bit. Continue"
     else
         echo "Failed compiled $bit-bit. Stop"
