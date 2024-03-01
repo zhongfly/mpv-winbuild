@@ -149,7 +149,7 @@ jobs:
               fi
             done
       - name: Save llvm cache
-        uses: actions/cache/save@v4.0.0
+        uses: actions/cache/save@v4.0.1
         with: 
           path: |
             mpv-winbuild-cmake/clang_root
@@ -200,7 +200,7 @@ jobs:
 
       - name: Restore llvm cache
         if: ${{ inputs.compiler =='clang' }}
-        uses: actions/cache/restore@v4.0.0
+        uses: actions/cache/restore@v4.0.1
         with: 
           fail-on-cache-miss: true
           path: |
@@ -255,20 +255,20 @@ jobs:
 
       - name: Save Toolchain Cache
         if: ${{ inputs.no_save_cache != true }}
-        uses: actions/cache/save@v4.0.0
+        uses: actions/cache/save@v4.0.1
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ needs.params.outputs.cache_suffix }}
 
       - name: Save clang_root cache
         if: ${{ inputs.compiler =='clang' && inputs.no_save_cache != true }}
-        uses: actions/cache/save@v4.0.0
+        uses: actions/cache/save@v4.0.1
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ needs.params.outputs.cache_suffix }}
       - name: Save Rust Cache
         if: ${{ inputs.no_save_cache != true }}
-        uses: actions/cache/save@v4.0.0
+        uses: actions/cache/save@v4.0.1
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
           key: rust-${{ needs.params.outputs.cache_suffix }}
