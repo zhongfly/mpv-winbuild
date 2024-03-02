@@ -1,0 +1,24 @@
+From 0afc7f6d44e8fc204135abca2b8926c051664610 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 2 Mar 2024 20:27:12 +0800
+Subject: [PATCH] spirv-headers: reset to working commit
+
+---
+ packages/spirv-headers.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/spirv-headers.cmake b/packages/spirv-headers.cmake
+index 567c2b1..ab92e4a 100644
+--- a/packages/spirv-headers.cmake
++++ b/packages/spirv-headers.cmake
+@@ -4,6 +4,7 @@ ExternalProject_Add(spirv-headers
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET b73e168ca5e123dcf3dea8a34b19a5130f421ae1
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ""
+     BUILD_COMMAND ""
+-- 
+2.43.0.windows.1
+
