@@ -1,18 +1,18 @@
-From 4047039e61712a1d9cc2ad55e8d13ed547e6a6b5 Mon Sep 17 00:00:00 2001
+From dc351a180790eb2c9270b5f82ca76c923acc59ac Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Fri, 5 Jan 2024 22:32:10 +0800
 Subject: [PATCH] packages: compile lgpl libmpv
 
 ---
- packages/ffmpeg.cmake | 20 --------------------
+ packages/ffmpeg.cmake | 23 -----------------------
  packages/mpv.cmake    | 31 ++++++++-----------------------
- 2 files changed, 8 insertions(+), 43 deletions(-)
+ 2 files changed, 8 insertions(+), 46 deletions(-)
 
 diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
-index b2a0d40..53a1890 100644
+index e620f2f..74e9973 100644
 --- a/packages/ffmpeg.cmake
 +++ b/packages/ffmpeg.cmake
-@@ -1,14 +1,11 @@
+@@ -1,18 +1,13 @@
  ExternalProject_Add(ffmpeg
      DEPENDS
          amf-headers
@@ -26,8 +26,12 @@ index b2a0d40..53a1890 100644
 -        libsrt
          libass
          libbluray
+-        libdvdnav
+-        libdvdread
          libmodplug
-@@ -24,24 +21,18 @@ ExternalProject_Add(ffmpeg
+         libpng
+         libsoxr
+@@ -26,24 +21,18 @@ ExternalProject_Add(ffmpeg
          opus
          speex
          vorbis
@@ -50,21 +54,25 @@ index b2a0d40..53a1890 100644
 -        davs2
 -        rubberband
          libva
+         openal-soft
      GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
-     SOURCE_DIR ${SOURCE_LOCATION}
-@@ -56,11 +47,8 @@ ExternalProject_Add(ffmpeg
+@@ -59,15 +48,11 @@ ExternalProject_Add(ffmpeg
          --enable-cross-compile
          --enable-runtime-cpudetect
          ${ffmpeg_hardcoded_tables}
 -        --enable-gpl
          --enable-version3
--        --enable-nonfree
          --enable-postproc
 -        --enable-avisynth
          --enable-vapoursynth
          --enable-libass
          --enable-libbluray
-@@ -77,28 +65,20 @@ ExternalProject_Add(ffmpeg
+-        --enable-libdvdnav
+-        --enable-libdvdread
+         --enable-libfreetype
+         --enable-libfribidi
+         --enable-libfontconfig
+@@ -81,28 +66,20 @@ ExternalProject_Add(ffmpeg
          --enable-libspeex
          --enable-libvorbis
          --enable-libbs2b
@@ -94,7 +102,7 @@ index b2a0d40..53a1890 100644
          --enable-cuda-llvm
          --enable-cuvid
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index 9d789ed..c471b01 100644
+index 983719f..a242d9d 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
 @@ -6,15 +6,11 @@ ExternalProject_Add(mpv
