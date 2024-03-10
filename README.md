@@ -44,7 +44,6 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   fontconfig [![fontconfig](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/gitlab.freedesktop.org/fontconfig/fontconfig?scale=0.8&cache=1800)](https://gitlab.freedesktop.org/fontconfig/fontconfig)
     -   freetype2 [![freetype2](https://flat.badgen.net/github/last-commit/freetype/freetype?scale=0.8&cache=1800)](https://github.com/freetype/freetype)
     -   fribidi [![fribidi](https://flat.badgen.net/github/last-commit/fribidi/fribidi?scale=0.8&cache=1800)](https://github.com/fribidi/fribidi)
-    -   game-music-emu [![game-music-emu](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/bitbucket/mpyne/game-music-emu?scale=0.8&cache=1800)](https://bitbucket.org/mpyne/game-music-emu)
     -   harfbuzz [![harfbuzz](https://flat.badgen.net/github/last-commit/harfbuzz/harfbuzz/main?scale=0.8&cache=1800)](https://github.com/harfbuzz/harfbuzz)
     -   lame [![lame](https://flat.badgen.net/gitlab/last-commit/shinchiro//lame?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/lame)
     -   lcms2 [![lcms2](https://flat.badgen.net/github/last-commit/mm2/Little-CMS?scale=0.8&cache=1800)](https://github.com/mm2/Little-CMS)
@@ -85,7 +84,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   openssl [![openssl](https://flat.badgen.net/github/last-commit/openssl/openssl?scale=0.8&cache=1800)](https://github.com/openssl/openssl)
     -   opus [![opus](https://flat.badgen.net/github/last-commit/xiph/opus?scale=0.8&cache=1800)](https://github.com/xiph/opus)
     -   rav1e [![rav1e](https://flat.badgen.net/github/last-commit/xiph/rav1e?scale=0.8&cache=1800)](https://github.com/xiph/rav1e)
-    -   rubberband [![rubberband](https://flat.badgen.net/github/last-commit/breakfastquay/rubberband/default?scale=0.8&cache=1800)](https://github.com/breakfastquay/rubberband)
+    -   rubberband (with [libsamplerate](https://github.com/libsndfile/libsamplerate.git)) [![rubberband](https://flat.badgen.net/github/last-commit/breakfastquay/rubberband/default?scale=0.8&cache=1800)](https://github.com/breakfastquay/rubberband)
     -   shaderc (with [spirv-headers](https://github.com/KhronosGroup/SPIRV-Headers), [spirv-tools](https://github.com/KhronosGroup/SPIRV-Tools), [glslang](https://github.com/KhronosGroup/glslang)) [![shaderc](https://flat.badgen.net/github/last-commit/google/shaderc/main?scale=0.8&cache=1800)](https://github.com/google/shaderc)
     -   speex [![speex](https://flat.badgen.net/github/last-commit/xiph/speex?scale=0.8&cache=1800)](https://github.com/xiph/speex)
     -   spirv-cross [![spirv-cross](https://flat.badgen.net/github/last-commit/KhronosGroup/SPIRV-Cross/main?scale=0.8&cache=1800)](https://github.com/KhronosGroup/SPIRV-Cross)
@@ -103,7 +102,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
 -   Zip
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7) 
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
-    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.3)
+    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.4)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R65)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
 
