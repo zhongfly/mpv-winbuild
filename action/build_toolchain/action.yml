@@ -1,0 +1,67 @@
+name: 'Build toolchain'
+description: 'Build toolchain'
+inputs:
+  bit:
+    description: "target bit"
+    required: false
+    default: "64-v3"
+  compiler:
+    description: "target bit"
+    required: false
+    default: "clang"
+  command:
+    description: "build command"
+    required: true
+  extra_option:
+    description: "extra cmake option"
+    required: false
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Apply patch
+      shell: bash
+      run: |
+        set -x
+        cd mpv-winbuild-cmake
+        if [[ "$(ls -A ../patch/*.patch)" ]]; then
+          for patch in ../patch/*.patch ; do
+            git am --3way "$patch" || git am --abort
+          done
+        fi
+
+    - name: Build
+      shell: bash
+      run: |
+        cd mpv-winbuild-cmake
+        bit="${{ inputs.bit }}"
+        compiler="${{ inputs.compiler }}"
+        gitdir=$(pwd)
+        clang_root=$(pwd)/clang_root
+        buildroot=$(pwd)
+        srcdir=$(pwd)/src_packages
+
+        if [ $bit == "32" ]; then
+            arch="i686"
+        elif [ $bit == "64" ]; then
+            arch="x86_64"
+        elif [ $bit == "64-v3" ]; then
+            arch="x86_64"
+            gcc_arch=-DGCC_ARCH=x86-64-v3
+            x86_64_level=-v3
+        fi
+        set -x
+        if [ "$compiler" == "clang" ]; then
+          clang_option="-DCMAKE_INSTALL_PREFIX=$clang_root -DMINGW_INSTALL_PREFIX=$buildroot/build$bit/install/$arch-w64-mingw32"
+        fi
+        cmake --fresh -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler $clang_option ${{ inputs.extra_option }} -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
+        set +x
+        stdbuf -oL bash -c "${{ inputs.command }}" | 
+          while IFS= read -r line
+          do
+            echo "$line"
+            if grep -q "ninja: build stopped" <<< "$line"; then
+              exit 1
+            fi
+          done
