@@ -29,11 +29,6 @@ on:
         required: false
         default: false
         type: boolean
-      skip_llvm_build:
-        description: "Skip building llvm if compiler is clang"
-        required: false
-        default: false
-        type: boolean
       trigger_build:
         description: "Trigger mpv build action after success build"
         required: false
@@ -88,66 +83,9 @@ jobs:
           cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}-${{ github.run_attempt }}"
           echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
 
-  build_llvm:
-    name: Build LLVM
-    needs: params
-    if: ${{ inputs.compiler =='clang' && inputs.skip_llvm_build != true }}
-    continue-on-error: true
-    runs-on: ubuntu-latest
-    container:
-      image: archlinux/archlinux:base-devel
-    steps:
-      - name: Install Dependencies
-        run: |
-          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-          sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git gyp ninja cmake ragel yasm nasm asciidoc enca gperf unzip xz gcc-multilib clang lld libc++ libc++abi python-pip curl lib32-glib2 wget python-cairo mimalloc
-          mkdir -p /home/opt/7zip
-          wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
-          sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
-          pip3 install -U --break-system-packages setuptools rst2pdf mako jsonschema meson
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global pull.rebase true
-          git config --global rebase.autoStash true
-          git config --global fetch.prune true
-      - uses: actions/checkout@v4
-      - name: Checkout toolchain
-        uses: actions/checkout@v4
-        with:
-          repository: shinchiro/mpv-winbuild-cmake
-          path: mpv-winbuild-cmake
-          fetch-depth: 0
-
-      - name: Build LLVM
-        uses: ./action/build_toolchain
-        with:
-          bit: "64-v3"
-          compiler: "clang"
-          command: "ninja -C $buildroot/build$bit llvm"
-
-      - name: Save llvm cache
-        uses: actions/cache/save@v4.0.2
-        with: 
-          path: |
-            mpv-winbuild-cmake/clang_root
-          key: llvm-${{ needs.params.outputs.cache_suffix }}
-
-      - name: Collect logs
-        if: ${{ always() }}
-        run: |
-          sudo 7z a logs.7z $(find mpv-winbuild-cmake -type f -iname "*-*.log" -or -wholename "*/ffbuild/config.log")
-      - name: upload logs
-        uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: llvm_logs
-          path: logs.7z
-
   build:
     name: Build Toolchain
-    needs: [params,build_llvm]
-    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    needs: [params]
     runs-on: ubuntu-latest
     container:
       image: archlinux/archlinux:base-devel

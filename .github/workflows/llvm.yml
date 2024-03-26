@@ -1,0 +1,159 @@
+name: LLVM
+run-name: "${{ inputs.run_name != '' && inputs.run_name || github.workflow }}"
+
+on: 
+  workflow_dispatch:
+    inputs:
+      pgo:
+        description: "Build llvm with PGO"
+        required: false
+        default: false
+        type: boolean   
+      no_save_cache:
+        description: "Don't save caches after success build"
+        required: false
+        default: false
+        type: boolean
+      trigger_toolchain:
+        description: "Trigger toolchain build action after success build"
+        required: false
+        default: true
+        type: boolean
+      build_target:
+        description: "Toolchain build target"
+        required: false
+        default: "all-64bit"
+        type: choice
+        options:
+        - 32bit
+        - 64bit
+        - 64bit-v3
+        - all-64bit
+        - all
+      trigger_build:
+        description: "Trigger mpv build action after toolchain build"
+        required: false
+        default: true
+        type: boolean
+      release:
+        description: "Publish a release after mpv build"
+        required: false
+        default: false
+        type: boolean
+      run_name:
+        description: 'The name displayed in the list of workflow runs'
+        required: false
+
+jobs:
+  build_llvm:
+    name: Build LLVM
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux/archlinux:base-devel
+    steps:
+      - name: suffix
+        id: suffix
+        run: |
+          cache_suffix="$(date "+%Y-%m-%d")-${{ github.run_id }}-${{ github.run_attempt }}"
+          echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
+      - name: Install Dependencies
+        run: |
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git ninja cmake gcc-multilib clang llvm lld libc++ libc++abi python-pip curl wget xz mimalloc
+          pip3 install -U --break-system-packages meson
+          mkdir -p /home/opt/7zip
+          wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global pull.rebase true
+          git config --global rebase.autoStash true
+          git config --global fetch.prune true
+      - uses: actions/checkout@v4
+      - name: Checkout toolchain
+        uses: actions/checkout@v4
+        with:
+          repository: shinchiro/mpv-winbuild-cmake
+          path: mpv-winbuild-cmake
+          fetch-depth: 0
+
+      - name: Build LLVM
+        uses: ./action/build_toolchain
+        with:
+          bit: "64-v3"
+          compiler: "clang"
+          command: "ninja -C $buildroot/build$bit llvm"
+          extra_option: "${{ inputs.pgo && '-DLLVM_ENABLE_PGO=GEN -DLLVM_PROFILE_DATA_DIR=$PWD/profiles/'}}"
+
+      - name: Training LLVM
+        uses: ./action/build_toolchain
+        if: ${{ inputs.pgo }}
+        with:
+          bit: "64-v3"
+          compiler: "clang"
+          command: "ninja -C $buildroot/build$bit rebuild_cache && cmake --build $buildroot/build$bit --target llvm-download && ninja -C $buildroot/build$bit llvm-clang"
+          extra_option: "-DLLVM_ENABLE_PGO=GEN -DLLVM_PROFILE_DATA_DIR=$buildroot/profiles/"
+
+      - name: Merging profdata
+        if: ${{ inputs.pgo }}
+        run: |
+          shopt -s globstar
+          cd mpv-winbuild-cmake/profiles/
+          ls -R
+          llvm-profdata merge *.profraw -o ../llvm.profdata
+          rm -rf ./{*,.*} || true
+
+      - name: Build LLVM with PGO
+        uses: ./action/build_toolchain
+        if: ${{ inputs.pgo }}
+        with:
+          bit: "64-v3"
+          compiler: "clang"
+          command: "ninja -C $buildroot/build$bit llvm"
+          extra_option: "-DLLVM_ENABLE_PGO=USE -DLLVM_PROFDATA_FILE=$buildroot/llvm.profdata"
+
+      - name: Save llvm cache
+        uses: actions/cache/save@v4.0.2
+        if: ${{ !inputs.no_save_cache }}
+        with: 
+          path: |
+            mpv-winbuild-cmake/clang_root
+          key: llvm-${{ steps.suffix.outputs.cache_suffix }}
+
+      - name: Collect logs
+        if: ${{ always() }}
+        run: |
+          sudo 7z a logs.7z $(find mpv-winbuild-cmake -type f -iname "*-*.log")
+      - name: upload logs
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: llvm_logs
+          path: logs.7z
+
+
+  trigger:
+    needs: [build_llvm]
+    if: ${{ always() && inputs.trigger_toolchain && !inputs.no_save_cache && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Toolchain build workflow
+        uses: actions/github-script@v7
+        with:
+          retries: 3
+          script: |
+            const repo="${{github.repository}}".split('/')[1];
+            await github.rest.actions.createWorkflowDispatch({
+              owner: '${{github.repository_owner}}',
+              repo,
+              ref: '${{github.ref}}',
+              workflow_id: 'toolchain.yml',
+              inputs: {
+                build_target: "${{ inputs.build_target }}",
+                compiler: "clang",
+                trigger_build: ${{ inputs.trigger_build }},
+                release: ${{ inputs.release }},
+                run_name: `CI Build: llvm update`
+              }
+            })
