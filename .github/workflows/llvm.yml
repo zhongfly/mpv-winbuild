@@ -59,8 +59,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake gcc-multilib clang llvm lld libc++ libc++abi python-pip curl wget xz mimalloc
-          pip3 install -U --break-system-packages meson
+          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ llvm wget mimalloc
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
