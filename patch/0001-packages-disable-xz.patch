@@ -1,0 +1,59 @@
+From 5f577137c50af154fd61a31052923148ca726f30 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 30 Mar 2024 14:59:13 +0800
+Subject: [PATCH] packages: disable xz
+
+---
+ packages/CMakeLists.txt   | 1 -
+ packages/ffmpeg.cmake     | 1 +
+ packages/libarchive.cmake | 3 +--
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
+index 7671c0ce..d873c71c 100644
+--- a/packages/CMakeLists.txt
++++ b/packages/CMakeLists.txt
+@@ -2,7 +2,6 @@ set_property(DIRECTORY PROPERTY EP_STEP_TARGETS download)
+ include(${PROJECT_SOURCE_DIR}/cmake/packages_check.cmake)
+ list(APPEND ep
+     gmp
+-    xz
+     lzo
+     uchardet
+     libsamplerate
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index c3f395b7..a4e24a46 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -119,6 +119,7 @@ ExternalProject_Add(ffmpeg
+         --disable-vdpau
+         --disable-videotoolbox
+         --disable-decoder=libaom_av1
++        --disable-lzma
+         ${ffmpeg_lto}
+         --extra-cflags='-Wno-error=int-conversion'
+         "--extra-libs='${ffmpeg_extra_libs}'" # -lstdc++ / -lc++ needs by libjxl and shaderc
+diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
+index 4773faef..4535e85f 100644
+--- a/packages/libarchive.cmake
++++ b/packages/libarchive.cmake
+@@ -3,7 +3,6 @@ ExternalProject_Add(libarchive
+         bzip2
+         expat
+         lzo
+-        xz
+         zlib
+         zstd
+         openssl
+@@ -27,7 +26,7 @@ ExternalProject_Add(libarchive
+         -DENABLE_LIBXML2=ON
+         -DENABLE_EXPAT=ON
+         -DENABLE_LZO=ON
+-        -DENABLE_LZMA=ON
++        -DENABLE_LZMA=OFF
+         -DENABLE_CPIO=OFF
+         -DENABLE_CNG=OFF
+         -DENABLE_CAT=OFF
+-- 
+2.43.0.windows.1
+
