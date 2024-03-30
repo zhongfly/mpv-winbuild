@@ -95,7 +95,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   vulkan-header [![Vulkan-Headers](https://flat.badgen.net/github/last-commit/KhronosGroup/Vulkan-Headers/main?scale=0.8&cache=1800)](https://github.com/KhronosGroup/Vulkan-Headers)
     -   x264 [![x264](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/code.videolan.org/videolan/x264?scale=0.8&cache=1800)](https://code.videolan.org/videolan/x264)
     -   x265 (multilib) [![x265](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/bitbucket/multicoreware/x265_git?scale=0.8&cache=1800)](https://bitbucket.org/multicoreware/x265_git)
-    -   xz [![xz](https://flat.badgen.net/gitlab/last-commit/shinchiro/xz?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/xz)
+    -   xz [![xz](https://flat.badgen.net/github/last-commit/tukaani-project/xz?scale=0.8&cache=1800)](https://github.com/tukaani-project/xz)
     -   zlib [![zlib](https://flat.badgen.net/github/last-commit/zlib-ng/zlib-ng?scale=0.8&cache=1800)](https://github.com/zlib-ng/zlib-ng)
     -   zstd [![zstd](https://flat.badgen.net/github/last-commit/facebook/zstd/dev?scale=0.8&cache=1800)](https://github.com/facebook/zstd)
 
@@ -104,5 +104,5 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
     -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.4)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
-    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth) (R65)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
+    -   [vapoursynth](https://github.com/vapoursynth/vapoursynth)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
 
