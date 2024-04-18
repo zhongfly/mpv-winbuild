@@ -59,7 +59,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ llvm wget mimalloc
+          sudo pacman -S --noconfirm --needed git ninja cmake meson wget mimalloc go
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
@@ -68,6 +68,9 @@ jobs:
           git config --global pull.rebase true
           git config --global rebase.autoStash true
           git config --global fetch.prune true
+          sudo GOBIN=/usr/bin go install go.chromium.org/luci/cipd/client/cmd/...@latest
+          sudo bash -c "cipd ensure -ensure-file-output /dev/null -root /usr/local/fuchsia-clang -log-level error -ensure-file <(echo 'fuchsia/third_party/clang/linux-amd64 latest')"
+          echo "PATH=/usr/local/fuchsia-clang/bin:$PATH" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - name: Checkout toolchain
         uses: actions/checkout@v4
