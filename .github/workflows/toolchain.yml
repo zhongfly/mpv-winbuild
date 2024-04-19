@@ -133,7 +133,7 @@ jobs:
         with:
           bit: "${{ matrix.bit }}"
           compiler: "gcc"
-          command: "ninja -C $buildroot/build$bit gcc && ninja -C $buildroot/build$bit rustup && ninja -C $buildroot/build$bit cargo-clean"
+          command: "ninja -C $buildroot/build$bit gcc"
 
       - name: Build Clang Toolchain
         uses: ./action/build_toolchain
@@ -141,7 +141,7 @@ jobs:
         with:
           bit: "${{ matrix.bit }}"
           compiler: "clang"
-          command: "ninja -C $buildroot/build$bit rebuild_cache && cmake --build $buildroot/build$bit --target llvm-download && ninja -C $buildroot/build$bit llvm-clang && ninja -C $buildroot/build$bit rustup && ninja -C $buildroot/build$bit cargo-clean"
+          command: "ninja -C $buildroot/build$bit rebuild_cache && cmake --build $buildroot/build$bit --target llvm-download && ninja -C $buildroot/build$bit llvm-clang"
 
       - name: Save Toolchain Cache
         if: ${{ inputs.no_save_cache != true }}
@@ -156,13 +156,7 @@ jobs:
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ needs.params.outputs.cache_suffix }}
-      - name: Save Rust Cache
-        if: ${{ inputs.no_save_cache != true }}
-        uses: actions/cache/save@v4.0.2
-        with:
-          path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
-          key: rust-${{ needs.params.outputs.cache_suffix }}
-          
+
       - name: Collect logs
         if: ${{ always() }}
         run: |
@@ -174,9 +168,48 @@ jobs:
           name: ${{ matrix.bit }}_logs
           path: logs.7z
 
+  rust:
+    name: Install Rust Toolchain
+    needs: [params]
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux/archlinux:base-devel
+    continue-on-error: true
+
+    steps:
+      - name: Install Dependencies
+        run: |
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git ninja cmake meson wget
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global pull.rebase true
+          git config --global rebase.autoStash true
+          git config --global fetch.prune true
+      - uses: actions/checkout@v4
+
+      - name: Checkout toolchain
+        uses: actions/checkout@v4
+        with:
+          repository: shinchiro/mpv-winbuild-cmake
+          path: mpv-winbuild-cmake
+          fetch-depth: 0
+
+      - name: Install Rust Toolchain
+        uses: ./action/build_toolchain
+        with:
+          bit: "64-v3"
+          command: "ninja -C $buildroot/build$bit rustup && ninja -C $buildroot/build$bit cargo-clean"
+
+      - name: Save Rust Cache
+        if: ${{ inputs.no_save_cache != true }}
+        uses: actions/cache/save@v4.0.2
+        with:
+          path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
+          key: rust-${{ needs.params.outputs.cache_suffix }}
 
   trigger:
-    needs: [build,params]
+    needs: [build,params,rust]
     if: ${{ always() && inputs.trigger_build != false && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
 
