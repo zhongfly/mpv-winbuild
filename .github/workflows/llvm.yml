@@ -69,7 +69,7 @@ jobs:
           git config --global rebase.autoStash true
           git config --global fetch.prune true
           sudo GOBIN=/usr/bin go install go.chromium.org/luci/cipd/client/cmd/...@latest
-          sudo bash -c "cipd ensure -ensure-file-output /dev/null -root /usr/local/fuchsia-clang -log-level error -ensure-file <(echo 'fuchsia/third_party/clang/linux-amd64 latest')"
+          sudo cipd install fuchsia/third_party/clang/linux-amd64 latest -root /usr/local/fuchsia-clang
           echo "PATH=/usr/local/fuchsia-clang/bin:$PATH" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - name: Checkout toolchain
