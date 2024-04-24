@@ -1,4 +1,4 @@
-From 50e8f21bdf37d17ed9178e39188a3c8220b44aa9 Mon Sep 17 00:00:00 2001
+From 3a525f6c961f23292e6a1136b861fca04d8e3944 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Sun, 10 Mar 2024 10:04:23 +0800
 Subject: [PATCH] packages: compile lgpl libmpv
@@ -10,7 +10,7 @@ Subject: [PATCH] packages: compile lgpl libmpv
  3 files changed, 9 insertions(+), 48 deletions(-)
 
 diff --git a/cmake/packages_check.cmake b/cmake/packages_check.cmake
-index 26e6c97..ef77c58 100644
+index e90ecfd9..4779b140 100644
 --- a/cmake/packages_check.cmake
 +++ b/cmake/packages_check.cmake
 @@ -6,11 +6,7 @@ if(COMPILER_TOOLCHAIN STREQUAL "gcc")
@@ -27,7 +27,7 @@ index 26e6c97..ef77c58 100644
      set(vapoursynth_pkgconfig_libs "-lVapourSynth -Wl,-delayload=VapourSynth.dll")
      set(vapoursynth_script_pkgconfig_libs "-lVSScript -Wl,-delayload=VSScript.dll")
 diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
-index e620f2f..74e9973 100644
+index 63ca894c..152c4ea3 100644
 --- a/packages/ffmpeg.cmake
 +++ b/packages/ffmpeg.cmake
 @@ -1,18 +1,13 @@
@@ -75,9 +75,9 @@ index e620f2f..74e9973 100644
          openal-soft
      GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
 @@ -59,15 +48,11 @@ ExternalProject_Add(ffmpeg
+         --pkg-config-flags=--static
          --enable-cross-compile
          --enable-runtime-cpudetect
-         ${ffmpeg_hardcoded_tables}
 -        --enable-gpl
          --enable-version3
          --enable-postproc
@@ -120,7 +120,7 @@ index e620f2f..74e9973 100644
          --enable-cuda-llvm
          --enable-cuvid
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index 3cf19ce..5f85787 100644
+index 3cf19ce0..5f857872 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
 @@ -6,15 +6,11 @@ ExternalProject_Add(mpv
