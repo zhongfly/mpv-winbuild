@@ -111,8 +111,8 @@ jobs:
         with:
           bit: "64-v3"
           compiler: "clang"
-          command: "ninja -C $buildroot/build$bit llvm"
-          extra_option: "-DLLVM_ENABLE_PGO=USE -DLLVM_PROFDATA_FILE=$buildroot/llvm.profdata"
+          command: "ninja -C $buildroot/build$bit llvm && rm -rf clang_root/llvm-thinlto || true"
+          extra_option: "-DLLVM_ENABLE_PGO=USE -DLLVM_ENABLE_LTO=Thin -DLLVM_PROFDATA_FILE=$buildroot/llvm.profdata"
 
       - name: Save llvm cache
         uses: actions/cache/save@v4.0.2
