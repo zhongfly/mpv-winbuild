@@ -212,6 +212,8 @@ jobs:
     needs: [build,params,rust]
     if: ${{ always() && inputs.trigger_build != false && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
 
     steps:
       - name: Trigger mpv build workflow

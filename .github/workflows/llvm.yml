@@ -138,6 +138,8 @@ jobs:
     needs: [build_llvm]
     if: ${{ always() && inputs.trigger_toolchain && !inputs.no_save_cache && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
 
     steps:
       - name: Trigger Toolchain build workflow

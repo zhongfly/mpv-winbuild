@@ -591,6 +591,8 @@ jobs:
     needs: [build_mpv,params]
     if: ${{ inputs.release == true }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -620,7 +622,6 @@ jobs:
 
       - name: Commit version & remove existing tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ env.tag_name }}
         shell: bash
         run: |
@@ -683,10 +684,7 @@ jobs:
           artifactErrorsFailBuild: true
           prerelease: false
           makeLatest: true
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Prune old releases
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           git checkout main
