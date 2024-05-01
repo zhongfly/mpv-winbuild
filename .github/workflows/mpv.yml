@@ -166,6 +166,9 @@ jobs:
     continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
+    permissions:
+      id-token: write
+      attestations: write
 
     steps:
       - name: Install Dependencies
@@ -585,6 +588,12 @@ jobs:
               core.summary.addList(patch_note.replace(/- \[(?<pr>#\d+)\]\((?<url>.*)\)/g,"<a href='$<url>'>$<pr></a>").replace(/`(?<code>[^`]+)`/g, '<code>$<code></code>').split('\n'));
             }
             await core.summary.addDetails('Packages Version',packages_table).write();
+
+      - name: Attest
+        uses: actions/attest-build-provenance@v1
+        continue-on-error: true
+        with:
+          subject-path: 'mpv-winbuild-cmake/release/*.7z'
 
   publish_release:
     name: Publish release
