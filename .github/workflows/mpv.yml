@@ -695,6 +695,8 @@ jobs:
           makeLatest: true
       - name: Prune old releases
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git checkout main
           bash prunetags.sh
