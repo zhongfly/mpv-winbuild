@@ -166,9 +166,6 @@ jobs:
     continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
-    permissions:
-      id-token: write
-      attestations: write
 
     steps:
       - name: Install Dependencies
@@ -589,11 +586,6 @@ jobs:
             }
             await core.summary.addDetails('Packages Version',packages_table).write();
 
-      - name: Attest
-        uses: actions/attest-build-provenance@v1
-        continue-on-error: true
-        with:
-          subject-path: 'mpv-winbuild-cmake/release/*.7z'
 
   publish_release:
     name: Publish release
@@ -601,6 +593,8 @@ jobs:
     if: ${{ inputs.release == true }}
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
+      attestations: write
       contents: write
 
     steps:
@@ -693,6 +687,11 @@ jobs:
           artifactErrorsFailBuild: true
           prerelease: false
           makeLatest: true
+      - name: Attest
+        uses: actions/attest-build-provenance@v1
+        continue-on-error: true
+        with:
+          subject-path: 'artifacts/*.7z'
       - name: Prune old releases
         shell: bash
         env:
