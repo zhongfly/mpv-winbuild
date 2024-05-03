@@ -1,0 +1,24 @@
+From cea01c5cf4e1df73b2d373eff0428745ae050f04 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 3 May 2024 16:42:05 +0800
+Subject: [PATCH] highway: enable CMAKE_HEADER_ONLY to fix build
+
+---
+ packages/highway.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/highway.cmake b/packages/highway.cmake
+index 7cb38875..8417a0fe 100644
+--- a/packages/highway.cmake
++++ b/packages/highway.cmake
+@@ -21,6 +21,7 @@ ExternalProject_Add(highway
+         -DHWY_ENABLE_EXAMPLES=OFF
+         -DHWY_ENABLE_INSTALL=ON
+         -DHWY_WARNINGS_ARE_ERRORS=OFF
++        -DHWY_CMAKE_HEADER_ONLY=ON
+         ${HWY_CMAKE_SSE2}
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+-- 
+2.43.0.windows.1
+
