@@ -56,7 +56,6 @@ build() {
     fi
     cmake --fresh -DTARGET_ARCH=$arch-w64-mingw32 $gcc_arch -DCOMPILER_TOOLCHAIN=$compiler "${clang_option[@]}" $extra_option -DENABLE_CCACHE=ON -DSINGLE_SOURCE_LOCATION=$srcdir -DRUSTUP_LOCATION=$buildroot/install_rustup -G Ninja -H$gitdir -B$buildroot/build$bit
 
-    ninja -C $buildroot/build$bit {libzvbi,libopenmpt}-removeprefix || rm -rf $srcdir/{libzvbi,libopenmpt} || true
     ninja -C $buildroot/build$bit download || true
 
     if [ "$compiler" == "gcc" ] && [ ! -f "$buildroot/build$bit/install/bin/cross-gcc" ]; then
