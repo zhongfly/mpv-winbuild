@@ -1,0 +1,48 @@
+From 4d15c5b8dadd02a7477ef3765f8d25e268b35d5c Mon Sep 17 00:00:00 2001
+From: Andarwinux <Andarwinux@users.noreply.github.com>
+Date: Mon, 10 Jun 2024 00:00:00 +0000
+Subject: [PATCH] rustup: unset LD_PRELOAD
+
+rustc doesn't support override malloc
+---
+ packages/libdovi.cmake | 1 +
+ packages/rav1e.cmake   | 1 +
+ toolchain/rustup.cmake | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/packages/libdovi.cmake b/packages/libdovi.cmake
+index 1b161e248..5d057c907 100644
+--- a/packages/libdovi.cmake
++++ b/packages/libdovi.cmake
+@@ -9,6 +9,7 @@ ExternalProject_Add(libdovi
+     PATCH_COMMAND ""
+     CONFIGURE_COMMAND ""
+     BUILD_COMMAND ${EXEC}
++        LD_PRELOAD=
+         CARGO_BUILD_TARGET_DIR=<BINARY_DIR>
+         CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
+         ${cargo_lto_rustflags}
+diff --git a/packages/rav1e.cmake b/packages/rav1e.cmake
+index 118e65a95..b6358e24a 100644
+--- a/packages/rav1e.cmake
++++ b/packages/rav1e.cmake
+@@ -6,6 +6,7 @@ ExternalProject_Add(rav1e
+     PATCH_COMMAND ""
+     CONFIGURE_COMMAND ""
+     BUILD_COMMAND ${EXEC}
++        LD_PRELOAD=
+         CARGO_BUILD_TARGET_DIR=<BINARY_DIR>
+         CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
+         CARGO_PROFILE_RELEASE_DEBUG=false
+diff --git a/toolchain/rustup.cmake b/toolchain/rustup.cmake
+index 250a5a04d..5f58863be 100644
+--- a/toolchain/rustup.cmake
++++ b/toolchain/rustup.cmake
+@@ -6,7 +6,7 @@ ExternalProject_Add(rustup
+         curl -sSf https://sh.rustup.rs |
+         sh -s -- -y --default-toolchain stable --target x86_64-pc-windows-gnu,i686-pc-windows-gnu --no-modify-path --profile minimal
+     BUILD_COMMAND ${EXEC} rustup update
+-    INSTALL_COMMAND ${EXEC} cargo install cargo-c --profile=release-strip --features=vendored-openssl
++    INSTALL_COMMAND ${EXEC} LD_PRELOAD= cargo install cargo-c --profile=release-strip --features=vendored-openssl
+     LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
