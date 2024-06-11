@@ -1,15 +1,29 @@
-From 4d15c5b8dadd02a7477ef3765f8d25e268b35d5c Mon Sep 17 00:00:00 2001
+From 64ae6695e71de3b66ebc1f5dfcb338d334c3c542 Mon Sep 17 00:00:00 2001
 From: Andarwinux <Andarwinux@users.noreply.github.com>
 Date: Mon, 10 Jun 2024 00:00:00 +0000
 Subject: [PATCH] rustup: unset LD_PRELOAD
 
 rustc doesn't support override malloc
 ---
- packages/libdovi.cmake | 1 +
- packages/rav1e.cmake   | 1 +
- toolchain/rustup.cmake | 2 +-
- 3 files changed, 3 insertions(+), 1 deletion(-)
+ packages/CMakeLists.txt | 2 +-
+ packages/libdovi.cmake  | 1 +
+ packages/rav1e.cmake    | 1 +
+ toolchain/rustup.cmake  | 2 +-
+ 4 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
+index 6a5f4cff2..576e22acc 100644
+--- a/packages/CMakeLists.txt
++++ b/packages/CMakeLists.txt
+@@ -141,7 +141,7 @@ add_custom_target(package-fullclean
+ )
+ 
+ add_custom_target(cargo-clean
+-    COMMAND ${EXEC} cargo install --git https://github.com/matthiaskrgr/cargo-cache.git --no-default-features --features ci-autoclean cargo-cache
++    COMMAND ${EXEC} LD_PRELOAD= cargo install --git https://github.com/matthiaskrgr/cargo-cache.git --no-default-features --features ci-autoclean cargo-cache
+     COMMAND ${EXEC} cargo-cache
+     COMMAND du -sh ${RUSTUP_LOCATION}
+     USES_TERMINAL
 diff --git a/packages/libdovi.cmake b/packages/libdovi.cmake
 index 1b161e248..5d057c907 100644
 --- a/packages/libdovi.cmake
@@ -46,3 +60,4 @@ index 250a5a04d..5f58863be 100644
 +    INSTALL_COMMAND ${EXEC} LD_PRELOAD= cargo install cargo-c --profile=release-strip --features=vendored-openssl
      LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
  )
+ 
