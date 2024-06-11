@@ -1,13 +1,14 @@
-From 3a525f6c961f23292e6a1136b861fca04d8e3944 Mon Sep 17 00:00:00 2001
+From 72cec5bbb7fe3c33a73a4e14105c9e8921ddc49e Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Sun, 10 Mar 2024 10:04:23 +0800
+Date: Tue, 11 Jun 2024 11:38:30 +0200
 Subject: [PATCH] packages: compile lgpl libmpv
 
 ---
  cmake/packages_check.cmake |  6 +-----
  packages/ffmpeg.cmake      | 23 -----------------------
+ packages/libarchive.cmake  |  3 +--
  packages/mpv.cmake         | 28 ++++++++--------------------
- 3 files changed, 9 insertions(+), 48 deletions(-)
+ 4 files changed, 10 insertions(+), 50 deletions(-)
 
 diff --git a/cmake/packages_check.cmake b/cmake/packages_check.cmake
 index e90ecfd9..4779b140 100644
@@ -119,6 +120,27 @@ index 63ca894c..152c4ea3 100644
          --enable-libaribcaption
          --enable-cuda-llvm
          --enable-cuvid
+diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
+index 4773fae..2e9027a 100644
+--- a/packages/libarchive.cmake
++++ b/packages/libarchive.cmake
+@@ -2,7 +2,6 @@ ExternalProject_Add(libarchive
+     DEPENDS
+         bzip2
+         expat
+-        lzo
+         xz
+         zlib
+         zstd
+@@ -26,7 +25,7 @@ ExternalProject_Add(libarchive
+         -DENABLE_ICONV=ON
+         -DENABLE_LIBXML2=ON
+         -DENABLE_EXPAT=ON
+-        -DENABLE_LZO=ON
++        -DENABLE_LZO=OFF
+         -DENABLE_LZMA=ON
+         -DENABLE_CPIO=OFF
+         -DENABLE_CNG=OFF
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
 index 3cf19ce0..5f857872 100644
 --- a/packages/mpv.cmake
