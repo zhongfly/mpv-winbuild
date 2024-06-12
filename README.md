@@ -102,7 +102,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
 -   Zip
     -   [xvidcore](https://labs.xvid.com/source/) (1.3.7) 
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
-    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.6)
+    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.8)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.17)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square)
 
