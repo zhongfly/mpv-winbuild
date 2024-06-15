@@ -1,0 +1,24 @@
+From 37c67bf536c05b166873f953673e52885d139174 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sun, 16 Jun 2024 10:47:46 +0800
+Subject: [PATCH] libdovi: reset to working commit
+
+---
+ packages/libdovi.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/libdovi.cmake b/packages/libdovi.cmake
+index 5d057c90..3285aad1 100644
+--- a/packages/libdovi.cmake
++++ b/packages/libdovi.cmake
+@@ -5,6 +5,7 @@ ExternalProject_Add(libdovi
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone dolby_vision"
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET 03e41c4
+     UPDATE_COMMAND ""
+     PATCH_COMMAND ""
+     CONFIGURE_COMMAND ""
+-- 
+2.45.1.windows.1
+
