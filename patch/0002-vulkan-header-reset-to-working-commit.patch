@@ -1,0 +1,24 @@
+From da45e57b1b085e449f5f51c58a3f18f388f36a76 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 19 Jun 2024 11:02:57 +0800
+Subject: [PATCH] vulkan-header: reset to working commit
+
+---
+ packages/vulkan-header.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/vulkan-header.cmake b/packages/vulkan-header.cmake
+index bf18b364..43a78524 100644
+--- a/packages/vulkan-header.cmake
++++ b/packages/vulkan-header.cmake
+@@ -5,6 +5,7 @@ ExternalProject_Add(vulkan-header
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET 8f034f6
+     CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -G Ninja
+         -DCMAKE_BUILD_TYPE=Release
+-- 
+2.45.1.windows.1
+
