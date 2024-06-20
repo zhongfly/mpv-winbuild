@@ -1,6 +1,6 @@
-From 72cec5bbb7fe3c33a73a4e14105c9e8921ddc49e Mon Sep 17 00:00:00 2001
+From f0b890b1fdb6f41d434a9bdc8bd59823166e5151 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Tue, 11 Jun 2024 11:38:30 +0200
+Date: Sun, 10 Mar 2024 10:04:23 +0800
 Subject: [PATCH] packages: compile lgpl libmpv
 
 ---
@@ -28,7 +28,7 @@ index e90ecfd9..4779b140 100644
      set(vapoursynth_pkgconfig_libs "-lVapourSynth -Wl,-delayload=VapourSynth.dll")
      set(vapoursynth_script_pkgconfig_libs "-lVSScript -Wl,-delayload=VSScript.dll")
 diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
-index 63ca894c..152c4ea3 100644
+index c3afe92c..a91ae91b 100644
 --- a/packages/ffmpeg.cmake
 +++ b/packages/ffmpeg.cmake
 @@ -1,18 +1,13 @@
@@ -66,7 +66,7 @@ index 63ca894c..152c4ea3 100644
 -        libzvbi
          libaribcaption
          aom
-         rav1e
+         svtav1
          dav1d
          vapoursynth
          uavs3d
@@ -101,7 +101,7 @@ index 63ca894c..152c4ea3 100644
 -        --enable-libx264
 -        --enable-libx265
          --enable-libaom
-         --enable-librav1e
+         --enable-libsvtav1
          --enable-libdav1d
 -        --enable-libdavs2
          --enable-libuavs3d
@@ -121,7 +121,7 @@ index 63ca894c..152c4ea3 100644
          --enable-cuda-llvm
          --enable-cuvid
 diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
-index 4773fae..2e9027a 100644
+index 4773faef..2e9027ae 100644
 --- a/packages/libarchive.cmake
 +++ b/packages/libarchive.cmake
 @@ -2,7 +2,6 @@ ExternalProject_Add(libarchive
@@ -142,7 +142,7 @@ index 4773fae..2e9027a 100644
          -DENABLE_CPIO=OFF
          -DENABLE_CNG=OFF
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index 3cf19ce0..5f857872 100644
+index 9cb510ef..fc862a2a 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
 @@ -6,15 +6,11 @@ ExternalProject_Add(mpv
@@ -191,7 +191,7 @@ index 3cf19ce0..5f857872 100644
          -Dspirv-cross=enabled
          -Dvulkan=enabled
          -Dvapoursynth=enabled
-@@ -66,11 +64,6 @@ ExternalProject_Add_Step(mpv strip-binary
+@@ -67,11 +65,6 @@ ExternalProject_Add_Step(mpv strip-binary
  
  ExternalProject_Add_Step(mpv copy-binary
      DEPENDEES strip-binary
@@ -203,7 +203,7 @@ index 3cf19ce0..5f857872 100644
      COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv-2.dll          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv-2.dll
      COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv.dll.a          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv.dll.a
      COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/libmpv/client.h       ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/include/mpv/client.h
-@@ -90,14 +83,9 @@ mv $2 $2-git-\${GIT}")
+@@ -91,14 +84,9 @@ mv $2 $2-git-\${GIT}")
  ExternalProject_Add_Step(mpv copy-package-dir
      DEPENDEES copy-binary
      COMMAND chmod 755 ${RENAME}
@@ -221,5 +221,5 @@ index 3cf19ce0..5f857872 100644
      LOG 1
  )
 -- 
-2.43.0
+2.45.1.windows.1
 
