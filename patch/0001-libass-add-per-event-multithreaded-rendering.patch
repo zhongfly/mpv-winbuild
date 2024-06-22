@@ -1,0 +1,52 @@
+From 72d177b760d4bcda6f0b5404609d8a9f0f93a568 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 10 May 2024 19:55:39 +0800
+Subject: [PATCH] libass: add per-event multithreaded rendering
+
+---
+ packages/libass.cmake | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
+
+diff --git a/packages/libass.cmake b/packages/libass.cmake
+index d6aba079..fa44b19d 100644
+--- a/packages/libass.cmake
++++ b/packages/libass.cmake
+@@ -6,25 +6,22 @@ ExternalProject_Add(libass
+         libiconv
+         fontconfig
+         libunibreak
+-    GIT_REPOSITORY https://github.com/libass/libass.git
++    GIT_REPOSITORY https://github.com/rcombs/libass.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
++    GIT_REMOTE_NAME origin
++    GIT_TAG threading
+     UPDATE_COMMAND ""
+-    CONFIGURE_COMMAND ${EXEC} CONF=1 meson setup <BINARY_DIR> <SOURCE_DIR>
++    CONFIGURE_COMMAND ${EXEC} autoreconf -fi && CONF=1 <SOURCE_DIR>/configure
++        --host=${TARGET_ARCH}
+         --prefix=${MINGW_INSTALL_PREFIX}
+-        --libdir=${MINGW_INSTALL_PREFIX}/lib
+-        --cross-file=${MESON_CROSS}
+-        --buildtype=release
+-        --default-library=static
+-        -Dfontconfig=enabled
+-        -Ddirectwrite=enabled
+-        -Dasm=enabled
+-        -Dlibunibreak=enabled
+-    BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+-    INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
++        --disable-shared
++        CFLAGS='-Wno-error=int-conversion'
++    BUILD_COMMAND ${MAKE}
++    INSTALL_COMMAND ${MAKE} install
++    BUILD_IN_SOURCE 1
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
+ 
+ force_rebuild_git(libass)
+-force_meson_configure(libass)
+ cleanup(libass install)
+-- 
+2.45.1.windows.1
+
