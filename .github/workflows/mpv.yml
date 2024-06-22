@@ -523,7 +523,7 @@ jobs:
                   case /github\.com/.test(remote):
                     url = getGithubUrl(hash,remote);
                     break;
-                  case /(gitlab\.com|code\.videolan\.org|gitlab\.gnome\.org)/.test(remote):
+                  case /(gitlab\.com|code\.videolan\.org|gitlab\.(gnome|freedesktop)\.org)/.test(remote):
                     url = getGitlabUrl(hash,remote);
                     break;
                   case /bitbucket\.org/.test(remote):
