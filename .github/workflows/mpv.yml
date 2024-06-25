@@ -628,6 +628,7 @@ jobs:
       - name: Commit version & remove existing tag
         env:
           tag_name: ${{ env.tag_name }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           git fetch --tags
