@@ -1,0 +1,26 @@
+From b2d28707c3a0ee3908fd1830d07adf892603aa1a Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Thu, 29 Aug 2024 00:05:07 +0800
+Subject: [PATCH] openssl: reset to working commit
+
+---
+ packages/openssl.cmake | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/packages/openssl.cmake b/packages/openssl.cmake
+index 7a1afcc8..d16f1eb4 100644
+--- a/packages/openssl.cmake
++++ b/packages/openssl.cmake
+@@ -13,6 +13,9 @@ ExternalProject_Add(openssl
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !test"
++    GIT_REMOTE_NAME origin
++    GIT_TAG master
++    GIT_RESET a82d9e5
+     GIT_SUBMODULES ""
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} CONF=1 <SOURCE_DIR>/Configure
+-- 
+2.46.0
+
