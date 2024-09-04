@@ -65,9 +65,9 @@ jobs:
         with:
           script: |
             const commit = await github.rest.repos.getCommit({
-              owner: 'mpv-player',
+              owner: 'Richasy',
               repo: 'mpv',
-              ref: `master`
+              ref: `d3d11`
             })
             core.setOutput('sha', String(commit.data.sha))
             
@@ -124,7 +124,7 @@ jobs:
               
               try {
                 const res = await waitingMergeability({
-                  owner: "mpv-player",
+                  owner: "Richasy",
                   repo: "mpv",
                   pull_number: pr_number,
                 });
@@ -185,7 +185,7 @@ jobs:
       - name: Checkout toolchain
         uses: actions/checkout@v4
         with:
-          repository: shinchiro/mpv-winbuild-cmake
+          repository: Richasy/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
           fetch-depth: 0
       - name: Prepare
@@ -651,7 +651,7 @@ jobs:
         with:
           script: |
             const sha = `${{ needs.params.outputs.sha }}`;
-            let note = `**MPV Git commit**: https://github.com/mpv-player/mpv/commit/${sha}\n`;
+            let note = `**MPV Git commit**: https://github.com/Richasy/mpv/commit/${sha}\n`;
             note+="**Build Time**: ${{ env.long_time }}\n";
             note+="**Compiler**: ${{ inputs.compiler }}\n";
             note+="**Build Details**: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}\n";

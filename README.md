@@ -6,7 +6,7 @@
 
 Use Github Action to build mpv for Windows with latest commit.
 
-Based on <https://github.com/shinchiro/mpv-winbuild-cmake>.
+Based on <https://github.com/Richasy/mpv-winbuild-cmake>.
 
 ## Auto-Builds
 
@@ -29,7 +29,7 @@ This repo only provides 64-bit version. If you need a 32-bit version, you can fo
 
 ## Information about packages
 
-same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://flat.badgen.net/github/last-commit/shinchiro/mpv-winbuild-cmake?cache=1800)](https://github.com/shinchiro/mpv-winbuild-cmake)
+same as [Richasy](https://github.com/Richasy/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://flat.badgen.net/github/last-commit/Richasy/mpv-winbuild-cmake?cache=1800)](https://github.com/Richasy/mpv-winbuild-cmake)
 
 -   Git/Hg
     -   amf-headers [![amf-headers](https://flat.badgen.net/github/last-commit/GPUOpen-LibrariesAndSDKs/AMF?scale=0.8&cache=1800)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/tree/master/amf/public/include)
@@ -45,7 +45,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   freetype2 [![freetype2](https://flat.badgen.net/github/last-commit/freetype/freetype?scale=0.8&cache=1800)](https://github.com/freetype/freetype)
     -   fribidi [![fribidi](https://flat.badgen.net/github/last-commit/fribidi/fribidi?scale=0.8&cache=1800)](https://github.com/fribidi/fribidi)
     -   harfbuzz [![harfbuzz](https://flat.badgen.net/github/last-commit/harfbuzz/harfbuzz/main?scale=0.8&cache=1800)](https://github.com/harfbuzz/harfbuzz)
-    -   lame [![lame](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/gitlab.com/shinchiro//lame?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/lame)
+    -   lame [![lame](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/gitlab.com/Richasy//lame?scale=0.8&cache=1800)](https://gitlab.com/Richasy/lame)
     -   lcms2 [![lcms2](https://flat.badgen.net/github/last-commit/mm2/Little-CMS?scale=0.8&cache=1800)](https://github.com/mm2/Little-CMS)
     -   libarchive [![libarchive](https://flat.badgen.net/github/last-commit/libarchive/libarchive?scale=0.8&cache=1800)](https://github.com/libarchive/libarchive)
     -   libaribcaption [![libaribcaption](https://flat.badgen.net/github/last-commit/xqq/libaribcaption?scale=0.8&cache=1800)](https://github.com/xqq/libaribcaption)
@@ -63,7 +63,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libplacebo (with [glad](https://github.com/Dav1dde/glad), [fast_float](https://github.com/fastfloat/fast_float), [xxhash](https://github.com/Cyan4973/xxHash)) [![libplacebo](https://flat.badgen.net/github/last-commit/haasn/libplacebo?scale=0.8&cache=1800)](https://github.com/haasn/libplacebo)
     -   libpng [![libpng](https://flat.badgen.net/github/last-commit/glennrp/libpng?scale=0.8&cache=1800)](https://github.com/glennrp/libpng)
     -   libsdl2 [![libpng](https://flat.badgen.net/github/last-commit/libsdl-org/SDL/SDL2?style=flat-square&scale=0.8&cache=1800)](https://github.com/libsdl-org/SDL)
-    -   libsoxr [![libsoxr](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/gitlab.com/shinchiro/soxr?scale=0.8&cache=1800)](https://gitlab.com/shinchiro/soxr)
+    -   libsoxr [![libsoxr](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/gitlab.com/Richasy/soxr?scale=0.8&cache=1800)](https://gitlab.com/Richasy/soxr)
     -   libsrt [![libsrt](https://flat.badgen.net/github/last-commit/Haivision/srt?scale=0.8&cache=1800)](https://github.com/Haivision/srt)
     -   libssh [![libssh](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/gitlab.com/libssh/libssh-mirror?scale=0.8&cache=1800)](https://git.libssh.org/projects/libssh.git)
     -   libudfread [![libdvdcss](https://flat.badgen.net/https/latest-commit-badgen.vercel.app/gitlab/code.videolan.org/videolan/libudfread?scale=0.8&cache=1800)](https://code.videolan.org/videolan/libudfread)
