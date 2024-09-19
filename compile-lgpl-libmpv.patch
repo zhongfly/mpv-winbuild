@@ -1,4 +1,4 @@
-From f0b890b1fdb6f41d434a9bdc8bd59823166e5151 Mon Sep 17 00:00:00 2001
+From 6a9032769c1b4c6c575d87cbce60c0ed10f960dd Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Sun, 10 Mar 2024 10:04:23 +0800
 Subject: [PATCH] packages: compile lgpl libmpv
@@ -11,10 +11,10 @@ Subject: [PATCH] packages: compile lgpl libmpv
  4 files changed, 10 insertions(+), 50 deletions(-)
 
 diff --git a/cmake/packages_check.cmake b/cmake/packages_check.cmake
-index e90ecfd9..4779b140 100644
+index e303e10dc..6c2eeb399 100644
 --- a/cmake/packages_check.cmake
 +++ b/cmake/packages_check.cmake
-@@ -6,11 +6,7 @@ if(COMPILER_TOOLCHAIN STREQUAL "gcc")
+@@ -7,11 +7,7 @@ if(COMPILER_TOOLCHAIN STREQUAL "gcc")
      set(ffmpeg_extra_libs "-lstdc++")
      set(libjxl_unaligned_vector "-Wa,-muse-unaligned-vector-move") # fix crash on AVX2 proc (64bit) due to unaligned stack memory
      set(mpv_copy_debug COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.debug ${CMAKE_CURRENT_BINARY_DIR}/mpv-debug/mpv.debug)
@@ -25,10 +25,10 @@ index e90ecfd9..4779b140 100644
 -                          COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/libmpv-2.dll)
 +    set(mpv_add_debuglink COMMAND ${EXEC} ${TARGET_ARCH}-strip -s <BINARY_DIR>/libmpv-2.dll)
  elseif(COMPILER_TOOLCHAIN STREQUAL "clang")
+     set(rust_target "gnullvm")
      set(vapoursynth_pkgconfig_libs "-lVapourSynth -Wl,-delayload=VapourSynth.dll")
-     set(vapoursynth_script_pkgconfig_libs "-lVSScript -Wl,-delayload=VSScript.dll")
 diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
-index c3afe92c..a91ae91b 100644
+index 49a0f6e95..e06b281d2 100644
 --- a/packages/ffmpeg.cmake
 +++ b/packages/ffmpeg.cmake
 @@ -1,18 +1,13 @@
@@ -36,7 +36,7 @@ index c3afe92c..a91ae91b 100644
      DEPENDS
          amf-headers
 -        avisynth-headers
-         nvcodec-headers
+         ${nvcodec_headers}
          bzip2
          lame
          lcms2
@@ -69,8 +69,8 @@ index c3afe92c..a91ae91b 100644
          svtav1
          dav1d
          vapoursynth
-         uavs3d
--        davs2
+         ${ffmpeg_uavs3d}
+-        ${ffmpeg_davs2}
 -        rubberband
          libva
          openal-soft
@@ -103,8 +103,8 @@ index c3afe92c..a91ae91b 100644
          --enable-libaom
          --enable-libsvtav1
          --enable-libdav1d
--        --enable-libdavs2
-         --enable-libuavs3d
+-        ${ffmpeg_davs2_cmd}
+         ${ffmpeg_uavs3d_cmd}
 -        --enable-libxvid
          --enable-libzimg
          --enable-openssl
@@ -118,10 +118,10 @@ index c3afe92c..a91ae91b 100644
          --enable-libshaderc
 -        --enable-libzvbi
          --enable-libaribcaption
-         --enable-cuda-llvm
-         --enable-cuvid
+         ${ffmpeg_cuda}
+         --enable-amf
 diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
-index 4773faef..2e9027ae 100644
+index 4773faef1..2e9027aea 100644
 --- a/packages/libarchive.cmake
 +++ b/packages/libarchive.cmake
 @@ -2,7 +2,6 @@ ExternalProject_Add(libarchive
@@ -142,7 +142,7 @@ index 4773faef..2e9027ae 100644
          -DENABLE_CPIO=OFF
          -DENABLE_CNG=OFF
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index 9cb510ef..fc862a2a 100644
+index b30e6e33f..af4c944b6 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
 @@ -6,15 +6,11 @@ ExternalProject_Add(mpv
@@ -221,5 +221,4 @@ index 9cb510ef..fc862a2a 100644
      LOG 1
  )
 -- 
-2.45.1.windows.1
-
+2.46.0
