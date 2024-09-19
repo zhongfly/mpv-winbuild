@@ -17,13 +17,17 @@ main() {
         package "64"
     elif [ "$target" == "64-v3" ]; then
         package "64-v3"
+    elif [ "$target" == "aarch64" ]; then
+        package "aarch64"
     elif [ "$target" == "all-64" ]; then
         package "64"
         package "64-v3"
+        package "aarch64"
     else [ "$target" == "all" ];
         package "32"
         package "64"
         package "64-v3"
+        package "aarch64"
     fi
     rm -rf ./release/mpv-packaging-master
 }
@@ -38,6 +42,8 @@ package() {
         local arch="x86_64"
         local gcc_arch="-DGCC_ARCH=x86-64-v3"
         local x86_64_level="-v3"
+    elif [ $bit == "aarch64" ]; then
+        local arch="aarch64"
     fi
 
     build $bit $arch $gcc_arch

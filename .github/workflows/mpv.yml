@@ -13,6 +13,7 @@ on:
         - 32bit
         - 64bit
         - 64bit-v3
+        - aarch64
         - all-64bit
         - all
       lgpl:
@@ -83,14 +84,17 @@ jobs:
               case "64bit-v3":
                 matrix.bit = ["64-v3"];
                 break;
+              case "aarch64":
+                matrix.bit = ["aarch64"];
+                break;
               case "all-64bit":
-                matrix.bit = ["64","64-v3"];
+                matrix.bit = ["64","64-v3","aarch64"];
                 break;
               case "all":
-                matrix.bit = ["32","64","64-v3"];
+                matrix.bit = ["32","64","64-v3","aarch64"];
                 break;
               default:
-                matrix.bit = ["64","64-v3"];
+                matrix.bit = ["64","64-v3","aarch64"];
                 break;
             }
             matrix.lgpl=[false];
@@ -367,6 +371,8 @@ jobs:
               arch="x86_64"
               gcc_arch=-DGCC_ARCH=x86-64-v3
               x86_64_level=-v3
+          elif [ $bit == "aarch64" ]; then
+              arch="aarch64"
           fi
           retry-tool() {
             local RETRY_COUNTER=0
@@ -426,6 +432,9 @@ jobs:
                 break;
               case "64-v3":
                 arch = "x86_64-v3";
+                break;
+              case "aarch64":
+                arch = "aarch64";
                 break;
             }
             for (let type of types) {

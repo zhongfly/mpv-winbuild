@@ -15,6 +15,7 @@ on:
         - 32bit
         - 64bit
         - 64bit-v3
+        - aarch64
         - all-64bit
         - all
       compiler:
@@ -66,14 +67,17 @@ jobs:
               case "64bit-v3":
                 matrix.bit = ["64-v3"];
                 break;
+              case "aarch64":
+                matrix.bit = ["aarch64"];
+                break;
               case "all-64bit":
-                matrix.bit = ["64","64-v3"];
+                matrix.bit = ["64","64-v3","aarch64"];
                 break;
               case "all":
-                matrix.bit = ["32","64","64-v3"];
+                matrix.bit = ["32","64","64-v3","aarch64"];
                 break;
               default:
-                matrix.bit = ["64","64-v3"];
+                matrix.bit = ["64","64-v3","aarch64"];
                 break;
             }
             core.setOutput("matrix",JSON.stringify(matrix));
@@ -224,7 +228,7 @@ jobs:
           script: |
             let build_target=new Set();
             const release = ${{ inputs.release }};
-            const targets = {"build64-v3":"64bit-v3","build64":"64bit","build32":"32bit"}
+            const targets = {"build64-v3":"64bit-v3","build64":"64bit","build32":"32bit","buildaarch64":"aarch64"}
             const repo="${{github.repository}}".split('/')[1];
             const cache_suffix="${{ needs.params.outputs.cache_suffix }}";
             const cache = await github.rest.actions.getActionsCacheList({
@@ -248,9 +252,10 @@ jobs:
               }
             }
             if(build_target.size>0){
-              if(build_target.has("64bit-v3") && build_target.has("64bit")) {
+              if(build_target.has("64bit-v3") && build_target.has("64bit") && build_target.has("aarch64")) {
                 build_target.delete("64bit-v3");
                 build_target.delete("64bit");
+                build_target.delete("aarch64");
                 build_target.add("all-64bit");
               }
               if(build_target.has("all-64bit") && build_target.has("32bit")) {

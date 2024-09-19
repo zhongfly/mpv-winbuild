@@ -28,6 +28,7 @@ on:
         - 32bit
         - 64bit
         - 64bit-v3
+        - aarch64
         - all-64bit
         - all
       trigger_build:
