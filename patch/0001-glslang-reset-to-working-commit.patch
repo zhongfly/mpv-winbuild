@@ -1,0 +1,24 @@
+From 020e9372c219ea24c0f5a75d4183189ab70c4915 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 5 Nov 2024 07:13:23 +0800
+Subject: [PATCH] glslang: reset to working commit
+
+---
+ packages/glslang.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/glslang.cmake b/packages/glslang.cmake
+index ca59d429d..3e59e8129 100644
+--- a/packages/glslang.cmake
++++ b/packages/glslang.cmake
+@@ -5,6 +5,7 @@ ExternalProject_Add(glslang
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !Test"
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET d81aeef
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ""
+     BUILD_COMMAND ""
+-- 
+2.47.0.windows.1
+
