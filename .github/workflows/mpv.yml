@@ -668,6 +668,27 @@ jobs:
             if (patch_note) {
               note+=`Merged Prs:\n${patch_note}\n`;
             }
+            note+="**Download Tips:**\n";
+            const path = require('path');
+            const tips = {
+              "i686": "for 32 bit system",
+              "x86_64": "for 64 bit system",
+              "x86_64-v3": "for 64 bit system with cpu not older than Intel Haswell or AMD Excavator",
+              "aarch64": "for ARM64(aarch64)"
+            }
+            async function getTips(arch){
+              const globber = await glob.create(`artifacts/mpv-${arch}-[0-9]*.7z`);
+              const files = await globber.glob();
+              if ( files.length > 0 ) {
+                const name = path.basename(files[0]);
+                return `[${name}](https://github.com/${{github.repository}}/releases/download/${{ env.tag_name }}/${name}): ${tips[arch]}\n`
+              } else {
+                return ""
+              }
+            }
+            for(const arch of Object.keys(tips)){
+              note += await getTips(arch);
+            }
             note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.tag_name }}?cache=300)";
             core.setOutput("note",note);
 
