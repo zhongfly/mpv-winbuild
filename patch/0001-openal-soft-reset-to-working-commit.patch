@@ -1,0 +1,26 @@
+From 55043ace296307fb16a4573052005282bb2f088b Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 30 Nov 2024 21:50:16 +0800
+Subject: [PATCH] openal-soft: reset to working commit
+
+---
+ packages/openal-soft.cmake | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/packages/openal-soft.cmake b/packages/openal-soft.cmake
+index e173bc4ce..436a31e54 100644
+--- a/packages/openal-soft.cmake
++++ b/packages/openal-soft.cmake
+@@ -4,6 +4,9 @@ ExternalProject_Add(openal-soft
+     GIT_REPOSITORY https://github.com/kcat/openal-soft.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
++    GIT_REMOTE_NAME origin
++    GIT_TAG master
++    GIT_RESET 5d2c405
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -G Ninja
+-- 
+2.47.0.windows.1
+
