@@ -721,7 +721,7 @@ jobs:
           prerelease: false
           makeLatest: true
       - name: Attest
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         continue-on-error: true
         with:
           subject-path: 'artifacts/*.7z'
