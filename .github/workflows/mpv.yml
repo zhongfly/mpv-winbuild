@@ -309,14 +309,14 @@ jobs:
           key: ${{ env.build_restore_key }}
 
       - name: Set up ccache
-        uses: zhongfly/setup-ccache-action@dist
+        uses: Chocobo1/setup-ccache-action@v1
         with:
           update_packager_index: false
           install_ccache: false
           store_cache: ${{ matrix.lgpl != true && inputs.no_save_cache != true }}
           override_cache_key: ccache-build${{ matrix.bit }}-${{ inputs.compiler }}
           ccache_options: |
-            cache_dir=$GITHUB_WORKSPACE/.ccache
+            cache_dir=${{ github.workspace }}/.ccache
             max_size=500M
             sloppiness=locale,time_macros
             compiler_check=none
