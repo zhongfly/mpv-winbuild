@@ -202,7 +202,7 @@ jobs:
 
       - name: Lookup Toolchain Cache
         id: lookup_toolchain
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
@@ -211,7 +211,7 @@ jobs:
           lookup-only: true
       - name: Lookup Build Cache
         id: lookup_build
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
@@ -255,7 +255,7 @@ jobs:
             
       - name: Keep inital clang sysroot cache alive
         if: ${{ inputs.compiler =='clang' && env.toolchain_version  }}
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ env.toolchain_version }}
@@ -264,7 +264,7 @@ jobs:
           lookup-only: true
       - name: Keep llvm cache alive
         if: ${{ inputs.compiler =='clang' }}
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with: 
           path: mpv-winbuild-cmake/clang_root
           key: llvm-${{ env.toolchain_version }}
@@ -273,7 +273,7 @@ jobs:
           lookup-only: true
       - name: Restore clang sysroot cache
         if: ${{ inputs.compiler =='clang' }}
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ env.key_suffix }}
@@ -281,7 +281,7 @@ jobs:
             ${{ matrix.bit }}-clang_root-${{ env.restore_suffix }}
 
       - name: Restore Rust Cache
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         id: cache_rust
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
@@ -289,7 +289,7 @@ jobs:
           restore-keys: |
             rust-${{ env.restore_suffix }}
       - name: Restore Source Cache
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: source-${{ env.key_suffix }}
@@ -297,13 +297,13 @@ jobs:
             source-${{ env.restore_suffix }}
       - name: Restore Toolchain Cache
         if: ${{ env.toolchain_restore_key != '' }}
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.toolchain_restore_key }}
       - name: Restore Build Cache
         if: ${{ inputs.needclean != true && env.build_restore_key != '' }}
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.build_restore_key }}
@@ -483,25 +483,25 @@ jobs:
 
       - name: Save clang sysroot cache
         if: ${{ inputs.compiler =='clang' && inputs.no_save_cache != true && matrix.lgpl != true }}
-        uses: actions/cache/save@v4.1.2
+        uses: actions/cache/save@v4.2.0
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ env.cache_suffix }}
       - name: Save Sources Cache
         if: ${{ inputs.no_save_cache != true && matrix.lgpl != true }}
-        uses: actions/cache/save@v4.1.2
+        uses: actions/cache/save@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: source-${{ env.cache_suffix }}
       - name: Save Rust Cache
         if: ${{ inputs.no_save_cache != true && matrix.lgpl != true }}
-        uses: actions/cache/save@v4.1.2
+        uses: actions/cache/save@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
           key: rust-${{ env.cache_suffix }}
       - name: Save Build Cache
         if: ${{ inputs.no_save_cache != true && matrix.lgpl != true }}
-        uses: actions/cache/save@v4.1.2
+        uses: actions/cache/save@v4.2.0
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: ${{ env.build_save_key }}
