@@ -97,7 +97,7 @@ zip() {
     mv $buildroot/build$bit/mpv-* $gitdir/release
     if [ "$simple_package" != "true" ]; then
         cd $gitdir/release/mpv-packaging-master
-        cp -r ./mpv-root/* ./$arch/d3dcompiler_43.dll ../mpv-$arch$x86_64_level*
+        cp -r ./mpv-root/* ../mpv-$arch$x86_64_level*
     fi
     cd $gitdir/release
     for dir in ./mpv*$arch$x86_64_level*; do
