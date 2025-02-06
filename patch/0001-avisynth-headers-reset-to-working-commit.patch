@@ -1,0 +1,26 @@
+From 32310782dcdd065b1ca6285545d38783ca66aa46 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Thu, 6 Feb 2025 22:01:57 +0800
+Subject: [PATCH] avisynth-headers: reset to working commit
+
+---
+ packages/avisynth-headers.cmake | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/packages/avisynth-headers.cmake b/packages/avisynth-headers.cmake
+index 2bbeb0c50..ab9114ea3 100644
+--- a/packages/avisynth-headers.cmake
++++ b/packages/avisynth-headers.cmake
+@@ -4,6 +4,9 @@ ExternalProject_Add(avisynth-headers
+     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !distrib"
+     GIT_SUBMODULES ""
++    GIT_REMOTE_NAME origin
++    GIT_TAG master
++    GIT_RESET 21fdc99
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -G Ninja
+-- 
+2.47.1
+
