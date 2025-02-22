@@ -1,0 +1,31 @@
+From 085798e551f2ca5c50591fc60d53218ce40b6b7e Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 22 Feb 2025 09:55:00 +0800
+Subject: [PATCH] vulkan: rebase patch
+
+---
+ packages/vulkan-0001-cross-compile-static-linking-hacks.patch | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/packages/vulkan-0001-cross-compile-static-linking-hacks.patch b/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
+index dbd770504..2c480840a 100644
+--- a/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
++++ b/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
+@@ -1,4 +1,4 @@
+-From 7903ac5e36f2ec7a0e1d649b8dd2ef2c78d09e65 Mon Sep 17 00:00:00 2001
++From 062eade11f9858dbc589e2fa6dd5a3b84526d267 Mon Sep 17 00:00:00 2001
+ From: shinchiro <shinchiro@users.noreply.github.com>
+ Date: Tue, 24 Sep 2024 22:27:16 +0800
+ Subject: [PATCH] loader: cross-compile & static linking hacks
+@@ -72,7 +72,7 @@ index 624192dc3..c37f31b39 100644
+      message(NOTICE "Apple STATIC lib: it will be built but not installed, and vulkan.pc and VulkanLoaderConfig.cmake won't be generated!")
+      return()
+ diff --git a/loader/loader.c b/loader/loader.c
+-index 9deff6881..41d347eb1 100644
++index 58825608b..d4e20c52b 100644
+ --- a/loader/loader.c
+ +++ b/loader/loader.c
+ @@ -1960,7 +1960,7 @@ out:
+-- 
+2.47.1
+
