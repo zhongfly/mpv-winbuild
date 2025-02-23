@@ -1,6 +1,11 @@
 name: MPV
 run-name: "${{ inputs.run_name != '' && format('{0} ({1})', inputs.run_name, inputs.compiler) || inputs.prs != '' && format('{0}[{2}] ({1})', github.workflow, inputs.compiler, inputs.prs) || format('{0} ({1})', github.workflow, inputs.compiler) }}"
 
+permissions:
+  actions: write
+  attestations: write
+  contents: write
+
 on: 
   workflow_dispatch:
     inputs:
@@ -731,37 +736,28 @@ jobs:
     steps:
       - name: Prepare
         run: |
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git curl
           echo "cache_suffix=$(date "+%Y-%m-%d")-${{ github.run_id }}" >> $GITHUB_ENV
-      - name: Restore llvm cache alive
+      - uses: actions/checkout@v4
+      
+      - name: Resave llvm cache
         id: llvm
         if: ${{ inputs.compiler =='clang' }}
-        uses: actions/cache/restore@v4.2.0
+        continue-on-error: true
+        uses: ./action/resave_cache
         with: 
           path: mpv-winbuild-cmake/clang_root
           key: llvm-
-          restore-keys: |
-            llvm-
-      - name: Save llvm cache
-        if: ${{ steps.llvm.outputs.cache-matched-key != '' }}
-        uses: actions/cache/save@v4.2.0
-        with: 
-          path: mpv-winbuild-cmake/clang_root
-          key: llvm-${{ env.cache_suffix }}
+          restore-keys: llvm-
 
-      - name: Restore Toolchain Cache alive
+      - name: Resave Toolchain Cache
         id: toolchain
-        uses: actions/cache/restore@v4.2.0
+        uses: ./action/resave_cache
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
           key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-
-          restore-keys: |
-            toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-
-      - name: Save Toolchain Cache
-        if: ${{ steps.toolchain.outputs.cache-matched-key != '' }}
-        uses: actions/cache/save@v4.2.0
-        with:
-          path: ${{ github.workspace }}/mpv-winbuild-cmake/build${{ matrix.bit }}
-          key: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-${{ env.cache_suffix }}
+          restore-keys: toolchain-${{ inputs.compiler }}-build${{ matrix.bit }}-
 
       - name: Generate cache key
         id: generate_key
@@ -775,18 +771,11 @@ jobs:
               core.exportVariable( `toolchain_version`, toolchain_version );
             }
 
-      - name: Restore inital clang sysroot cache alive
+      - name: Resave inital clang sysroot cache
         id: clang_root
         if: ${{ inputs.compiler =='clang' && env.toolchain_version  }}
-        uses: actions/cache/restore@v4.2.0
+        uses: ./action/resave_cache
         with: 
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ env.toolchain_version }}
-          restore-keys: |
-            ${{ matrix.bit }}-clang_root-${{ env.toolchain_version }}
-      - name: Save clang_root cache
-        if: ${{ steps.clang_root.outputs.cache-hit == 'true' }}
-        uses: actions/cache/save@v4.2.0
-        with: 
-          path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
-          key: ${{ matrix.bit }}-clang_root-${{ env.cache_suffix }}
+          restore-keys: ${{ matrix.bit }}-clang_root-${{ env.toolchain_version }}

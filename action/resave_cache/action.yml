@@ -1,0 +1,74 @@
+name: 'Resave cache'
+description: 'Resave cache'
+inputs:
+  repository:
+    description: 'The repository to use for the cache. The default is the current repository.'
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: 'The ref to use for the cache. The default is the current ref.'
+    required: false
+    default: ${{ github.ref }}
+  path:
+    description: 'A list of files, directories, and wildcard patterns to cache and restore'
+    required: true
+  key:
+    description: 'An explicit key for restoring and saving the cache'
+    required: true
+  restore-keys:
+    description: 'An ordered multiline string listing the prefix-matched keys, that are used for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.'
+    required: false
+  token:
+    description: 'The token used to read/write the cache. The default is the GITHUB_TOKEN secret.'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  cache-hit:
+    description: 'A boolean value to indicate an exact match was found for the primary key'
+    value: ${{ steps.restore.outputs.cache-hit }}
+  cache-primary-key:
+    description: 'A resolved cache key for which cache match was attempted'
+    value: ${{ steps.restore.outputs.cache-primary-key }}
+  cache-matched-key:
+    description: 'Key of the cache that was restored, it could either be the primary key on cache-hit or a partial/complete match of one of the restore keys'
+    value: ${{ steps.restore.outputs.cache-matched-key }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Restore cache
+      id: restore
+      uses: actions/cache/restore@v4.2.0
+      with: 
+        path: ${{ inputs.path }}
+        key: ${{ inputs.key }}
+        restore-keys: ${{ inputs.restore-keys }}
+
+    - name: Delete cache
+      id: delete
+      if: ${{ steps.restore.outputs.cache-matched-key != '' }}
+      shell: bash
+      run: |
+        response=$(curl -L -w "%{http_code}" -o response_body.txt \
+          -X DELETE \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ inputs.token }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "https://api.github.com/repos/${{ inputs.repository }}/actions/caches?key=${{ steps.restore.outputs.cache-matched-key }}&ref=${{ inputs.ref }}")
+        if [ "$response" -ne 200 ]; then
+          echo "Error: Failed to delete cache with status code $response"
+          echo "Response body:"
+          cat response_body.txt
+          echo "result=false" >> "$GITHUB_OUTPUT"
+        else
+          echo "result=true" >> "$GITHUB_OUTPUT"
+        fi
+        rm -f response_body.txt
+
+    - name: Save cache
+      if: ${{ steps.restore.outputs.cache-matched-key != '' && steps.delete.outputs.result == 'true' }}
+      uses: actions/cache/save@v4.2.0
+      with: 
+        path: ${{ inputs.path }}
+        key: ${{ steps.restore.outputs.cache-matched-key }}
