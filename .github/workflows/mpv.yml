@@ -738,18 +738,7 @@ jobs:
         run: |
           sudo pacman -Syu --noconfirm
           sudo pacman -S --noconfirm --needed git curl
-          echo "cache_suffix=$(date "+%Y-%m-%d")-${{ github.run_id }}" >> $GITHUB_ENV
       - uses: actions/checkout@v4
-      
-      - name: Resave llvm cache
-        id: llvm
-        if: ${{ inputs.compiler =='clang' }}
-        continue-on-error: true
-        uses: ./action/resave_cache
-        with: 
-          path: mpv-winbuild-cmake/clang_root
-          key: llvm-
-          restore-keys: llvm-
 
       - name: Resave Toolchain Cache
         id: toolchain
@@ -779,3 +768,29 @@ jobs:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/clang_root
           key: ${{ matrix.bit }}-clang_root-${{ env.toolchain_version }}
           restore-keys: ${{ matrix.bit }}-clang_root-${{ env.toolchain_version }}
+          
+  cache_llvm:
+    name: keep llvm cache alive
+    needs: [params,build_mpv]
+    if: ${{ inputs.no_save_cache != true }}
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux/archlinux:base-devel
+    continue-on-error: true
+
+    steps:
+      - name: Prepare
+        run: |
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git curl
+      - uses: actions/checkout@v4
+      
+      - name: Resave llvm cache
+        id: llvm
+        if: ${{ inputs.compiler =='clang' }}
+        continue-on-error: true
+        uses: ./action/resave_cache
+        with: 
+          path: mpv-winbuild-cmake/clang_root
+          key: llvm-
+          restore-keys: llvm-
