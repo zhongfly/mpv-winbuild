@@ -772,7 +772,7 @@ jobs:
   cache_llvm:
     name: keep llvm cache alive
     needs: [params,build_mpv]
-    if: ${{ inputs.no_save_cache != true }}
+    if: ${{ inputs.no_save_cache != true && inputs.compiler =='clang' }}
     runs-on: ubuntu-latest
     container:
       image: archlinux/archlinux:base-devel
@@ -787,7 +787,6 @@ jobs:
       
       - name: Resave llvm cache
         id: llvm
-        if: ${{ inputs.compiler =='clang' }}
         continue-on-error: true
         uses: ./action/resave_cache
         with: 
