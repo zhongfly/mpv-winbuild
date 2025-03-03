@@ -39,7 +39,7 @@ runs:
   steps:
     - name: Restore cache
       id: restore
-      uses: actions/cache/restore@v4.2.0
+      uses: actions/cache/restore@v4.2.2
       with: 
         path: ${{ inputs.path }}
         key: ${{ inputs.key }}
@@ -68,7 +68,7 @@ runs:
 
     - name: Save cache
       if: ${{ steps.restore.outputs.cache-matched-key != '' && steps.delete.outputs.result == 'true' }}
-      uses: actions/cache/save@v4.2.0
+      uses: actions/cache/save@v4.2.2
       with: 
         path: ${{ inputs.path }}
         key: ${{ steps.restore.outputs.cache-matched-key }}

@@ -116,7 +116,7 @@ jobs:
           extra_option: "-DLLVM_ENABLE_PGO=USE -DLLVM_ENABLE_LTO=Thin -DLLVM_PROFDATA_FILE=$buildroot/llvm.profdata"
 
       - name: Save llvm cache
-        uses: actions/cache/save@v4.2.0
+        uses: actions/cache/save@v4.2.2
         if: ${{ !inputs.no_save_cache }}
         with: 
           path: |
