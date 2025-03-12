@@ -1,0 +1,24 @@
+From 5f5ced37109b286712cc4bfef836a649c98d0837 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 12 Mar 2025 19:14:03 +0800
+Subject: [PATCH] fontconfig: reset to working commit
+
+---
+ packages/fontconfig.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/fontconfig.cmake b/packages/fontconfig.cmake
+index 64b41d5..39a252b 100644
+--- a/packages/fontconfig.cmake
++++ b/packages/fontconfig.cmake
+@@ -9,6 +9,7 @@ ExternalProject_Add(fontconfig
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET 25f58a52b0b30efbba0ea27c98dc58e411a42b84
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/fontconfig-*.patch
+     CONFIGURE_COMMAND ${EXEC} CONF=1 meson setup <BINARY_DIR> <SOURCE_DIR>
+-- 
+2.48.1
+
