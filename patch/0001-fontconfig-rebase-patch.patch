@@ -1,0 +1,42 @@
+From 800e85eaf020c05674c7727818aa20713075fd71 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sun, 16 Mar 2025 20:14:47 +0800
+Subject: [PATCH] fontconfig: rebase patch
+
+---
+ packages/fontconfig-0002-Do-not-use-dirent.h.patch | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/packages/fontconfig-0002-Do-not-use-dirent.h.patch b/packages/fontconfig-0002-Do-not-use-dirent.h.patch
+index b088480..925dca0 100644
+--- a/packages/fontconfig-0002-Do-not-use-dirent.h.patch
++++ b/packages/fontconfig-0002-Do-not-use-dirent.h.patch
+@@ -1,4 +1,4 @@
+-From fb7701e1f00fb9145f0f5b88f7d67fd3931f1e1b Mon Sep 17 00:00:00 2001
++From afc9eca7789e5d77849b0d92b604c71df0eeca40 Mon Sep 17 00:00:00 2001
+ From: shinchiro <shinchiro@users.noreply.github.com>
+ Date: Sat, 6 Apr 2024 11:38:08 +0800
+ Subject: [PATCH] Do not use dirent.h
+@@ -10,10 +10,10 @@ Relevant issue: https://github.com/mpv-player/mpv/issues/10679
+  1 file changed, 1 deletion(-)
+ 
+ diff --git a/meson.build b/meson.build
+-index dd3cfe3..be3ea1e 100644
++index 656ed950..363a5571 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -84,7 +84,6 @@ python3 = import('python').find_installation()
++@@ -85,7 +85,6 @@ python3 = import('python').find_installation()
+  pytest = find_program('pytest', required: false)
+  
+  check_headers = [
+@@ -22,5 +22,5 @@ index dd3cfe3..be3ea1e 100644
+    ['fcntl.h'],
+    ['inttypes.h'],
+ -- 
+-2.47.0
++2.47.1
+ 
+-- 
+2.48.1
+
