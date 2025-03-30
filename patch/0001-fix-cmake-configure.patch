@@ -1,0 +1,186 @@
+From adcc457389b8d78ff33bb7300cd711cf5f20c38d Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sun, 30 Mar 2025 20:10:47 +0800
+Subject: [PATCH] fix cmake configure
+
+---
+ packages/highway.cmake       | 1 +
+ packages/libarchive.cmake    | 1 +
+ packages/libmodplug.cmake    | 1 +
+ packages/libsamplerate.cmake | 1 +
+ packages/libsoxr.cmake       | 1 +
+ packages/libsrt.cmake        | 1 +
+ packages/ogg.cmake           | 1 +
+ packages/uavs3d.cmake        | 1 +
+ packages/uchardet.cmake      | 1 +
+ packages/vorbis.cmake        | 1 +
+ packages/x265.cmake          | 5 +++++
+ 11 files changed, 15 insertions(+)
+
+diff --git a/packages/highway.cmake b/packages/highway.cmake
+index 7cb3887..743fee9 100644
+--- a/packages/highway.cmake
++++ b/packages/highway.cmake
+@@ -21,6 +21,7 @@ ExternalProject_Add(highway
+         -DHWY_ENABLE_EXAMPLES=OFF
+         -DHWY_ENABLE_INSTALL=ON
+         -DHWY_WARNINGS_ARE_ERRORS=OFF
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+         ${HWY_CMAKE_SSE2}
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
+index fa1186e..bd32c64 100644
+--- a/packages/libarchive.cmake
++++ b/packages/libarchive.cmake
+@@ -37,6 +37,7 @@ ExternalProject_Add(libarchive
+         -DBUILD_TESTING=OFF
+         -DENABLE_TEST=OFF
+         -DWINDOWS_VERSION=WIN10
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/libmodplug.cmake b/packages/libmodplug.cmake
+index 056c577..b7a7ca3 100644
+--- a/packages/libmodplug.cmake
++++ b/packages/libmodplug.cmake
+@@ -11,6 +11,7 @@ ExternalProject_Add(libmodplug
+         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
+         -DCMAKE_FIND_ROOT_PATH=${MINGW_INSTALL_PREFIX}
+         -DBUILD_SHARED_LIBS=OFF
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+             COMMAND bash -c "cp ${CMAKE_CURRENT_BINARY_DIR}/libmodplug.pc ${MINGW_INSTALL_PREFIX}/lib/pkgconfig/libmodplug.pc"
+diff --git a/packages/libsamplerate.cmake b/packages/libsamplerate.cmake
+index 8938b9f..b1748f5 100644
+--- a/packages/libsamplerate.cmake
++++ b/packages/libsamplerate.cmake
+@@ -12,6 +12,7 @@ ExternalProject_Add(libsamplerate
+         -DBUILD_SHARED_LIBS=OFF
+         -DBUILD_TESTING=OFF
+         -DLIBSAMPLERATE_EXAMPLES=OFF
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/libsoxr.cmake b/packages/libsoxr.cmake
+index e793a3f..ea27c08 100644
+--- a/packages/libsoxr.cmake
++++ b/packages/libsoxr.cmake
+@@ -13,6 +13,7 @@ ExternalProject_Add(libsoxr
+         -DBUILD_TESTS=OFF
+         -DWITH_OPENMP=OFF
+         -DHAVE_WORDS_BIGENDIAN_EXITCODE=1
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/libsrt.cmake b/packages/libsrt.cmake
+index 188ba41..78a64d3 100644
+--- a/packages/libsrt.cmake
++++ b/packages/libsrt.cmake
+@@ -16,6 +16,7 @@ ExternalProject_Add(libsrt
+         -DENABLE_APPS=OFF
+         -DENABLE_SHARED=OFF
+         -DUSE_ENCLIB=openssl
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/ogg.cmake b/packages/ogg.cmake
+index 9df683e..a4dc0f2 100644
+--- a/packages/ogg.cmake
++++ b/packages/ogg.cmake
+@@ -10,6 +10,7 @@ ExternalProject_Add(ogg
+         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
+         -DCMAKE_FIND_ROOT_PATH=${MINGW_INSTALL_PREFIX}
+         -DBUILD_SHARED_LIBS=OFF
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/uavs3d.cmake b/packages/uavs3d.cmake
+index 0d92d85..4c63b6a 100644
+--- a/packages/uavs3d.cmake
++++ b/packages/uavs3d.cmake
+@@ -11,6 +11,7 @@ ExternalProject_Add(uavs3d
+         -DCMAKE_FIND_ROOT_PATH=${MINGW_INSTALL_PREFIX}
+         -DBUILD_SHARED_LIBS=OFF
+         -DCOMPILE_10BIT=ON
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/uchardet.cmake b/packages/uchardet.cmake
+index b4d3e4b..f354258 100644
+--- a/packages/uchardet.cmake
++++ b/packages/uchardet.cmake
+@@ -13,6 +13,7 @@ ExternalProject_Add(uchardet
+         -DBUILD_STATIC=ON
+         -DBUILD_BINARY=OFF
+         -DTARGET_ARCHITECTURE=${TARGET_CPU_FAMILY}
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/vorbis.cmake b/packages/vorbis.cmake
+index 5e8f679..174300d 100644
+--- a/packages/vorbis.cmake
++++ b/packages/vorbis.cmake
+@@ -12,6 +12,7 @@ ExternalProject_Add(vorbis
+         -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
+         -DCMAKE_FIND_ROOT_PATH=${MINGW_INSTALL_PREFIX}
+         -DBUILD_SHARED_LIBS=OFF
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+diff --git a/packages/x265.cmake b/packages/x265.cmake
+index 8f51bec..424f42f 100644
+--- a/packages/x265.cmake
++++ b/packages/x265.cmake
+@@ -37,6 +37,7 @@ ExternalProject_Add(x265-10bit
+         -DENABLE_SHARED=OFF
+         -DENABLE_CLI=OFF
+         -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+@@ -60,6 +61,7 @@ ExternalProject_Add(x265-10bit-lib
+         -DENABLE_SHARED=OFF
+         -DENABLE_CLI=OFF
+         -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libx265.a ${binary_dir}/libx265_main10.a
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+@@ -84,6 +86,7 @@ ExternalProject_Add(x265-12bit-lib
+         -DENABLE_SHARED=OFF
+         -DENABLE_CLI=OFF
+         -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
++        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libx265.a ${binary_dir}/libx265_main12.a
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+@@ -124,6 +127,7 @@ ExternalProject_Add(x265-8+10bit
+                         -DENABLE_SHARED=OFF
+                         -DENABLE_CLI=OFF
+                         -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
++                        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+           COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libx265.a <BINARY_DIR>/libx265_main.a
+           COMMAND chmod 755 ${COMBINE}
+@@ -156,6 +160,7 @@ ExternalProject_Add(x265-8+10+12bit
+                         -DENABLE_SHARED=OFF
+                         -DENABLE_CLI=OFF
+                         -DCMAKE_ASM_NASM_FLAGS=-w-macro-params-legacy
++                        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+           COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libx265.a <BINARY_DIR>/libx265_main.a
+           COMMAND chmod 755 ${COMBINE}
+-- 
+2.48.1
+
