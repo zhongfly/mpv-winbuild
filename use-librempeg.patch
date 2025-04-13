@@ -1,0 +1,31 @@
+From 4cfb98b0c867fcee0eaf04b0c7ea46e6d323ddcc Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 25 Jun 2024 20:12:14 +0800
+Subject: [PATCH] ffmpeg: use librempeg fork
+
+---
+ packages/ffmpeg.cmake | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index c3afe92c3..ad7ad8095 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -46,7 +46,7 @@ ExternalProject_Add(ffmpeg
+         rubberband
+         libva
+         openal-soft
+-    GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
++    GIT_REPOSITORY https://github.com/librempeg/librempeg.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !tests/ref/fate"
+@@ -61,7 +61,6 @@ ExternalProject_Add(ffmpeg
+         --enable-runtime-cpudetect
+         --enable-gpl
+         --enable-version3
+-        --enable-postproc
+         --enable-avisynth
+         --enable-vapoursynth
+         --enable-libass
+
