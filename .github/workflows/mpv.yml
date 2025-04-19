@@ -12,7 +12,7 @@ on:
       build_target:
         description: "Build target"
         required: false
-        default: "all-64bit"
+        default: "64bit-v3"
         type: choice
         options:
         - 32bit
@@ -173,7 +173,7 @@ jobs:
     needs: params
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: cachyos/cachyos-v3:latest
     continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
@@ -183,7 +183,7 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache
+          sudo pacman -S --noconfirm --needed base-devel dash zlib-ng-compat git ninja cmake meson unzip ragel yasm nasm gperf rst2pdf python-cairo curl wget mimalloc go ccache
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2409-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
@@ -192,11 +192,16 @@ jobs:
           git config --global pull.rebase true
           git config --global rebase.autoStash true
           git config --global fetch.prune true
+          sudo GOBIN=/usr/bin go install go.chromium.org/luci/cipd/client/cmd/...@latest
+          sudo cipd install fuchsia/third_party/clang/linux-amd64 latest -root /usr/local/fuchsia-clang
+          sudo rm /usr/bin/sh
+          sudo ln -s dash /usr/bin/sh
+          echo "PATH=/usr/local/fuchsia-clang/bin:$PATH" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - name: Checkout toolchain
         uses: actions/checkout@v4
         with:
-          repository: shinchiro/mpv-winbuild-cmake
+          repository: Andarwinux/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
           fetch-depth: 0
       - name: Prepare
@@ -306,8 +311,9 @@ jobs:
           override_cache_key: ccache-build${{ matrix.bit }}-${{ inputs.compiler }}
           ccache_options: |
             cache_dir=${{ github.workspace }}/.ccache
-            max_size=500M
-            sloppiness=locale,time_macros
+            max_size=1.6G
+            sloppiness=locale,time_macros,pch_defines
+            compression=true
             compiler_check=none
 
       - name: Download mpv patch
@@ -728,7 +734,7 @@ jobs:
     if: ${{ inputs.no_save_cache != true }}
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: cachyos/cachyos-v3:latest
     continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix_bit) }}
@@ -775,7 +781,7 @@ jobs:
     if: ${{ inputs.no_save_cache != true && inputs.compiler =='clang' }}
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: cachyos/cachyos-v3:latest
     continue-on-error: true
 
     steps:
