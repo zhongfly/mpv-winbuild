@@ -182,6 +182,17 @@ jobs:
         if: ${{ always() }}
         run: |
           tar -Jcf ./clang_root_${{ matrix.bit }}.tar.xz --format=ustar --numeric-owner --owner=0 --group=0 --sort=name mpv-winbuild-cmake/clang_root
+      
+      - name: "release clang_root"
+        uses: ncipollo/release-action@v1
+        with:
+          prerelease: false
+          artifacts: clang_root_${{ matrix.bit }}.tar.xz
+          replacesArtifacts: true
+          tag: clang_root
+          name: clang_root
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   rust:
     name: Install Rust Toolchain
@@ -225,6 +236,19 @@ jobs:
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
           key: rust-${{ needs.params.outputs.cache_suffix }}
+      
+      - name: Collect logs
+        if: ${{ always() }}
+        run: |
+          sudo 7z a rust_logs.7z $(find mpv-winbuild-cmake -type f -iname "*-*.log")
+
+      - name: upload logs
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: rust_logs
+          path: rust_logs.7z
+
 
   trigger:
     needs: [build,params,rust]
