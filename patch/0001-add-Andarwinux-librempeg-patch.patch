@@ -1,0 +1,83 @@
+From 0d2cfbf061d201703e9ff6dd657f737185e27303 Mon Sep 17 00:00:00 2001
+From: nanachisol <nanachisol@github.com>
+Date: Sat, 19 Apr 2025 17:24:20 +0800
+Subject: [PATCH] add Andarwinux librempeg patch
+
+disable ffmpeg libvvenc
+---
+ 0001-add-Andarwinux-librempeg-patch.patch | 33 +++++++++++++++++++++++
+ packages/ffmpeg.cmake                     |  4 +--
+ 2 files changed, 34 insertions(+), 3 deletions(-)
+ create mode 100644 0001-add-Andarwinux-librempeg-patch.patch
+
+diff --git a/0001-add-Andarwinux-librempeg-patch.patch b/0001-add-Andarwinux-librempeg-patch.patch
+new file mode 100644
+index 0000000..3860621
+--- /dev/null
++++ b/0001-add-Andarwinux-librempeg-patch.patch
+@@ -0,0 +1,33 @@
++From b34d7ec2b449bc932558cfc8d8c2178f2bd8bfcc Mon Sep 17 00:00:00 2001
++From: nanachisol <nanachisol@github.com>
++Date: Sat, 19 Apr 2025 17:24:20 +0800
++Subject: [PATCH] add Andarwinux librempeg patch
++
++---
++ packages/ffmpeg.cmake | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
++index 0234a11..ae79208 100644
++--- a/packages/ffmpeg.cmake
+++++ b/packages/ffmpeg.cmake
++@@ -47,7 +47,7 @@ ExternalProject_Add(ffmpeg
++         frei0r
++         vvenc
++         codec2
++-    GIT_REPOSITORY https://github.com/Andarwinux/FFmpeg.git
+++    GIT_REPOSITORY https://github.com/librempeg/librempeg.git
++     SOURCE_DIR ${SOURCE_LOCATION}
++     GIT_CLONE_FLAGS "--depth=1 --sparse --filter=tree:0"
++     GIT_PROGRESS TRUE
++@@ -65,7 +65,6 @@ ExternalProject_Add(ffmpeg
++         --enable-gpl
++         --enable-version3
++         --enable-nonfree
++-        --enable-postproc
++         --enable-avisynth
++         --enable-vapoursynth
++         --enable-libass
++-- 
++2.49.0.windows.1
++
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index 0234a11..2c67757 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -47,7 +47,7 @@ ExternalProject_Add(ffmpeg
+         frei0r
+         vvenc
+         codec2
+-    GIT_REPOSITORY https://github.com/Andarwinux/FFmpeg.git
++    GIT_REPOSITORY https://github.com/librempeg/librempeg.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--depth=1 --sparse --filter=tree:0"
+     GIT_PROGRESS TRUE
+@@ -65,7 +65,6 @@ ExternalProject_Add(ffmpeg
+         --enable-gpl
+         --enable-version3
+         --enable-nonfree
+-        --enable-postproc
+         --enable-avisynth
+         --enable-vapoursynth
+         --enable-libass
+@@ -91,7 +90,6 @@ ExternalProject_Add(ffmpeg
+         --enable-libx265
+         --enable-libaom
+         --enable-libsvtav1
+-        --enable-libvvenc
+         --enable-libdav1d
+         --enable-libzimg
+         --enable-openssl
+-- 
+2.49.0.windows.1
+
