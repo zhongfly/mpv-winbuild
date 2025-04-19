@@ -7,7 +7,7 @@ on:
       pgo:
         description: "Build llvm with PGO"
         required: false
-        default: false
+        default: true
         type: boolean   
       no_save_cache:
         description: "Don't save caches after success build"
@@ -22,7 +22,7 @@ on:
       build_target:
         description: "Toolchain build target"
         required: false
-        default: "all-64bit"
+        default: "64bit-v3"
         type: choice
         options:
         - 32bit
@@ -50,7 +50,7 @@ jobs:
     name: Build LLVM
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: cachyos/cachyos-v3:latest
     steps:
       - name: suffix
         id: suffix
@@ -60,9 +60,9 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson wget mimalloc go
+          sudo pacman -S --noconfirm --needed base-devel dash zlib-ng-compat git ninja cmake meson wget mimalloc go ccache bin-cpuflags-x86
           mkdir -p /home/opt/7zip
-          wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          wget -qO - https://www.7-zip.org/a/7z2409-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -76,7 +76,7 @@ jobs:
       - name: Checkout toolchain
         uses: actions/checkout@v4
         with:
-          repository: shinchiro/mpv-winbuild-cmake
+          repository: Andarwinux/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
           fetch-depth: 0
 
@@ -85,8 +85,8 @@ jobs:
         with:
           bit: "64-v3"
           compiler: "clang"
-          command: "ninja -C $buildroot/build$bit llvm"
-          extra_option: "${{ inputs.pgo && '-DLLVM_ENABLE_PGO=GEN -DLLVM_PROFILE_DATA_DIR=$PWD/profiles/'}}"
+          command: "ninja -C $buildroot/build$bit toolchains-download || true ; ninja -C $buildroot/build$bit toolchains-download && ninja -C $buildroot/build$bit llvm-host-libcxx && ninja -C $buildroot/build$bit llvm && ninja -C $buildroot/build$bit toolchains-fullclean"
+          extra_option: "${{ inputs.pgo && '-DCUSTOM_LIBCXX=ON -DCUSTOM_COMPILER_RT=OFF -DLLVM_ENABLE_PGO=GEN -DLLVM_ENABLE_LTO=Thin -DLLVM_PROFILE_DATA_DIR=$PWD/profiles/ -DTOOLCHAIN_FLAGS=-mno-sse4a'}}"
 
       - name: Training LLVM
         uses: ./action/build_toolchain
@@ -94,8 +94,8 @@ jobs:
         with:
           bit: "64-v3"
           compiler: "clang"
-          command: "ninja -C $buildroot/build$bit rebuild_cache && cmake --build $buildroot/build$bit --target llvm-download && ninja -C $buildroot/build$bit llvm-clang"
-          extra_option: "-DLLVM_ENABLE_PGO=GEN -DLLVM_PROFILE_DATA_DIR=$buildroot/profiles/"
+          command: "ninja -C $buildroot/build$bit rebuild_cache && ninja -C $buildroot/build$bit toolchains-download && ninja -C $buildroot/build$bit llvm-clang && ninja -C $buildroot/build$bit curl libmediainfo mediainfo sqlite"
+          extra_option: "-DCUSTOM_LIBCXX=ON -DCUSTOM_COMPILER_RT=OFF -DLLVM_ENABLE_PGO=GEN -DLLVM_ENABLE_LTO=Thin -DCLANG_PACKAGES_LTO=ON -DENABLE_CCACHE=ON -DLLVM_PROFILE_DATA_DIR=$buildroot/profiles/ -DTOOLCHAIN_FLAGS=-mno-sse4a"
 
       - name: Merging profdata
         if: ${{ inputs.pgo }}
@@ -103,7 +103,7 @@ jobs:
           shopt -s globstar
           cd mpv-winbuild-cmake/profiles/
           ls -R
-          llvm-profdata merge *.profraw -o ../llvm.profdata
+          llvm-profdata merge *.profraw -o ../llvm.profdata --sparse
           rm -rf ./{*,.*} || true
 
       - name: Build LLVM with PGO
@@ -112,8 +112,17 @@ jobs:
         with:
           bit: "64-v3"
           compiler: "clang"
-          command: "ninja -C $buildroot/build$bit llvm && rm -rf clang_root/llvm-thinlto || true"
-          extra_option: "-DLLVM_ENABLE_PGO=USE -DLLVM_ENABLE_LTO=Thin -DLLVM_PROFDATA_FILE=$buildroot/llvm.profdata"
+          command: "ninja -C $buildroot/build$bit toolchains-fullclean && ninja -C $buildroot/build$bit llvm-host-compiler-rt-builtin && ninja -C $buildroot/build$bit llvm-host-libcxx && ninja -C $buildroot/build$bit llvm"
+          extra_option: "-DCUSTOM_LIBCXX=ON -DCUSTOM_COMPILER_RT=ON -DLLVM_ENABLE_PGO=USE -DLLVM_ENABLE_LTO=Thin -DLLVM_PROFDATA_FILE=$buildroot/llvm.profdata -DTOOLCHAIN_FLAGS=-mno-sse4a"
+ 
+      - name: Test
+        run: |
+           file mpv-winbuild-cmake/clang_root/llvmbin/llvm
+           ldd mpv-winbuild-cmake/clang_root/llvmbin/llvm
+           ls -alh mpv-winbuild-cmake/clang_root/llvmbin/llvm
+           bin-cpuflags-x86 -d mpv-winbuild-cmake/clang_root/llvmbin/llvm
+           llvm-readobj --headers --notes mpv-winbuild-cmake/clang_root/llvmbin/llvm
+           ./mpv-winbuild-cmake/clang_root/llvmbin/llvm clang -v
 
       - name: Save llvm cache
         uses: actions/cache/save@v4.2.2
