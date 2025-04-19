@@ -1,5 +1,16 @@
---- a/ffmpeg_external_original.cmake # Placeholder filename for the original content
-+++ b/ffmpeg_external_modified.cmake # Placeholder filename for the modified content
+From 4cfb98b0c867fcee0eaf04b0c7ea46e6d323ddcc Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 25 Jun 2024 20:12:14 +0800
+Subject: [PATCH] ffmpeg: use librempeg fork
+
+---
+ packages/ffmpeg.cmake | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index c3afe92c3..ad7ad8095 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
 @@ -46,7 +46,7 @@
          codec2
      )
