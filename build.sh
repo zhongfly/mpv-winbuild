@@ -56,6 +56,9 @@ build() {
     local bit=$1
     local arch=$2
     local gcc_arch=$3
+
+    export PATH="/usr/local/fuchsia-clang/bin:$PATH"
+    export LD_PRELOAD="$clang_root/bin/libmimalloc.so"
     
     if [ "$compiler" == "clang" ]; then
         clang_option=(-DCMAKE_INSTALL_PREFIX=$clang_root -DMINGW_INSTALL_PREFIX=$buildroot/build$bit/install/$arch-w64-mingw32 -DCLANG_PACKAGES_LTO=ON)
@@ -87,6 +90,8 @@ build() {
     fi
     
     ninja -C $buildroot/build$bit cargo-clean
+    ninja -C $buildroot/build$bit ccache-recomp
+    sudo cp -f $clang_root/bin/ccache /usr/bin/ccache
 }
 
 zip() {
