@@ -9,7 +9,7 @@ on:
       build_target:
         description: "Build target"
         required: false
-        default: "all-64bit"
+        default: "64bit-v3"
         type: choice
         options:
         - 32bit
@@ -92,7 +92,7 @@ jobs:
     needs: [params]
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: cachyos/cachyos-v3:latest
     continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
@@ -102,21 +102,26 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson wget mimalloc
+          sudo pacman -S --noconfirm --needed base-devel dash zlib-ng-compat git ninja cmake meson wget mimalloc go
           mkdir -p /home/opt/7zip
-          wget -qO - https://www.7-zip.org/a/7z2301-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          wget -qO - https://www.7-zip.org/a/7z2409-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
           git config --global rebase.autoStash true
           git config --global fetch.prune true
+          sudo GOBIN=/usr/bin go install go.chromium.org/luci/cipd/client/cmd/...@latest
+          sudo cipd install fuchsia/third_party/clang/linux-amd64 latest -root /usr/local/fuchsia-clang
+          sudo rm /usr/bin/sh
+          sudo ln -s dash /usr/bin/sh
+          echo "PATH=/usr/local/fuchsia-clang/bin:$PATH" >> $GITHUB_ENV
       - uses: actions/checkout@v4
 
       - name: Checkout toolchain
         uses: actions/checkout@v4
         with:
-          repository: shinchiro/mpv-winbuild-cmake
+          repository: Andarwinux/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
           fetch-depth: 0
 
@@ -145,7 +150,8 @@ jobs:
         with:
           bit: "${{ matrix.bit }}"
           compiler: "clang"
-          command: "ninja -C $buildroot/build$bit rebuild_cache && cmake --build $buildroot/build$bit --target llvm-download && ninja -C $buildroot/build$bit llvm-clang"
+          command: "ninja -C $buildroot/build$bit rebuild_cache && ninja -C $buildroot/build$bit toolchains-download || true ; ninja -C $buildroot/build$bit toolchains-download && ninja -C $buildroot/build$bit llvm-clang && ninja -C $buildroot/build$bit llvm-compiler-rt && ninja -C $buildroot/build$bit llvm-host-compiler-rt-builtin && ninja -C $buildroot/build$bit llvm-host-libcxx && ninja -C $buildroot/build$bit ccache ninja"
+          extra_option: "-DLLVM_ENABLE_LTO=Thin -DCUSTOM_LIBCXX=ON -DCUSTOM_COMPILER_RT=ON"
 
       - name: Save Toolchain Cache
         if: ${{ inputs.no_save_cache != true }}
@@ -171,20 +177,28 @@ jobs:
         with:
           name: ${{ matrix.bit }}_logs
           path: logs.7z
+          
+      - name: Packaging clang_root
+        if: ${{ always() }}
+        run: |
+          tar -Jcf ./clang_root_${{ matrix.bit }}.tar.xz --format=ustar --numeric-owner --owner=0 --group=0 --sort=name mpv-winbuild-cmake/clang_root
 
   rust:
     name: Install Rust Toolchain
     needs: [params]
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: cachyos/cachyos-v3:latest
     continue-on-error: true
 
     steps:
       - name: Install Dependencies
         run: |
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson wget
+          sudo pacman -S --noconfirm --needed base-devel dash zlib-ng-compat git ninja cmake meson wget clang mimalloc go
+          mkdir -p /home/opt/7zip
+          wget -qO - https://www.7-zip.org/a/7z2409-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
@@ -195,7 +209,7 @@ jobs:
       - name: Checkout toolchain
         uses: actions/checkout@v4
         with:
-          repository: shinchiro/mpv-winbuild-cmake
+          repository: Andarwinux//mpv-winbuild-cmake
           path: mpv-winbuild-cmake
           fetch-depth: 0
 
