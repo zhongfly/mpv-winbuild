@@ -1,0 +1,25 @@
+From 92c4aabe4c55ea0ba4de65abae008a94a5339893 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sun, 4 May 2025 09:59:39 +0800
+Subject: [PATCH] xxhash: update cmake location
+
+---
+ packages/xxhash.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/xxhash.cmake b/packages/xxhash.cmake
+index 5806cb3..aec5477 100644
+--- a/packages/xxhash.cmake
++++ b/packages/xxhash.cmake
+@@ -5,7 +5,7 @@ ExternalProject_Add(xxhash
+     GIT_TAG dev
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+-    CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR>/cmake_unofficial -B<BINARY_DIR>
++    CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR>/build/cmake -B<BINARY_DIR>
+         -G Ninja
+         -DCMAKE_BUILD_TYPE=Release
+         -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE}
+-- 
+2.48.1.windows.1
+
