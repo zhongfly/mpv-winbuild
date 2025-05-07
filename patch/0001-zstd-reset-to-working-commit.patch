@@ -1,0 +1,22 @@
+From 6f43b596657b715a9725ba0c6a2667a296c9925f Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 7 May 2025 09:18:23 +0800
+Subject: [PATCH] zstd: reset to working commit
+
+---
+ packages/zstd.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/zstd.cmake b/packages/zstd.cmake
+index 5c5e00ebb..0936ac8cc 100644
+--- a/packages/zstd.cmake
++++ b/packages/zstd.cmake
+@@ -5,6 +5,7 @@ ExternalProject_Add(zstd
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+     GIT_TAG dev
++    GIT_RESET 2d224dc7457fb6a6267f801c59546b981d6552fb
+     CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR>/build/cmake -B<BINARY_DIR>
+         -G Ninja
+         -DCMAKE_BUILD_TYPE=Release
+
