@@ -1,17 +1,17 @@
-From 6a9032769c1b4c6c575d87cbce60c0ed10f960dd Mon Sep 17 00:00:00 2001
+From fa6b96a96776626cc4cf96a644bd4eadf3d4b69c Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Sun, 10 Mar 2024 10:04:23 +0800
+Date: Sun, 23 Feb 2025 18:59:20 +0800
 Subject: [PATCH] packages: compile lgpl libmpv
 
 ---
  cmake/packages_check.cmake |  6 +-----
- packages/ffmpeg.cmake      | 23 -----------------------
+ packages/ffmpeg.cmake      | 22 ----------------------
  packages/libarchive.cmake  |  3 +--
  packages/mpv.cmake         | 28 ++++++++--------------------
- 4 files changed, 10 insertions(+), 50 deletions(-)
+ 4 files changed, 10 insertions(+), 49 deletions(-)
 
 diff --git a/cmake/packages_check.cmake b/cmake/packages_check.cmake
-index e303e10dc..6c2eeb399 100644
+index e303e10..6c2eeb3 100644
 --- a/cmake/packages_check.cmake
 +++ b/cmake/packages_check.cmake
 @@ -7,11 +7,7 @@ if(COMPILER_TOOLCHAIN STREQUAL "gcc")
@@ -28,7 +28,7 @@ index e303e10dc..6c2eeb399 100644
      set(rust_target "gnullvm")
      set(vapoursynth_pkgconfig_libs "-lVapourSynth -Wl,-delayload=VapourSynth.dll")
 diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
-index 49a0f6e95..e06b281d2 100644
+index 252c687..f674eba 100644
 --- a/packages/ffmpeg.cmake
 +++ b/packages/ffmpeg.cmake
 @@ -1,18 +1,13 @@
@@ -75,14 +75,13 @@ index 49a0f6e95..e06b281d2 100644
          libva
          openal-soft
      GIT_REPOSITORY https://github.com/FFmpeg/FFmpeg.git
-@@ -59,15 +48,11 @@ ExternalProject_Add(ffmpeg
+@@ -59,14 +48,11 @@ ExternalProject_Add(ffmpeg
          --pkg-config-flags=--static
          --enable-cross-compile
          --enable-runtime-cpudetect
 -        --enable-gpl
          --enable-version3
-         --enable-postproc
--        --enable-avisynth
+         --enable-avisynth
          --enable-vapoursynth
          --enable-libass
          --enable-libbluray
@@ -91,7 +90,7 @@ index 49a0f6e95..e06b281d2 100644
          --enable-libfreetype
          --enable-libfribidi
          --enable-libfontconfig
-@@ -81,28 +66,20 @@ ExternalProject_Add(ffmpeg
+@@ -80,28 +66,20 @@ ExternalProject_Add(ffmpeg
          --enable-libspeex
          --enable-libvorbis
          --enable-libbs2b
@@ -121,7 +120,7 @@ index 49a0f6e95..e06b281d2 100644
          ${ffmpeg_cuda}
          --enable-amf
 diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
-index 4773faef1..2e9027aea 100644
+index 0d7fa80..2b1ed2c 100644
 --- a/packages/libarchive.cmake
 +++ b/packages/libarchive.cmake
 @@ -2,7 +2,6 @@ ExternalProject_Add(libarchive
@@ -142,7 +141,7 @@ index 4773faef1..2e9027aea 100644
          -DENABLE_CPIO=OFF
          -DENABLE_CNG=OFF
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index b30e6e33f..af4c944b6 100644
+index 874ee95..7b6d6de 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
 @@ -6,15 +6,11 @@ ExternalProject_Add(mpv
@@ -202,7 +201,7 @@ index b30e6e33f..af4c944b6 100644
 -    ${mpv_copy_debug}
      COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv-2.dll          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv-2.dll
      COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv.dll.a          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv.dll.a
-     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/libmpv/client.h       ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/include/mpv/client.h
+     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/mpv/client.h       ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/include/mpv/client.h
 @@ -91,14 +84,9 @@ mv $2 $2-git-\${GIT}")
  ExternalProject_Add_Step(mpv copy-package-dir
      DEPENDEES copy-binary
@@ -221,4 +220,5 @@ index b30e6e33f..af4c944b6 100644
      LOG 1
  )
 -- 
-2.46.0
+2.48.1.windows.1
+
