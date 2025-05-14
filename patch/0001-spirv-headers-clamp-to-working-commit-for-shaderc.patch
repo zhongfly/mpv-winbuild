@@ -1,0 +1,23 @@
+From 4b6f70921fcd50748b9564bbb86219c920c752a4 Mon Sep 17 00:00:00 2001
+From: nanachisol <155338130+nanachisol@users.noreply.github.com>
+Date: Wed, 14 May 2025 10:12:36 +0000
+Subject: [PATCH] spirv-headers: clamp to working commit for shaderc
+
+---
+ packages/spirv-headers.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/spirv-headers.cmake b/packages/spirv-headers.cmake
+index 567c2b1..b7332ae 100644
+--- a/packages/spirv-headers.cmake
++++ b/packages/spirv-headers.cmake
+@@ -4,6 +4,7 @@ ExternalProject_Add(spirv-headers
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET 6d0784e
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ""
+     BUILD_COMMAND ""
+-- 
+2.49.0
