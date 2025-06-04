@@ -50,7 +50,7 @@ jobs:
     name: Build LLVM
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: ghcr.io/archlinux/archlinux:base-devel
     steps:
       - name: suffix
         id: suffix

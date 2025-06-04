@@ -92,7 +92,7 @@ jobs:
     needs: [params]
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: ghcr.io/archlinux/archlinux:base-devel
     continue-on-error: true
     strategy:
       matrix: ${{ fromJson(needs.params.outputs.matrix) }}
@@ -177,7 +177,7 @@ jobs:
     needs: [params]
     runs-on: ubuntu-latest
     container:
-      image: archlinux/archlinux:base-devel
+      image: ghcr.io/archlinux/archlinux:base-devar
     continue-on-error: true
 
     steps:
