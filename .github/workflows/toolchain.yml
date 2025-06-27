@@ -177,7 +177,7 @@ jobs:
     needs: [params]
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/archlinux/archlinux:base-devar
+      image: ghcr.io/archlinux/archlinux:base-devel
     continue-on-error: true
 
     steps:
