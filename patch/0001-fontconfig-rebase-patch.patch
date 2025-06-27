@@ -1,0 +1,73 @@
+From fda9e9c45b9a364f0185d7e761ff6d31d3d9e29e Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 27 Jun 2025 21:47:04 +0800
+Subject: [PATCH] fontconfig: rebase patch
+
+---
+ ...nfig-0001-Custom-changes-for-mpv-builds.patch | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/packages/fontconfig-0001-Custom-changes-for-mpv-builds.patch b/packages/fontconfig-0001-Custom-changes-for-mpv-builds.patch
+index 96d19b6..1a1cd5c 100644
+--- a/packages/fontconfig-0001-Custom-changes-for-mpv-builds.patch
++++ b/packages/fontconfig-0001-Custom-changes-for-mpv-builds.patch
+@@ -1,4 +1,4 @@
+-From 6380205b240d21eec5b0552dbb3dc46bb18396df Mon Sep 17 00:00:00 2001
++From e6b32de820b1b901c7cd987dd6e28b341b631514 Mon Sep 17 00:00:00 2001
+ From: shinchiro <shinchiro@users.noreply.github.com>
+ Date: Thu, 1 May 2025 21:49:30 +0800
+ Subject: [PATCH] Custom changes for mpv builds
+@@ -10,10 +10,10 @@ Based on original lachs0r's patch for fontconfig
+  2 files changed, 58 insertions(+), 10 deletions(-)
+ 
+ diff --git a/src/fcdir.c b/src/fcdir.c
+-index 54be3b8..6fdc40f 100644
++index 9527d94d..64cdc5fa 100644
+ --- a/src/fcdir.c
+ +++ b/src/fcdir.c
+-@@ -72,11 +72,6 @@ FcFileScanFontConfig (FcFontSet     *set,
++@@ -76,11 +76,6 @@ FcFileScanFontConfig (FcFontSet     *set,
+      int            old_nfont = set->nfont;
+      const FcChar8 *sysroot = FcConfigGetSysRoot (config);
+  
+@@ -24,8 +24,8 @@ index 54be3b8..6fdc40f 100644
+ -
+      unsigned int (*query_function) (const FcChar8 *, unsigned int, FcBlanks *, int *, FcFontSet *) = FcFreeTypeQueryAll;
+  #if ENABLE_FONTATIONS
+-     if (getenv ("FC_FONTATIONS") != NULL) {
+-@@ -86,9 +81,6 @@ FcFileScanFontConfig (FcFontSet     *set,
++     if (getenv ("FC_FONTATIONS")) {
++@@ -90,9 +85,6 @@ FcFileScanFontConfig (FcFontSet     *set,
+      if (!query_function (file, -1, NULL, NULL, set))
+  	return FcFalse;
+  
+@@ -35,7 +35,7 @@ index 54be3b8..6fdc40f 100644
+      for (i = old_nfont; i < set->nfont; i++) {
+  	FcPattern *font = set->fonts[i];
+  
+-@@ -229,7 +221,7 @@ FcDirScanConfig (FcFontSet     *set,
++@@ -233,7 +225,7 @@ FcDirScanConfig (FcFontSet     *set,
+      base = file_prefix + strlen ((char *)file_prefix);
+  
+      if (FcDebug() & FC_DBG_SCAN)
+@@ -44,7 +44,7 @@ index 54be3b8..6fdc40f 100644
+  
+      d = opendir ((char *)s_dir);
+      if (!d) {
+-@@ -263,8 +255,29 @@ FcDirScanConfig (FcFontSet     *set,
++@@ -272,8 +264,29 @@ FcDirScanConfig (FcFontSet     *set,
+      /*
+       * Scan file files to build font patterns
+       */
+@@ -76,7 +76,7 @@ index 54be3b8..6fdc40f 100644
+  bail2:
+      FcStrSetDestroy (files);
+ diff --git a/src/fcinit.c b/src/fcinit.c
+-index 11afa28..b961600 100644
++index 9c66515c..f0a1e8e9 100644
+ --- a/src/fcinit.c
+ +++ b/src/fcinit.c
+ @@ -36,6 +36,12 @@
+-- 
+2.48.1.windows.1
+
