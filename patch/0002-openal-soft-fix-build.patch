@@ -1,0 +1,24 @@
+From 62f6a2905f1ff32f9e5f338111de1a9bc4f62bbe Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 27 Jun 2025 21:52:29 +0800
+Subject: [PATCH] openal-soft: fix build
+
+---
+ packages/openal-soft.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/openal-soft.cmake b/packages/openal-soft.cmake
+index e173bc4..d79f17c 100644
+--- a/packages/openal-soft.cmake
++++ b/packages/openal-soft.cmake
+@@ -17,6 +17,7 @@ ExternalProject_Add(openal-soft
+         -DALSOFT_EXAMPLES=OFF
+         -DALSOFT_TESTS=OFF
+         -DALSOFT_BACKEND_PIPEWIRE=OFF
++        "-DCMAKE_CXX_FLAGS='-I<SOURCE_DIR>/gsl/include'"
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+           COMMAND bash -c "echo 'Libs.private: -lole32 -luuid -lshlwapi' >> <BINARY_DIR>/openal.pc"
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+-- 
+2.48.1.windows.1
+
