@@ -1,0 +1,59 @@
+From 91a517abd6e9ee3d08127c3d3cd9a25442f965c3 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sun, 10 Aug 2025 18:14:05 +0800
+Subject: [PATCH] openssl: use winstore by default
+
+---
+ ...openssl-0001-use-winstore-by-default.patch | 27 +++++++++++++++++++
+ packages/openssl.cmake                        |  1 +
+ 2 files changed, 28 insertions(+)
+ create mode 100644 packages/openssl-0001-use-winstore-by-default.patch
+
+diff --git a/packages/openssl-0001-use-winstore-by-default.patch b/packages/openssl-0001-use-winstore-by-default.patch
+new file mode 100644
+index 0000000..128f160
+--- /dev/null
++++ b/packages/openssl-0001-use-winstore-by-default.patch
+@@ -0,0 +1,27 @@
++From 8477418c8e97d5293a4fba300329adf083dafe28 Mon Sep 17 00:00:00 2001
++From: Andarwinux <Andarwinux@users.noreply.github.com>
++Date: Fri, 8 Aug 2025 00:00:00 +0000
++Subject: [PATCH] use winstore by default
++
++---
++ crypto/x509/by_store.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/crypto/x509/by_store.c b/crypto/x509/by_store.c
++index 46bb534..129b732 100644
++--- a/crypto/x509/by_store.c
+++++ b/crypto/x509/by_store.c
++@@ -136,6 +136,10 @@ static int by_store_ctrl_ex(X509_LOOKUP *ctx, int cmd, const char *argp,
++ {
++     switch (cmd) {
++     case X509_L_ADD_STORE:
+++#ifdef _WIN32
+++        if (argp == NULL)
+++            argp = "org.openssl.winstore://";
+++#endif
++         if (argp != NULL) {
++             STACK_OF(CACHED_STORE) *stores = X509_LOOKUP_get_method_data(ctx);
++             CACHED_STORE *store = OPENSSL_zalloc(sizeof(*store));
++-- 
++2.50.1
++
+diff --git a/packages/openssl.cmake b/packages/openssl.cmake
+index 5d0e763..d9b5f3c 100644
+--- a/packages/openssl.cmake
++++ b/packages/openssl.cmake
+@@ -9,6 +9,7 @@ ExternalProject_Add(openssl
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !test"
+     GIT_SUBMODULES ""
+     UPDATE_COMMAND ""
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/openssl-*.patch
+     CONFIGURE_COMMAND ${EXEC} CONF=1 <SOURCE_DIR>/Configure
+         --cross-compile-prefix=${TARGET_ARCH}-
+         --prefix=${MINGW_INSTALL_PREFIX}
+-- 
+2.48.1.windows.1
+
