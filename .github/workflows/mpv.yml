@@ -313,7 +313,7 @@ jobs:
 
       - name: Download mpv patch
         if: ${{ needs.params.outputs.patch_note }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: mpv-patch
           path: mpv-patch
@@ -602,7 +602,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: artifacts
           pattern: '{mpv,ffmpeg}*'
