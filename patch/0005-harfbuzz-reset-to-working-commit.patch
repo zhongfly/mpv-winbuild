@@ -1,0 +1,24 @@
+From 60fc5a8e859685d3a24407f588e8cf9dca816b6e Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 13 Aug 2025 01:21:42 +0800
+Subject: [PATCH] harfbuzz: reset to working commit
+
+---
+ packages/harfbuzz.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/harfbuzz.cmake b/packages/harfbuzz.cmake
+index 5248f25..b8ceeb3 100644
+--- a/packages/harfbuzz.cmake
++++ b/packages/harfbuzz.cmake
+@@ -6,6 +6,7 @@ ExternalProject_Add(harfbuzz
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
++    GIT_RESET 6ec1b2790c55ec7ec363bd00e295f08910c52ee2
+     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !test"
+     UPDATE_COMMAND ""
+-- 
+2.48.1.windows.1
+
