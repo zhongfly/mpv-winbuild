@@ -1,0 +1,40 @@
+From 9160d5afe84fe49056ab16d2f0db9cc958d6563b Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 13 Aug 2025 00:42:10 +0800
+Subject: [PATCH] libudfread: switch to meson
+
+---
+ packages/libudfread.cmake | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/packages/libudfread.cmake b/packages/libudfread.cmake
+index 6a1d33e..a1eff8c 100644
+--- a/packages/libudfread.cmake
++++ b/packages/libudfread.cmake
+@@ -3,15 +3,17 @@ ExternalProject_Add(libudfread
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     UPDATE_COMMAND ""
+-    CONFIGURE_COMMAND ${EXEC} autoreconf -fi && CONF=1 <SOURCE_DIR>/configure
+-        --host=${TARGET_ARCH}
++    CONFIGURE_COMMAND ${EXEC} CONF=1 meson setup <BINARY_DIR> <SOURCE_DIR>
+         --prefix=${MINGW_INSTALL_PREFIX}
+-        --disable-shared
+-    BUILD_COMMAND ${MAKE}
+-    INSTALL_COMMAND ${MAKE} install
+-    BUILD_IN_SOURCE 1
++        --libdir=${MINGW_INSTALL_PREFIX}/lib
++        --cross-file=${MESON_CROSS}
++        --buildtype=release
++        --default-library=static
++    BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
++    INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
+ 
+ force_rebuild_git(libudfread)
++force_meson_configure(libudfread)
+ cleanup(libudfread install)
+-- 
+2.48.1.windows.1
+
