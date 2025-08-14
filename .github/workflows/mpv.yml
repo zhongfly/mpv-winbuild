@@ -516,6 +516,7 @@ jobs:
             const getGoogleSourceUrl = (hash,remote) => remote + `/+/${hash}`;            
             const gethGitVideolanUrl = (hash,remote) => remote.replace(/\/git\//,"/?p=") + `;a=commit;h=${hash}`;
             const getCgitUrl = (hash,remote) => remote + `/commit/?id=${hash}`;
+            const getCodebergUrl = (hash,remote) => remote.replace(/\.git$/,"") + `/commit/${hash}`;
             function getCommitUrl(hash,remote) {
                 let url = "";
                 switch (true) {
@@ -536,6 +537,9 @@ jobs:
                     break;
                   case /git\.libssh\.org/.test(remote):
                     url = getCgitUrl(hash,remote);
+                    break;
+                  case /codeberg\.org/.test(remote):
+                    url = getCodebergUrl(hash,remote);
                     break;
                   default:
                     url = remote;
