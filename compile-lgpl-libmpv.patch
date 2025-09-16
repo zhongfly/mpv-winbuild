@@ -1,17 +1,17 @@
-From 666435bcbccceb907154f525950aaa3c78f7d2ae Mon Sep 17 00:00:00 2001
+From 8a4ea707f610a0b56bca5255099654e306fefd42 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Sun, 23 Feb 2025 18:59:20 +0800
+Date: Tue, 16 Sep 2025 21:29:15 +0800
 Subject: [PATCH] packages: compile lgpl libmpv
 
 ---
  cmake/packages_check.cmake |  6 +-----
  packages/ffmpeg.cmake      | 23 -----------------------
  packages/libarchive.cmake  |  3 +--
- packages/mpv.cmake         | 28 ++++++++--------------------
- 4 files changed, 10 insertions(+), 50 deletions(-)
+ packages/mpv.cmake         | 30 ++++++++----------------------
+ 4 files changed, 10 insertions(+), 52 deletions(-)
 
 diff --git a/cmake/packages_check.cmake b/cmake/packages_check.cmake
-index e303e10..6c2eeb3 100644
+index acf8ccb..f843cce 100644
 --- a/cmake/packages_check.cmake
 +++ b/cmake/packages_check.cmake
 @@ -7,11 +7,7 @@ if(COMPILER_TOOLCHAIN STREQUAL "gcc")
@@ -120,7 +120,7 @@ index 252c687..1c666b3 100644
          ${ffmpeg_cuda}
          --enable-amf
 diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
-index 0d7fa80..2b1ed2c 100644
+index 800c5c4..1bb241a 100644
 --- a/packages/libarchive.cmake
 +++ b/packages/libarchive.cmake
 @@ -2,7 +2,6 @@ ExternalProject_Add(libarchive
@@ -131,7 +131,7 @@ index 0d7fa80..2b1ed2c 100644
          xz
          zlib
          zstd
-@@ -26,7 +25,7 @@ ExternalProject_Add(libarchive
+@@ -27,7 +26,7 @@ ExternalProject_Add(libarchive
          -DENABLE_ICONV=ON
          -DENABLE_LIBXML2=ON
          -DENABLE_EXPAT=ON
@@ -141,7 +141,7 @@ index 0d7fa80..2b1ed2c 100644
          -DENABLE_CPIO=OFF
          -DENABLE_CNG=OFF
 diff --git a/packages/mpv.cmake b/packages/mpv.cmake
-index 874ee95..7b6d6de 100644
+index 1014cc7..7b6d6de 100644
 --- a/packages/mpv.cmake
 +++ b/packages/mpv.cmake
 @@ -6,15 +6,11 @@ ExternalProject_Add(mpv
@@ -190,19 +190,21 @@ index 874ee95..7b6d6de 100644
          -Dspirv-cross=enabled
          -Dvulkan=enabled
          -Dvapoursynth=enabled
-@@ -67,11 +65,6 @@ ExternalProject_Add_Step(mpv strip-binary
+@@ -67,13 +65,6 @@ ExternalProject_Add_Step(mpv strip-binary
  
  ExternalProject_Add_Step(mpv copy-binary
      DEPENDEES strip-binary
 -    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.exe                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv.exe
 -    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.com                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv.com
+-    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/etc/mpv-register.bat              ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv-register.bat
+-    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/etc/mpv-unregister.bat            ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv-unregister.bat
 -    COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/mpv.pdf                           ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/doc/manual.pdf
 -    COMMAND ${CMAKE_COMMAND} -E copy ${MINGW_INSTALL_PREFIX}/etc/fonts/fonts.conf   ${CMAKE_CURRENT_BINARY_DIR}/mpv-package/mpv/fonts.conf
 -    ${mpv_copy_debug}
      COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv-2.dll          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv-2.dll
      COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/libmpv.dll.a          ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/libmpv.dll.a
      COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/mpv/client.h       ${CMAKE_CURRENT_BINARY_DIR}/mpv-dev/include/mpv/client.h
-@@ -91,14 +84,9 @@ mv $2 $2-git-\${GIT}")
+@@ -93,14 +84,9 @@ mv $2 $2-git-\${GIT}")
  ExternalProject_Add_Step(mpv copy-package-dir
      DEPENDEES copy-binary
      COMMAND chmod 755 ${RENAME}
@@ -220,5 +222,5 @@ index 874ee95..7b6d6de 100644
      LOG 1
  )
 -- 
-2.48.1.windows.1
+2.51.0.windows.1
 
