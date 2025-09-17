@@ -18,6 +18,7 @@ on:
         - 32bit
         - 64bit
         - 64bit-v3
+        - 64bit-v4
         - aarch64
         - all-64bit
         - all
@@ -90,17 +91,20 @@ jobs:
               case "64bit-v3":
                 matrix.bit = ["64-v3"];
                 break;
+              case "64bit-v4":
+                matrix.bit = ["64-v4"];
+                break;
               case "aarch64":
                 matrix.bit = ["aarch64"];
                 break;
               case "all-64bit":
-                matrix.bit = ["64","64-v3","aarch64"];
+                matrix.bit = ["64","64-v3","64-v4","aarch64"];
                 break;
               case "all":
-                matrix.bit = ["32","64","64-v3","aarch64"];
+                matrix.bit = ["32","64","64-v3","64-v4","aarch64"];
                 break;
               default:
-                matrix.bit = ["64","64-v3","aarch64"];
+                matrix.bit = ["64","64-v3","64-v4","aarch64"];
                 break;
             }
             core.setOutput("matrix_bit",JSON.stringify(matrix));
@@ -361,6 +365,10 @@ jobs:
               arch="x86_64"
               gcc_arch=-DGCC_ARCH=x86-64-v3
               x86_64_level=-v3
+          elif [ $bit == "64-v4" ]; then
+              arch="x86_64"
+              gcc_arch=-DGCC_ARCH=x86-64-v4
+              x86_64_level=-v4
           elif [ $bit == "aarch64" ]; then
               arch="aarch64"
           fi
@@ -422,6 +430,9 @@ jobs:
                 break;
               case "64-v3":
                 arch = "x86_64-v3";
+                break;
+              case "64-v4":
+                arch = "x86_64-v4";
                 break;
               case "aarch64":
                 arch = "aarch64";
@@ -668,6 +679,7 @@ jobs:
               "i686": "for 32 bit system",
               "x86_64": "for 64 bit system",
               "x86_64-v3": "for 64 bit system with cpu not older than Intel Haswell or AMD Excavator",
+              "x86_64-v4": "for 64 bit system with AVX-512(AMD Zen4+ or Intel Skylake-X/Ice Lake/Tiger Lake/Rocket Lake)",
               "aarch64": "for ARM64(aarch64)"
             }
             async function getTips(arch){
