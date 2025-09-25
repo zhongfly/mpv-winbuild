@@ -1,0 +1,24 @@
+From 63e2fd3c5ebd6cd6d9ad105b4ff35f146e2e9dba Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Thu, 25 Sep 2025 20:25:38 +0800
+Subject: [PATCH] libarchive: reset to working commit
+
+---
+ packages/libarchive.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/libarchive.cmake b/packages/libarchive.cmake
+index 800c5c4..d88616b 100644
+--- a/packages/libarchive.cmake
++++ b/packages/libarchive.cmake
+@@ -11,6 +11,7 @@ ExternalProject_Add(libarchive
+     GIT_REPOSITORY https://github.com/libarchive/libarchive.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
++    GIT_RESET 39dc43b
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} CONF=1 cmake -H<SOURCE_DIR> -B<BINARY_DIR>
+         -G Ninja
+-- 
+2.51.0.windows.1
+
