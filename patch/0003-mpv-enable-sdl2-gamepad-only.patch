@@ -1,0 +1,25 @@
+From cc64890878c69d808531224479e7ad564bcc390b Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 29 Oct 2025 22:43:35 +0800
+Subject: [PATCH] mpv: enable 'sdl2-gamepad' only
+
+---
+ packages/mpv.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/mpv.cmake b/packages/mpv.cmake
+index 874ee95..a5993f9 100644
+--- a/packages/mpv.cmake
++++ b/packages/mpv.cmake
+@@ -41,7 +41,7 @@ ExternalProject_Add(mpv
+         -Dpdf-build=enabled
+         -Dlua=enabled
+         -Djavascript=enabled
+-        -Dsdl2=enabled
++        -Dsdl2-gamepad=enabled
+         -Dlibarchive=enabled
+         -Dlibbluray=enabled
+         -Ddvdnav=enabled
+-- 
+2.51.2.windows.1
+
