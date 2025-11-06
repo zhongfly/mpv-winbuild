@@ -183,8 +183,8 @@ jobs:
         run: |
           sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache
-          sudo pacman -U --noconfirm https://archive.archlinux.org/packages/p/python-docutils/python-docutils-1%3A0.21.2-3-any.pkg.tar.zst
+          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache retry
+          sudo retry -t 5 pacman -U --noconfirm https://archive.archlinux.org/packages/p/python-docutils/python-docutils-1%3A0.21.2-3-any.pkg.tar.zst
           mkdir -p /home/opt/7zip
           wget -qO - https://www.7-zip.org/a/7z2500-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
