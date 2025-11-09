@@ -181,12 +181,14 @@ jobs:
     steps:
       - name: Install Dependencies
         run: |
-          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+          sudo echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf >/dev/null
+          sudo pacman-key --init
+          sudo pacman-key --populate archlinux
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache
-          sudo pacman -U --noconfirm https://archive.archlinux.org/packages/p/python-docutils/python-docutils-1%3A0.21.2-3-any.pkg.tar.zst
+          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache python-pip
+          sudo python -m pip install --break-system-packages roman
           mkdir -p /home/opt/7zip
-          wget -qO - https://www.7-zip.org/a/7z2500-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          wget -qO - https://www.7-zip.org/a/7z2501-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"

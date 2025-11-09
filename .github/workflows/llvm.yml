@@ -59,10 +59,12 @@ jobs:
           echo "cache_suffix=$cache_suffix" >> "$GITHUB_OUTPUT"
       - name: Install Dependencies
         run: |
+          sudo pacman-key --init
+          sudo pacman-key --populate archlinux
           sudo pacman -Syu --noconfirm
           sudo pacman -S --noconfirm --needed git ninja cmake meson wget mimalloc go
           mkdir -p /home/opt/7zip
-          wget -qO - https://www.7-zip.org/a/7z2500-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
+          wget -qO - https://www.7-zip.org/a/7z2501-linux-x64.tar.xz | tar -xJf - -C /home/opt/7zip 7zzs
           sudo ln -s /home/opt/7zip/7zzs /usr/bin/7z
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
