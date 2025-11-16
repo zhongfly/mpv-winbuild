@@ -683,7 +683,7 @@ jobs:
             for(const arch of Object.keys(tips)){
               note += await getTips(arch);
             }
-            note+="**Downloads**: ![downloads](https://badgen.net/github/assets-dl/${{github.repository}}/${{ env.tag_name }}?cache=300)";
+            note+="**Downloads**: ![downloads](https://img.shields.io/github/downloads/${{github.repository}}/${{ env.tag_name }}/total?cacheSeconds=300)";
             core.setOutput("note",note);
 
             const os = require('os'); 
