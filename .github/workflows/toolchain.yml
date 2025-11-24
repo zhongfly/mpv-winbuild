@@ -110,10 +110,10 @@ jobs:
           git config --global pull.rebase true
           git config --global rebase.autoStash true
           git config --global fetch.prune true
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Checkout toolchain
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: shinchiro/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
@@ -190,10 +190,10 @@ jobs:
           git config --global pull.rebase true
           git config --global rebase.autoStash true
           git config --global fetch.prune true
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Checkout toolchain
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: shinchiro/mpv-winbuild-cmake
           path: mpv-winbuild-cmake
