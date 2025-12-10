@@ -105,6 +105,7 @@ jobs:
           sudo pacman-key --populate archlinux
           sudo pacman -Syu --noconfirm
           sudo pacman -S --noconfirm --needed git ninja cmake meson wget mimalloc 7zip unzip
+          sudo pacman -U --noconfirm https://archive.archlinux.org/packages/m/meson/meson-1.9.2-1-any.pkg.tar.zst
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
