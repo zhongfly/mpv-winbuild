@@ -280,3 +280,27 @@ jobs:
             } else {
               core.setFailed("Don't find any success build cache");
             }
+  cache_llvm:
+    name: keep llvm cache alive
+    needs: [build,params]
+    if: ${{ always() && inputs.compiler =='clang' }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/archlinux/archlinux:base-devel
+    continue-on-error: true
+
+    steps:
+      - name: Prepare
+        run: |
+          sudo pacman -Syu --noconfirm
+          sudo pacman -S --noconfirm --needed git curl
+      - uses: actions/checkout@v6
+      
+      - name: Resave llvm cache
+        id: llvm
+        continue-on-error: true
+        uses: ./action/resave_cache
+        with: 
+          path: mpv-winbuild-cmake/clang_root
+          key: llvm-
+          restore-keys: llvm-
