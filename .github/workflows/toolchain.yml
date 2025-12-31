@@ -175,7 +175,6 @@ jobs:
   rust:
     name: Install Rust Toolchain
     needs: [params]
-    if: ${{ false }}
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/archlinux/archlinux:base-devel
@@ -214,7 +213,7 @@ jobs:
           key: rust-${{ needs.params.outputs.cache_suffix }}
 
   trigger:
-    needs: [build,params]
+    needs: [build,params,rust]
     if: ${{ always() && inputs.trigger_build != false && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
     permissions:

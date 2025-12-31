@@ -485,7 +485,7 @@ jobs:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/src_packages
           key: source-${{ env.cache_suffix }}
       - name: Save Rust Cache
-        if: ${{ false && inputs.no_save_cache != true && matrix.lgpl != true }}
+        if: ${{ inputs.no_save_cache != true && matrix.lgpl != true }}
         uses: actions/cache/save@v5.0.1
         with:
           path: ${{ github.workspace }}/mpv-winbuild-cmake/install_rustup
