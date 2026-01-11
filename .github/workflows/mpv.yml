@@ -185,9 +185,8 @@ jobs:
           sudo pacman-key --init
           sudo pacman-key --populate archlinux
           sudo pacman -Syu --noconfirm
-          sudo pacman -S --noconfirm --needed git ninja cmake meson clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache python-pip 7zip
-          sudo pacman -U --noconfirm https://archive.archlinux.org/packages/m/meson/meson-1.9.2-1-any.pkg.tar.zst
-          sudo python -m pip install --break-system-packages roman
+          sudo pacman -S --noconfirm --needed git ninja cmake clang lld libc++ unzip ragel yasm nasm gperf rst2pdf lib32-gcc-libs lib32-glib2 python-cairo curl wget mimalloc ccache python-pip 7zip
+          sudo python -m pip install --break-system-packages roman "meson==1.9.2"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global pull.rebase true
