@@ -1,12 +1,11 @@
-From 67d88cd6c4b011a758d1bd26780b99cfeceae075 Mon Sep 17 00:00:00 2001
+From 128bd3942789e8d27c8b454d81c9a9165eb84fb3 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
-Date: Sun, 28 Dec 2025 13:52:41 +0800
+Date: Sat, 17 Jan 2026 12:03:43 +0800
 Subject: [PATCH] openssl: use winstore by default
 
 ---
  ...openssl-0001-use-winstore-by-default.patch | 26 +++++++++++++++++++
- packages/openssl.cmake                        |  1 +
- 2 files changed, 27 insertions(+)
+ 1 file changed, 26 insertions(+)
  create mode 100644 packages/openssl-0001-use-winstore-by-default.patch
 
 diff --git a/packages/openssl-0001-use-winstore-by-default.patch b/packages/openssl-0001-use-winstore-by-default.patch
@@ -41,17 +40,5 @@ index 0000000..69a3d15
 +             CACHED_STORE *store = OPENSSL_zalloc(sizeof(*store));
 +-- 
 +2.52.0
-diff --git a/packages/openssl.cmake b/packages/openssl.cmake
-index 5bb526c..2ad087d 100644
---- a/packages/openssl.cmake
-+++ b/packages/openssl.cmake
-@@ -9,6 +9,7 @@ ExternalProject_Add(openssl
-     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !test"
-     GIT_SUBMODULES ""
-     UPDATE_COMMAND ""
-+    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/openssl-*.patch
-     CONFIGURE_COMMAND ${EXEC} sed -i [['/__int64 ossl_ssize_t/i #include <stdint.h>']] <SOURCE_DIR>/include/openssl/e_os2.h
-     COMMAND ${EXEC} CONF=1 <SOURCE_DIR>/Configure
-         --cross-compile-prefix=${TARGET_ARCH}-
 -- 
-2.52.0.windows.1
+2.52.0
