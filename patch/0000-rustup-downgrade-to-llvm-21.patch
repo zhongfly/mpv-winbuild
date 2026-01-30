@@ -1,0 +1,25 @@
+From c7890be93b67f5e97c6e21ab1fc383bb62fb256e Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 30 Jan 2026 20:33:07 +0800
+Subject: [PATCH] rustup: downgrade to llvm 21
+
+---
+ toolchain/rustup.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/rustup.cmake b/toolchain/rustup.cmake
+index 0889364..af0abab 100644
+--- a/toolchain/rustup.cmake
++++ b/toolchain/rustup.cmake
+@@ -4,7 +4,7 @@ ExternalProject_Add(rustup
+     SOURCE_DIR rustup-prefix/src
+     CONFIGURE_COMMAND ${EXEC} CONF=1
+         curl -sSf https://sh.rustup.rs |
+-        sh -s -- -y --default-toolchain nightly --target aarch64-pc-windows-gnullvm,x86_64-pc-windows-gnullvm,i686-pc-windows-gnullvm,x86_64-pc-windows-gnu,i686-pc-windows-gnu --no-modify-path --profile minimal
++        sh -s -- -y --default-toolchain nightly-2026-01-28 --target aarch64-pc-windows-gnullvm,x86_64-pc-windows-gnullvm,i686-pc-windows-gnullvm,x86_64-pc-windows-gnu,i686-pc-windows-gnu --no-modify-path --profile minimal
+     BUILD_COMMAND ${EXEC} rustup update
+     INSTALL_COMMAND ""
+     LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+-- 
+2.52.0.windows.1
+
