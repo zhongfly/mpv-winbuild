@@ -1,0 +1,122 @@
+From 2a0c1c883a1cf1cba00a15942977baa766a4b576 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 4 Feb 2026 22:06:00 +0800
+Subject: [PATCH] build(ffmpeg): always build shared FFmpeg and bundle DLLs for
+ mpv
+
+- Build FFmpeg with --enable-shared/--disable-static
+
+- Remove leftover libav*.a to prevent accidental static linking
+
+- Copy FFmpeg DLLs into mpv-package for runtime
+---
+ cmake/copy_ffmpeg_dlls.cmake | 45 ++++++++++++++++++++++++++++++++++++
+ packages/ffmpeg.cmake        | 11 +++++++++
+ packages/mpv.cmake           | 10 ++++++++
+ 3 files changed, 66 insertions(+)
+ create mode 100644 cmake/copy_ffmpeg_dlls.cmake
+
+diff --git a/cmake/copy_ffmpeg_dlls.cmake b/cmake/copy_ffmpeg_dlls.cmake
+new file mode 100644
+index 0000000..3e1edf3
+--- /dev/null
++++ b/cmake/copy_ffmpeg_dlls.cmake
+@@ -0,0 +1,45 @@
++if(NOT DEFINED FFMPEG_BIN_DIR OR "${FFMPEG_BIN_DIR}" STREQUAL "")
++    message(FATAL_ERROR "FFMPEG_BIN_DIR is required.")
++endif()
++if(NOT DEFINED DEST_DIR OR "${DEST_DIR}" STREQUAL "")
++    message(FATAL_ERROR "DEST_DIR is required.")
++endif()
++
++set(_ffmpeg_dll_patterns
++    "${FFMPEG_BIN_DIR}/avcodec-*.dll"
++    "${FFMPEG_BIN_DIR}/avdevice-*.dll"
++    "${FFMPEG_BIN_DIR}/avfilter-*.dll"
++    "${FFMPEG_BIN_DIR}/avformat-*.dll"
++    "${FFMPEG_BIN_DIR}/avutil-*.dll"
++    "${FFMPEG_BIN_DIR}/postproc-*.dll"
++    "${FFMPEG_BIN_DIR}/swresample-*.dll"
++    "${FFMPEG_BIN_DIR}/swscale-*.dll"
++    "${FFMPEG_BIN_DIR}/libavcodec-*.dll"
++    "${FFMPEG_BIN_DIR}/libavdevice-*.dll"
++    "${FFMPEG_BIN_DIR}/libavfilter-*.dll"
++    "${FFMPEG_BIN_DIR}/libavformat-*.dll"
++    "${FFMPEG_BIN_DIR}/libavutil-*.dll"
++    "${FFMPEG_BIN_DIR}/libpostproc-*.dll"
++    "${FFMPEG_BIN_DIR}/libswresample-*.dll"
++    "${FFMPEG_BIN_DIR}/libswscale-*.dll"
++)
++
++set(_ffmpeg_dlls "")
++foreach(_pattern IN LISTS _ffmpeg_dll_patterns)
++    file(GLOB _matched LIST_DIRECTORIES false "${_pattern}")
++    list(APPEND _ffmpeg_dlls ${_matched})
++endforeach()
++list(REMOVE_DUPLICATES _ffmpeg_dlls)
++
++if(NOT _ffmpeg_dlls)
++    message(FATAL_ERROR "No FFmpeg DLLs found in: ${FFMPEG_BIN_DIR}")
++endif()
++
++file(MAKE_DIRECTORY "${DEST_DIR}")
++foreach(_dll IN LISTS _ffmpeg_dlls)
++    file(COPY "${_dll}" DESTINATION "${DEST_DIR}")
++endforeach()
++
++list(LENGTH _ffmpeg_dlls _ffmpeg_dlls_count)
++message(STATUS "Copied ${_ffmpeg_dlls_count} FFmpeg DLL(s) to: ${DEST_DIR}")
++
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index 252c687..07e7214 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -56,6 +56,8 @@ ExternalProject_Add(ffmpeg
+         --prefix=${MINGW_INSTALL_PREFIX}
+         --arch=${TARGET_CPU}
+         --target-os=mingw32
++        --enable-shared
++        --disable-static
+         --pkg-config-flags=--static
+         --enable-cross-compile
+         --enable-runtime-cpudetect
+@@ -119,6 +121,15 @@ ExternalProject_Add(ffmpeg
+         "--extra-libs='${ffmpeg_extra_libs}'" # -lstdc++ / -lc++ needs by libjxl and shaderc
+     BUILD_COMMAND ${MAKE}
+     INSTALL_COMMAND ${MAKE} install
++        COMMAND ${EXEC} rm -f
++            ${MINGW_INSTALL_PREFIX}/lib/libavcodec.a
++            ${MINGW_INSTALL_PREFIX}/lib/libavdevice.a
++            ${MINGW_INSTALL_PREFIX}/lib/libavfilter.a
++            ${MINGW_INSTALL_PREFIX}/lib/libavformat.a
++            ${MINGW_INSTALL_PREFIX}/lib/libavutil.a
++            ${MINGW_INSTALL_PREFIX}/lib/libpostproc.a
++            ${MINGW_INSTALL_PREFIX}/lib/libswresample.a
++            ${MINGW_INSTALL_PREFIX}/lib/libswscale.a
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
+ 
+diff --git a/packages/mpv.cmake b/packages/mpv.cmake
+index 66613e2..3774674 100644
+--- a/packages/mpv.cmake
++++ b/packages/mpv.cmake
+@@ -83,6 +83,16 @@ ExternalProject_Add_Step(mpv copy-binary
+     COMMENT "Copying mpv binaries and manual"
+ )
+ 
++ExternalProject_Add_Step(mpv copy-ffmpeg-dlls
++    DEPENDEES strip-binary
++    DEPENDERS copy-binary
++    COMMAND ${CMAKE_COMMAND}
++        "-DFFMPEG_BIN_DIR=${MINGW_INSTALL_PREFIX}/bin"
++        "-DDEST_DIR=${CMAKE_CURRENT_BINARY_DIR}/mpv-package"
++        -P ${PROJECT_SOURCE_DIR}/cmake/copy_ffmpeg_dlls.cmake
++    COMMENT "Copying FFmpeg DLLs"
++)
++
+ set(RENAME ${CMAKE_CURRENT_BINARY_DIR}/mpv-prefix/src/rename.sh)
+ file(WRITE ${RENAME}
+ "#!/bin/bash
+-- 
+2.52.0.windows.1
+
