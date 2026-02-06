@@ -50,6 +50,10 @@ runs:
             arch="x86_64"
             gcc_arch=-DGCC_ARCH=x86-64-v3
             x86_64_level=-v3
+        elif [ $bit == "64-v4" ]; then
+            arch="x86_64"
+            gcc_arch=-DGCC_ARCH=x86-64-v4
+            x86_64_level=-v4
         elif [ $bit == "aarch64" ]; then
             arch="aarch64"
         fi
