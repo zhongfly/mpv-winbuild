@@ -270,7 +270,6 @@ jobs:
             ${{ matrix.bit }}-clang_root-${{ env.restore_suffix }}
 
       - name: Restore Rust Cache
-        if: ${{ false }}
         uses: actions/cache/restore@v5.0.1
         id: cache_rust
         with:
