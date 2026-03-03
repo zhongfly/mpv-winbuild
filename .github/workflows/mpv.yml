@@ -431,7 +431,6 @@ jobs:
               const files = await globber.glob();
               if ( files.length > 0 ) {
                 const file = files[0];
-                core.exportVariable( `${type}_name`, path.basename(file) );
                 core.exportVariable( `${type}_path`, file );
               }
             }
@@ -446,29 +445,29 @@ jobs:
 
       - name: upload mpv-debug
         uses: actions/upload-artifact@v7
-        if: ${{ env.mpv-debug_name && env.mpv-debug_path }}
+        if: ${{ env.mpv-debug_path }}
         with:
-          name: ${{ env.mpv-debug_name }}
           path: ${{ env.mpv-debug_path }}
+          archive: false
       - name: upload mpv-dev
         uses: actions/upload-artifact@v7
-        if: ${{ env.mpv-dev_name && env.mpv-dev_path }}
+        if: ${{ env.mpv-dev_path }}
         with:
-          name: ${{ env.mpv-dev_name }}
           path: ${{ env.mpv-dev_path }}
+          archive: false
       - name: upload mpv
         uses: actions/upload-artifact@v7
-        if: ${{ env.mpv_name && env.mpv_path }}
+        if: ${{ env.mpv_path }}
         with:
-          name: ${{ env.mpv_name }}
           path: ${{ env.mpv_path }}
+          archive: false
           
       - name: upload ffmpeg
         uses: actions/upload-artifact@v7
         if: ${{ env.ffmpeg_name }}
         with:
-          name: ${{ env.ffmpeg_name }}
           path: mpv-winbuild-cmake/release/${{ env.ffmpeg_name }}.7z
+          archive: false
 
       - name: Save clang sysroot cache
         if: ${{ inputs.compiler =='clang' && inputs.no_save_cache != true && matrix.lgpl != true }}
@@ -610,6 +609,7 @@ jobs:
           path: artifacts
           pattern: '{mpv,ffmpeg}*'
           merge-multiple: true
+          skip-decompress : true
     
       - name: "Check artifacts"
         uses: actions/github-script@v8
