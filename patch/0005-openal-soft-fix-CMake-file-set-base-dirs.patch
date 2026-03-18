@@ -1,0 +1,57 @@
+From 34dce851530fac04a0068feb19b2a14daad80d5c Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 18 Mar 2026 21:17:14 +0800
+Subject: [PATCH] openal-soft: fix CMake file set base dirs
+
+---
+ ...w-generated-internal-headers-in-file.patch | 25 +++++++++++++++++++
+ packages/openal-soft.cmake                    |  1 +
+ 2 files changed, 26 insertions(+)
+ create mode 100644 packages/openal-soft-0001-cmake-allow-generated-internal-headers-in-file.patch
+
+diff --git a/packages/openal-soft-0001-cmake-allow-generated-internal-headers-in-file.patch b/packages/openal-soft-0001-cmake-allow-generated-internal-headers-in-file.patch
+new file mode 100644
+index 0000000..ad29f8e
+--- /dev/null
++++ b/packages/openal-soft-0001-cmake-allow-generated-internal-headers-in-file.patch
+@@ -0,0 +1,25 @@
++From 7e0d08ae24c8f6de74dbca4e7f5616fd914bff61 Mon Sep 17 00:00:00 2001
++From: Codex <codex@openai.com>
++Date: Thu, 18 Mar 2026 16:40:00 +0800
++Subject: [PATCH] cmake: allow generated internal headers in file sets
++
++---
++ CMakeLists.txt | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0ea6768..4c1a810 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1703,7 +1703,8 @@ if(LIBTYPE STREQUAL "STATIC")
++         target_sources(${IMPL_TARGET}
++             PRIVATE ${COMMON_SRCS} ${OPENAL_SRCS} ${ALC_SRCS} ${CORE_SRCS}
++             PRIVATE FILE_SET internal_headers TYPE HEADERS
++-                FILES ${COMMON_HDRS} ${OPENAL_HDRS} ${ALC_HDRS} ${CORE_HDRS}
+++                BASE_DIRS "${OpenAL_SOURCE_DIR}" "${OpenAL_BINARY_DIR}"
+++                FILES ${COMMON_HDRS} ${OPENAL_HDRS} ${ALC_HDRS} ${CORE_HDRS}
++             PUBLIC FILE_SET public_headers TYPE HEADERS
++                 BASE_DIRS "${OpenAL_SOURCE_DIR}/include" FILES ${TARGET_PUBLIC_HEADERS}
++         )
++-- 
++2.49.0
+diff --git a/packages/openal-soft.cmake b/packages/openal-soft.cmake
+index c32bdd6..511847f 100644
+--- a/packages/openal-soft.cmake
++++ b/packages/openal-soft.cmake
+@@ -2,6 +2,7 @@ ExternalProject_Add(openal-soft
+     DEPENDS
+         libsdl2
+     GIT_REPOSITORY https://github.com/kcat/openal-soft.git
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/openal-soft-*.patch
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     UPDATE_COMMAND ""
+-- 
+2.52.0.windows.1
+
