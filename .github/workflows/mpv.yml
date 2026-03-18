@@ -41,7 +41,7 @@ on:
       no_save_cache:
         description: "Don't save caches after success build"
         required: false
-        default: false
+        default: true
         type: boolean
       release:
         description: "Publish a release"
@@ -196,7 +196,8 @@ jobs:
       - name: Checkout toolchain
         uses: actions/checkout@v6
         with:
-          repository: shinchiro/mpv-winbuild-cmake
+          repository: zhongfly/mpv-winbuild-cmake
+          ref: python-new
           path: mpv-winbuild-cmake
           fetch-depth: 0
       - name: Prepare
