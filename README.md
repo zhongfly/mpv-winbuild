@@ -1,47 +1,47 @@
-# mpv-winbuild
+# mpv-赢建
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zhongfly/mpv-winbuild/mpv.yml?branch=main&cacheSeconds=1800)](https://github.com/zhongfly/mpv-winbuild/actions)
-[![releases](https://img.shields.io/github/v/release/zhongfly/mpv-winbuild?cacheSeconds=1800)](https://github.com/zhongfly/mpv-winbuild/releases/latest)
-[![downloads](https://img.shields.io/github/downloads/zhongfly/mpv-winbuild/total?cacheSeconds=1800)](https://github.com/zhongfly/mpv-winbuild/releases)
+[![GitHub 工作流状态](https://img.shields.io/github/actions/workflow/status/zhongfly/mpv-winbuild/mpv.yml?branch=main&cacheSeconds=1800)](https://github.com/zhongfly/mpv-winbuild/actions)
+[![版本发布](https://img.shields.io/github/v/release/zhongfly/mpv-winbuild?cacheSeconds=1800)](https://github.com/zhongfly/mpv-winbuild/releases/latest)
+[![下载次数](https://img.shields.io/github/downloads/zhongfly/mpv-winbuild/total?cacheSeconds=1800)](https://github.com/zhongfly/mpv-winbuild/releases)
 
-Use Github Action to build mpv for Windows with latest commit.
+使用 Github Action 通过最新提交构建 Windows 版的 mpv。
 
-Based on <https://github.com/shinchiro/mpv-winbuild-cmake>.
+基于 <https://github.com/shinchiro/mpv-winbuild-cmake>.
 
-## Auto-Builds
+## 自动构建
 
-Checks the mpv repository every hour for updates. If there is an update and it is relevant to the windows build, it will automatically run the compilation and **release it on success**.
+每小时检查mpv仓库是否有更新。如果有更新并且与Windows版本相关，它将自动运行编译并**成功后发布**。
 
-This repo only provides 64-bit version. If you need a 32-bit version, you can fork this repo and run `MPV` workflow by yourself.
+这个仓库只提供64位版本。如果你需要32位版本，可以克隆这个仓库并自行运行`MPV`工作流程。
 
-> [!NOTE]
-> `mpv-dev-xxxx.7z` is libmpv, including the `libmpv-2.dll` file.
+> [!NOTE] [!NOTE]
+`mpv-dev-xxxx.7z` 是 libmpv，包括 `libmpv-2.dll` 文件。 `mpv-dev-xxxx.7z` is libmpv, including the `libmpv-2.dll` file.
 >
-> Some media players based on libmpv use `libmpv-2.dll` or `mpv-2.dll`.You can upgrade their libmpv by overwriting this dll.
+> 一些基于libmpv的媒体播放器使用`libmpv-2.dll`或`mpv-2.dll`。你可以通过覆盖这个dll来升级它们的libmpv。 Some media players based on libmpv use `libmpv-2.dll` or `mpv-2.dll`.You can upgrade their libmpv by overwriting this dll.
 >
-> `mpv-dev-lgpl-xxxx.7z` is libmpv under LGPLv2.1+ license, which disables LGPLv2.1+ incompatible packages and statically links to ffmpeg under LGPLv3.
+`mpv-dev-lgpl-xxxx.7z` 是在 LGPLv2.1+ 许可证下发布的 libmpv，它禁用与 LGPLv2.1+ 兼容的包，并且静态链接到在 LGPLv3 下发布的 ffmpeg。 `mpv-dev-lgpl-xxxx.7z` is libmpv under LGPLv2.1+ license, which disables LGPLv2.1+ incompatible packages and statically links to ffmpeg under LGPLv3.
 > 
-> I'm not a lawyer and can't guarantee that I've disabled all LGPL-incompatible packages, use at your own risk.
+我不是律师，不能保证我已禁用所有与LGPL不兼容的软件包，请自行承担风险。 I'm not a lawyer and can't guarantee that I've disabled all LGPL-incompatible packages, use at your own risk.
 
-### Release Retention Policy
+### 发布保留策略 Release Retention Policy
 
--   The last 30 days of builds will be retained.
+-   最近30个版本将被保留。   The last 30 days of builds will be retained.
 
-## Information about packages
+##  关于软件包的信息 Information about packages
 
-same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fshinchiro%2Fmpv-winbuild-cmake&cacheSeconds=1800)](https://github.com/shinchiro/mpv-winbuild-cmake)
+与 [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fshinchiro%2Fmpv-winbuild-cmake&cacheSeconds=1800)](https://github.com/shinchiro/mpv-winbuild-cmake) 相同[shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/README.md#information-about-packages) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fshinchiro%2Fmpv-winbuild-cmake&cacheSeconds=1800)](https://github.com/shinchiro/mpv-winbuild-cmake)
 
--   Git/Hg
-    -   amf-headers [![amf-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FGPUOpen-LibrariesAndSDKs%2FAMF&cacheSeconds=1800)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/tree/master/amf/public/include)
-    -   ANGLE [![ANGLE](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fgoogle%2Fangle%2Fmain&cacheSeconds=1800)](https://github.com/google/angle)
-    -   aom [![aom](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fm-ab-s%2Faom&cacheSeconds=1800)](https://aomedia.googlesource.com/aom)
-    -   avisynth-headers [![avisynth-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FAviSynth%2FAviSynthPlus&cacheSeconds=1800)](https://github.com/AviSynth/AviSynthPlus)
-    -   bzip2 [![bzip2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.com%2Fbzip2%2Fbzip2&cacheSeconds=1800)](https://gitlab.com/bzip2/bzip2)
-    -   dav1d [![dav1d](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fcode.videolan.org%2Fvideolan%2Fdav1d&cacheSeconds=1800)](https://code.videolan.org/videolan/dav1d/)
-    -   davs2 [![davs2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fpkuvcl%2Fdavs2&cacheSeconds=1800)](https://github.com/pkuvcl/davs2)
-    -   expat [![expat](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibexpat%2Flibexpat&cacheSeconds=1800)](https://github.com/libexpat/libexpat)
-    -   FFmpeg [![FFmpeg](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FFFmpeg%2FFFmpeg&cacheSeconds=1800)](https://github.com/FFmpeg/FFmpeg)
-    -   fontconfig [![fontconfig](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.freedesktop.org%2Ffontconfig%2Ffontconfig&cacheSeconds=1800)](https://gitlab.freedesktop.org/fontconfig/fontconfig)
+-   Git/ Mercurial   Git/Hg
+    -   amf-headers [![amf-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FGPUOpen-LibrariesAndSDKs%2FAMF&cacheSeconds=1800)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/tree/master/amf/public/include)-   amf-headers [![amf-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FGPUOpen-LibrariesAndSDKs%2FAMF&cacheSeconds=1800)](https://github.com/GPUOpen-LibrariesAndSDKs/AMF/tree/master/amf/public/include)
+    - ANGLE [![ANGLE](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fgoogle%2Fangle%2Fmain&cacheSeconds=1800)](https://github.com/google/angle)-   ANGLE [![ANGLE](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fgoogle%2Fangle%2Fmain&cacheSeconds=1800)](https://github.com/google/angle)
+    - aom [![aom](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fm-ab-s%2Faom&cacheSeconds=1800)](https://aomedia.googlesource.com/aom)-   aom [![aom](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fm-ab-s%2Faom&cacheSeconds=1800)](https://aomedia.googlesource.com/aom)
+    -   avisynth-headers [![avisynth-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FAviSynth%2FAviSynthPlus&cacheSeconds=1800)](https://github.com/AviSynth/AviSynthPlus)-   avisynth-headers [![avisynth-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FAviSynth%2FAviSynthPlus&cacheSeconds=1800)](https://github.com/AviSynth/AviSynthPlus)
+    -   bzip2 [![bzip2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.com%2Fbzip2%2Fbzip2&cacheSeconds=1800)](https://gitlab.com/bzip2/bzip2)-   bzip2 [![bzip2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.com%2Fbzip2%2Fbzip2&cacheSeconds=1800)](https://gitlab.com/bzip2/bzip2)
+    - dav1d [![dav1d](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fcode.videolan.org%2Fvideolan%2Fdav1d&cacheSeconds=1800)](https://code.videolan.org/videolan/dav1d/)-   dav1d [![dav1d](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fcode.videolan.org%2Fvideolan%2Fdav1d&cacheSeconds=1800)](https://code.videolan.org/videolan/dav1d/)
+    -   davs2 [![davs2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fpkuvcl%2Fdavs2&cacheSeconds=1800)](https://github.com/pkuvcl/davs2)-   davs2 [![davs2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fpkuvcl%2Fdavs2&cacheSeconds=1800)](https://github.com/pkuvcl/davs2)
+    - expat [![expat](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibexpat%2Flibexpat&cacheSeconds=1800)](https://github.com/libexpat/libexpat)-   expat [![expat](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibexpat%2Flibexpat&cacheSeconds=1800)](https://github.com/libexpat/libexpat)
+    - FFmpeg [![FFmpeg](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FFFmpeg%2FFFmpeg&cacheSeconds=1800)](https://github.com/FFmpeg/FFmpeg)-   FFmpeg [![FFmpeg](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FFFmpeg%2FFFmpeg&cacheSeconds=1800)](https://github.com/FFmpeg/FFmpeg)
+    -   fontconfig [![fontconfig](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.freedesktop.org%2Ffontconfig%2Ffontconfig&cacheSeconds=1800)](https://gitlab.freedesktop.org/fontconfig/fontconfig)-   fontconfig [![fontconfig](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.freedesktop.org%2Ffontconfig%2Ffontconfig&cacheSeconds=1800)](https://gitlab.freedesktop.org/fontconfig/fontconfig)
     -   freetype2 [![freetype2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Ffreetype%2Ffreetype&cacheSeconds=1800)](https://github.com/freetype/freetype)
     -   fribidi [![fribidi](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Ffribidi%2Ffribidi&cacheSeconds=1800)](https://github.com/fribidi/fribidi)
     -   harfbuzz [![harfbuzz](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fharfbuzz%2Fharfbuzz%2Fmain&cacheSeconds=1800)](https://github.com/harfbuzz/harfbuzz)
@@ -56,7 +56,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   libdvdnav [![libdvdnav](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fcode.videolan.org%2Fvideolan%2Flibdvdnav&cacheSeconds=1800)](https://code.videolan.org/videolan/libdvdnav)
     -   libdvdread [![libdvdread](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fcode.videolan.org%2Fvideolan%2Flibdvdread&cacheSeconds=1800)](https://code.videolan.org/videolan/libdvdread)
     -   libjpeg [![libjpeg](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibjpeg-turbo%2Flibjpeg-turbo%2Fmain&cacheSeconds=1800)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-    -   libjxl (with [brotli](https://github.com/google/brotli), [highway](https://github.com/google/highway)) [![libjxl](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibjxl%2Flibjxl%2Fmain&cacheSeconds=1800)](https://github.com/libjxl/libjxl)
+    -   libjxl (与 [brotli](https://github.com/google/brotli), [highway](https://github.com/google/highway) 一起) [![libjxl](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibjxl%2Flibjxl%2Fmain&cacheSeconds=1800)](https://github.com/libjxl/libjxl)-   libjxl (with [brotli](https://github.com/google/brotli), [highway](https://github.com/google/highway)) [![libjxl](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibjxl%2Flibjxl%2Fmain&cacheSeconds=1800)](https://github.com/libjxl/libjxl)
     -   libmodplug [![libmodplug](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FKonstanty%2Flibmodplug&cacheSeconds=1800)](https://github.com/Konstanty/libmodplug)
     -   libmysofa [![libmysofa](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fhoene%2Flibmysofa%2Fmain&cacheSeconds=1800)](https://github.com/hoene/libmysofa)
     -   libplacebo (with [glad](https://github.com/Dav1dde/glad), [fast_float](https://github.com/fastfloat/fast_float), [xxhash](https://github.com/Cyan4973/xxHash)) [![libplacebo](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fhaasn%2Flibplacebo&cacheSeconds=1800)](https://github.com/haasn/libplacebo)
