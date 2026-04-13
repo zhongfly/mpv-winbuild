@@ -143,7 +143,7 @@ jobs:
 
     steps:
       - name: Trigger Toolchain build workflow
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           retries: 3
           script: |
