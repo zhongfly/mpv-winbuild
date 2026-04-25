@@ -563,7 +563,7 @@ jobs:
                 [local_hash, remote_hash, status, remote] = await repo_info(dir)
                 let url = getCommitUrl(remote_hash, remote);
                 let package_name = path.basename(dir);
-                info_table.push([package_name, local_hash, status, `<a href="${url}">${remote_hash.slice(0,7)}</a>`]);
+                info_table.push([package_name, local_hash, status, `<a href="${url}">${remote_hash.slice(0,10)}</a>`]);
               }
               return info_table;
             }
@@ -580,7 +580,7 @@ jobs:
             const compiler_version = (await myExec(`${exec_path}`,["cross-gcc","--version","||","clang","--version"])).split('\n')[0];
                         
             core.summary
-              .addRaw(`mpv-winbuild-cmake: ${upstream_status} (remote:<a href="${upstream_url}">${upstream_remote_hash.slice(0,7)}</a>)`,true)
+              .addRaw(`mpv-winbuild-cmake: ${upstream_status} (remote:<a href="${upstream_url}">${upstream_remote_hash.slice(0,10)}</a>)`,true)
               .addRaw(`Compiler: ${compiler_version}`,true);
             const patch_note = `${{ needs.params.outputs.patch_note }}`;
             if (patch_note) {
@@ -625,7 +625,7 @@ jobs:
         run: |
           echo "long_time=$(date "+%Y-%m-%d %H:%M")" >> $GITHUB_ENV
           echo "short_time=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-          echo "tag_name=$(date "+%Y-%m-%d")-$(head -c 7 <<< "${{needs.params.outputs.sha}}")"  >> $GITHUB_ENV
+          echo "tag_name=$(date "+%Y-%m-%d")-$(head -c 10 <<< "${{needs.params.outputs.sha}}")"  >> $GITHUB_ENV
 
       - name: Commit version & remove existing tag
         env:
