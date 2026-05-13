@@ -1,0 +1,46 @@
+From fb7e56c69139b989d41ccfa11d28ed4cdda61979 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 13 May 2026 19:11:01 +0800
+Subject: [PATCH] ffmpeg: drop xvidcore
+
+---
+ packages/CMakeLists.txt | 2 +-
+ packages/ffmpeg.cmake   | 2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
+index e0a14f4..c2c0ecc 100644
+--- a/packages/CMakeLists.txt
++++ b/packages/CMakeLists.txt
+@@ -119,7 +119,7 @@ list(LENGTH ep ep_length)
+ message(STATUS "Parsing ${ep_length} packages")
+ 
+ # Exclude packages which dont depend on mpv when update
+-list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "curl" "libressl" "mbedtls" "nettle" "gmp")
++list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "curl" "libressl" "mbedtls" "nettle" "gmp" "xvidcore")
+ list(REMOVE_ITEM repo ${removed})
+ list(REMOVE_ITEM ep ${removed})
+ list(TRANSFORM repo APPEND "-force-update" OUTPUT_VARIABLE update)
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index 252c687..ae30095 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -28,7 +28,6 @@ ExternalProject_Add(ffmpeg
+         vorbis
+         x264
+         ${ffmpeg_x265}
+-        xvidcore
+         libxml2
+         libvpl
+         libopenmpt
+@@ -90,7 +89,6 @@ ExternalProject_Add(ffmpeg
+         --enable-libdav1d
+         ${ffmpeg_davs2_cmd}
+         ${ffmpeg_uavs3d_cmd}
+-        --enable-libxvid
+         --enable-libzimg
+         --enable-openssl
+         --enable-libxml2
+-- 
+2.52.0.windows.1
+

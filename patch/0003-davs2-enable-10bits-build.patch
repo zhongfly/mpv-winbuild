@@ -1,0 +1,31 @@
+From 090d9a0d1e3fb11e8b1b950fc3a5ab25eb31dc6f Mon Sep 17 00:00:00 2001
+From: dyphire <61936050+dyphire@users.noreply.github.com>
+Date: Fri, 1 May 2026 15:45:44 +0800
+Subject: [PATCH] davs2: enable 10bits build
+
+Closed https://github.com/shinchiro/mpv-winbuild-cmake/issues/819
+---
+ packages/davs2.cmake | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/packages/davs2.cmake b/packages/davs2.cmake
+index aa34171f1..1a6a092ee 100644
+--- a/packages/davs2.cmake
++++ b/packages/davs2.cmake
+@@ -3,7 +3,7 @@ if(${TARGET_CPU} MATCHES "i686")
+ endif()
+ 
+ ExternalProject_Add(davs2
+-    GIT_REPOSITORY https://github.com/pkuvcl/davs2.git
++    GIT_REPOSITORY https://github.com/saindriches/davs2.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     UPDATE_COMMAND ""
+@@ -12,6 +12,7 @@ ExternalProject_Add(davs2
+         --cross-prefix=${TARGET_CPU}-w64-mingw32-
+         --prefix=${MINGW_INSTALL_PREFIX}
+         --disable-cli
++        --bit-depth=10
+         ${disable_asm}
+     BUILD_COMMAND ${MAKE} -C <SOURCE_DIR>/build/linux
+     INSTALL_COMMAND ${MAKE} -C <SOURCE_DIR>/build/linux install
