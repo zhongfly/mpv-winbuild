@@ -38,8 +38,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   avisynth-headers [![avisynth-headers](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FAviSynth%2FAviSynthPlus&cacheSeconds=1800)](https://github.com/AviSynth/AviSynthPlus)
     -   bzip2 [![bzip2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.com%2Fbzip2%2Fbzip2&cacheSeconds=1800)](https://gitlab.com/bzip2/bzip2)
     -   dav1d [![dav1d](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fcode.videolan.org%2Fvideolan%2Fdav1d&cacheSeconds=1800)](https://code.videolan.org/videolan/dav1d/)
-    -   davs2 [![davs2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fpkuvcl%2Fdavs2&cacheSeconds=1800)](https://github.com/pkuvcl/davs2)
-    -   expat [![expat](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Flibexpat%2Flibexpat&cacheSeconds=1800)](https://github.com/libexpat/libexpat)
+    -   davs2 [![davs2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fsaindriches%2Fdavs2&cacheSeconds=1800)](https://github.com/saindriches/davs2)
     -   FFmpeg [![FFmpeg](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FFFmpeg%2FFFmpeg&cacheSeconds=1800)](https://github.com/FFmpeg/FFmpeg)
     -   fontconfig [![fontconfig](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.freedesktop.org%2Ffontconfig%2Ffontconfig&cacheSeconds=1800)](https://gitlab.freedesktop.org/fontconfig/fontconfig)
     -   freetype2 [![freetype2](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Ffreetype%2Ffreetype&cacheSeconds=1800)](https://github.com/freetype/freetype)
@@ -100,7 +99,6 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   zstd [![zstd](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Ffacebook%2Fzstd%2Fdev&cacheSeconds=1800)](https://github.com/facebook/zstd)
 
 -   Zip
-    -   [xvidcore](https://labs.xvid.com/source/) (1.3.7) 
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
     -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.12)
     -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.18)
