@@ -1,0 +1,46 @@
+From 7bb1dd5e988e1d57d948ea3a9838f676cbb66e41 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 13 May 2026 21:46:55 +0800
+Subject: mpv: enable libcurl
+
+---
+ packages/CMakeLists.txt | 2 +-
+ packages/mpv.cmake      | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
+index 71816f0..1e47200 100644
+--- a/packages/CMakeLists.txt
++++ b/packages/CMakeLists.txt
+@@ -124,7 +124,7 @@ list(LENGTH ep ep_length)
+ message(STATUS "Parsing ${ep_length} packages")
+ 
+ # Exclude packages which dont depend on mpv when update
+-list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "curl" "libressl" "mbedtls" "nettle" "gmp" "xvidcore" "expat")
++list(APPEND removed "flac" "opusfile" "libopusenc" "opus-tools" "termcap" "readline" "cryptopp" "sqlite" "libuv" "libsodium" "megasdk" "libsixel" "libressl" "mbedtls" "nettle" "gmp" "xvidcore" "expat")
+ list(REMOVE_ITEM repo ${removed})
+ list(REMOVE_ITEM ep ${removed})
+ list(TRANSFORM repo APPEND "-force-update" OUTPUT_VARIABLE update)
+diff --git a/packages/mpv.cmake b/packages/mpv.cmake
+index d88a06f..a2954d5 100644
+--- a/packages/mpv.cmake
++++ b/packages/mpv.cmake
+@@ -24,6 +24,7 @@ ExternalProject_Add(mpv
+         libsdl2
+         subrandr
+         libsixel
++        curl
+     GIT_REPOSITORY https://github.com/mpv-player/mpv.git
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+@@ -57,6 +58,7 @@ ExternalProject_Add(mpv
+         -Dsubrandr=enabled
+         -Dsixel=enabled
+         ${mpv_gl}
++        -Dlibcurl=enabled
+         -Dc_args='-Wno-error=int-conversion'
+     BUILD_COMMAND ${EXEC} LTO_JOB=1 PDB=1 ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ""
+-- 
+2.52.0.windows.1
+

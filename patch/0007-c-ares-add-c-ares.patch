@@ -1,0 +1,79 @@
+From 1e33b8322824f7f817c4e2cf1fdd98bdcef344aa Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 13 May 2026 22:18:54 +0800
+Subject: c-ares: add c-ares
+
+---
+ packages/CMakeLists.txt |  1 +
+ packages/c-ares.cmake   | 26 ++++++++++++++++++++++++++
+ packages/curl.cmake     |  2 ++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 packages/c-ares.cmake
+
+diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
+index b36d309..f17b4f7 100644
+--- a/packages/CMakeLists.txt
++++ b/packages/CMakeLists.txt
+@@ -87,6 +87,7 @@ list(APPEND ep
+     libaribcaption
+     libsixel
+     ffmpeg
++    c-ares
+     libpsl
+     curl
+     mpv
+diff --git a/packages/c-ares.cmake b/packages/c-ares.cmake
+new file mode 100644
+index 0000000..755b8b8
+--- /dev/null
++++ b/packages/c-ares.cmake
+@@ -0,0 +1,26 @@
++ExternalProject_Add(c-ares
++    GIT_REPOSITORY https://github.com/c-ares/c-ares.git
++    SOURCE_DIR ${SOURCE_LOCATION}
++    GIT_CLONE_FLAGS "--depth=1 --filter=tree:0"
++    GIT_TAG main
++    GIT_REMOTE_NAME origin
++    UPDATE_COMMAND ""
++    CONFIGURE_COMMAND ${EXEC} ${CMAKE_COMMAND} -H<SOURCE_DIR> -B<BINARY_DIR>
++        -G Ninja
++        -DCMAKE_BUILD_TYPE=Release
++        -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE}
++        -DCMAKE_INSTALL_PREFIX=${MINGW_INSTALL_PREFIX}
++        -DCMAKE_FIND_ROOT_PATH=${MINGW_INSTALL_PREFIX}
++        -DBUILD_SHARED_LIBS=OFF
++        -DCARES_BUILD_TOOLS=OFF
++        -DCARES_BUILD_TESTS=OFF
++        -DCARES_SHARED=OFF
++        -DCARES_STATIC=ON
++        -DCARES_INSTALL=ON
++    BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
++    INSTALL_COMMAND ${EXEC} ${CMAKE_COMMAND} --install <BINARY_DIR>
++    LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
++)
++
++force_rebuild_git(c-ares)
++cleanup(c-ares install)
+diff --git a/packages/curl.cmake b/packages/curl.cmake
+index 54e07b3..59c4a5e 100644
+--- a/packages/curl.cmake
++++ b/packages/curl.cmake
+@@ -1,6 +1,7 @@
+ ExternalProject_Add(curl
+     DEPENDS
+         brotli
++        c-ares
+         libpsl
+         libssh
+         openssl
+@@ -31,6 +32,7 @@ ExternalProject_Add(curl
+         -DCURL_USE_LIBSSH2=OFF
+         -DCURL_USE_OPENSSL=ON
+         -DCURL_ZSTD=ON
++        -DENABLE_ARES=ON
+         -DENABLE_CURL_MANUAL=OFF
+         -DENABLE_UNICODE=ON
+         -DENABLE_THREADED_RESOLVER=ON
+-- 
+2.52.0.windows.1
+

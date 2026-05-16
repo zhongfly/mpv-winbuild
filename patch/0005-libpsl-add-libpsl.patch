@@ -1,0 +1,56 @@
+From 7da0532d7745735ab60fb1fd5c604cc71c6afd0f Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 13 May 2026 21:45:55 +0800
+Subject: libpsl: add libpsl
+
+---
+ packages/CMakeLists.txt |  1 +
+ packages/libpsl.cmake   | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+ create mode 100644 packages/libpsl.cmake
+
+diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
+index 9a6b511..76181ab 100644
+--- a/packages/CMakeLists.txt
++++ b/packages/CMakeLists.txt
+@@ -87,6 +87,7 @@ list(APPEND ep
+     libaribcaption
+     libsixel
+     ffmpeg
++    libpsl
+     mpv
+     mpv-release
+     mpv-packaging
+diff --git a/packages/libpsl.cmake b/packages/libpsl.cmake
+new file mode 100644
+index 0000000..f9e0089
+--- /dev/null
++++ b/packages/libpsl.cmake
+@@ -0,0 +1,24 @@
++ExternalProject_Add(libpsl
++    GIT_REPOSITORY https://github.com/rockdaboot/libpsl.git
++    SOURCE_DIR ${SOURCE_LOCATION}
++    GIT_CLONE_FLAGS "--depth=1 --sparse --filter=tree:0"
++    GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !/fuzz !tests !tools tools/meson.build"
++    UPDATE_COMMAND ""
++    CONFIGURE_COMMAND ""
++    COMMAND ${EXEC} echo > <SOURCE_DIR>/tools/meson.build
++    COMMAND ${EXEC} CONF=1 meson setup <BINARY_DIR> <SOURCE_DIR>
++        --prefix=${MINGW_INSTALL_PREFIX}
++        --libdir=${MINGW_INSTALL_PREFIX}/lib
++        --cross-file=${MESON_CROSS}
++        --buildtype=release
++        --default-library=static
++        -Dtests=false
++        -Druntime=no
++    BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR> src/suffixes_dafsa.h
++    INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
++    LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
++)
++
++force_rebuild_git(libpsl)
++force_meson_configure(libpsl)
++cleanup(libpsl install)
+-- 
+2.52.0.windows.1
+
