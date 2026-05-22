@@ -1,4 +1,4 @@
-From b1e6a600844b6be70a2eb8df888b05c7c420e3ec Mon Sep 17 00:00:00 2001
+From 058faae0bfca90f76a2a9c97dd90fe5e4d277bda Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Wed, 13 May 2026 22:54:01 +0800
 Subject: ngtcp2,nghttp3,nghttp2: add ngtcp2,nghttp3,nghttp2
@@ -29,7 +29,7 @@ index f17b4f7..71816f0 100644
      libpsl
      curl
 diff --git a/packages/curl.cmake b/packages/curl.cmake
-index 59c4a5e..0f8c9aa 100644
+index caf2211..0fdf58e 100644
 --- a/packages/curl.cmake
 +++ b/packages/curl.cmake
 @@ -4,6 +4,9 @@ ExternalProject_Add(curl
@@ -42,7 +42,7 @@ index 59c4a5e..0f8c9aa 100644
          openssl
          zlib
          zstd
-@@ -36,13 +39,16 @@ ExternalProject_Add(curl
+@@ -36,6 +39,9 @@ ExternalProject_Add(curl
          -DENABLE_CURL_MANUAL=OFF
          -DENABLE_UNICODE=ON
          -DENABLE_THREADED_RESOLVER=ON
@@ -51,7 +51,8 @@ index 59c4a5e..0f8c9aa 100644
 +        -DUSE_NGTCP2=ON
          -DUSE_WIN32_IDN=ON
          -DUSE_WINDOWS_SSPI=ON
-         -DUSE_HTTPSRR=ON
+         -DUSE_ECH=ON
+@@ -43,7 +49,7 @@ ExternalProject_Add(curl
          -DUSE_SSLS_EXPORT=ON
          -DCURL_USE_PKGCONFIG=ON
          -DCMAKE_DISABLE_FIND_PACKAGE_Perl=ON

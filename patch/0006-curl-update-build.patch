@@ -1,4 +1,4 @@
-From a09c3700cdd5bfba9440c5b00d55d8d0f7e93673 Mon Sep 17 00:00:00 2001
+From 0a7d48b66fa98bbe77b92015912e8df4666c5489 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Wed, 13 May 2026 21:46:45 +0800
 Subject: curl: update build
@@ -6,8 +6,8 @@ Subject: curl: update build
 ---
  packages/CMakeLists.txt                       |  2 +-
  ...001-Skip-compiling-unnecessary-stuff.patch | 25 ---------
- packages/curl.cmake                           | 53 ++++++++++++++-----
- 3 files changed, 40 insertions(+), 40 deletions(-)
+ packages/curl.cmake                           | 54 ++++++++++++++-----
+ 3 files changed, 41 insertions(+), 40 deletions(-)
  delete mode 100644 packages/curl-0001-Skip-compiling-unnecessary-stuff.patch
 
 diff --git a/packages/CMakeLists.txt b/packages/CMakeLists.txt
@@ -58,10 +58,10 @@ index 1b0144e..0000000
 -2.15.0
 -
 diff --git a/packages/curl.cmake b/packages/curl.cmake
-index 5b73db3..54e07b3 100644
+index 5b73db3..492f739 100644
 --- a/packages/curl.cmake
 +++ b/packages/curl.cmake
-@@ -1,25 +1,50 @@
+@@ -1,25 +1,51 @@
  ExternalProject_Add(curl
      DEPENDS
 -        mbedtls
@@ -110,6 +110,7 @@ index 5b73db3..54e07b3 100644
 +        -DENABLE_THREADED_RESOLVER=ON
 +        -DUSE_WIN32_IDN=ON
 +        -DUSE_WINDOWS_SSPI=ON
++        -DUSE_ECH=ON
 +        -DUSE_HTTPSRR=ON
 +        -DUSE_SSLS_EXPORT=ON
 +        -DCURL_USE_PKGCONFIG=ON

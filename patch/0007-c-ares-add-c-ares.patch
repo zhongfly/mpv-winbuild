@@ -1,4 +1,4 @@
-From 1e33b8322824f7f817c4e2cf1fdd98bdcef344aa Mon Sep 17 00:00:00 2001
+From 7507b58480a27bebe08114bc56558a609830c858 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Wed, 13 May 2026 22:18:54 +0800
 Subject: c-ares: add c-ares
@@ -55,7 +55,7 @@ index 0000000..755b8b8
 +force_rebuild_git(c-ares)
 +cleanup(c-ares install)
 diff --git a/packages/curl.cmake b/packages/curl.cmake
-index 54e07b3..59c4a5e 100644
+index 492f739..caf2211 100644
 --- a/packages/curl.cmake
 +++ b/packages/curl.cmake
 @@ -1,6 +1,7 @@
