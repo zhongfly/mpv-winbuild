@@ -1,0 +1,58 @@
+From cd578060264885966d95b94ef14da9f5d0dcca7d Mon Sep 17 00:00:00 2001
+From: _ <>
+Date: Fri, 29 May 2026 00:00:00 +0000
+Subject: [PATCH] spirv-cross, shaderc: skip unused stuff
+
+speedup building and reduce code size
+---
+ packages/shaderc.cmake     | 8 +++++++-
+ packages/spirv-cross.cmake | 5 +++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/packages/shaderc.cmake b/packages/shaderc.cmake
+index 2540ff1..72866fb 100644
+--- a/packages/shaderc.cmake
++++ b/packages/shaderc.cmake
+@@ -20,15 +20,21 @@ ExternalProject_Add(shaderc
+         -DSHADERC_SKIP_SPVC=ON
+         -DSHADERC_SKIP_INSTALL=ON
+         -DSHADERC_SKIP_EXAMPLES=ON
++        -DSHADERC_SKIP_EXECUTABLES=ON
++        -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
+         -DSPIRV_SKIP_EXECUTABLES=ON
+         -DSPIRV_SKIP_TESTS=ON
+         -DENABLE_SPIRV_TOOLS_INSTALL=ON
+         -DENABLE_GLSLANG_BINARIES=OFF
+         -DSPIRV_TOOLS_BUILD_STATIC=ON
++        -DDISABLE_RTTI=ON
++        -DDISABLE_EXCEPTIONS=ON
++        -DENABLE_HLSL=OFF
++        -DSHADERC_ENABLE_HLSL=OFF
+         -DSPIRV_TOOLS_LIBRARY_TYPE=STATIC
+         -DMINGW_COMPILER_PREFIX=${TARGET_ARCH}
+         -DCMAKE_CXX_FLAGS='${CMAKE_CXX_FLAGS} -std=c++17'
+-    BUILD_COMMAND ${EXEC} LTO_JOB=1 ninja -C <BINARY_DIR>
++    BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR> libshaderc_combined.a shaderc_combined-pkg-config
+     INSTALL_COMMAND ""
+     LOG_DOWNLOAD 1 LOG_UPDATE 1 LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
+diff --git a/packages/spirv-cross.cmake b/packages/spirv-cross.cmake
+index d49b9d3..d1049ff 100644
+--- a/packages/spirv-cross.cmake
++++ b/packages/spirv-cross.cmake
+@@ -15,7 +15,12 @@ ExternalProject_Add(spirv-cross
+         -DBUILD_SHARED_LIBS=OFF
+         -DSPIRV_CROSS_SHARED=ON
+         -DSPIRV_CROSS_CLI=OFF
++        -DSPIRV_CROSS_ENABLE_MSL=OFF
++        -DSPIRV_CROSS_ENABLE_CPP=OFF
++        -DSPIRV_CROSS_ENABLE_REFLECT=OFF
++        -DSPIRV_CROSS_ENABLE_UTIL=OFF
+         -DSPIRV_CROSS_ENABLE_TESTS=OFF
++        -DSPIRV_CROSS_EXCEPTIONS_TO_ASSERTIONS=ON
+         -DCMAKE_CXX_FLAGS='${CMAKE_CXX_FLAGS} -D__USE_MINGW_ANSI_STDIO'
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+-- 
+2.54.0
+
