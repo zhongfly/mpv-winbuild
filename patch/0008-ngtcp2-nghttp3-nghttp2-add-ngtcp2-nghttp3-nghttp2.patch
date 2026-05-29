@@ -1,15 +1,15 @@
-From 058faae0bfca90f76a2a9c97dd90fe5e4d277bda Mon Sep 17 00:00:00 2001
+From e8c2028811471fa16c910aa1ffb3758bdadf4baa Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Wed, 13 May 2026 22:54:01 +0800
 Subject: ngtcp2,nghttp3,nghttp2: add ngtcp2,nghttp3,nghttp2
 
 ---
  packages/CMakeLists.txt |  3 +++
- packages/curl.cmake     |  8 +++++++-
+ packages/curl.cmake     |  9 ++++++++-
  packages/nghttp2.cmake  | 31 +++++++++++++++++++++++++++++++
  packages/nghttp3.cmake  | 27 +++++++++++++++++++++++++++
  packages/ngtcp2.cmake   | 30 ++++++++++++++++++++++++++++++
- 5 files changed, 98 insertions(+), 1 deletion(-)
+ 5 files changed, 99 insertions(+), 1 deletion(-)
  create mode 100644 packages/nghttp2.cmake
  create mode 100644 packages/nghttp3.cmake
  create mode 100644 packages/ngtcp2.cmake
@@ -29,7 +29,7 @@ index f17b4f7..71816f0 100644
      libpsl
      curl
 diff --git a/packages/curl.cmake b/packages/curl.cmake
-index caf2211..0fdf58e 100644
+index caf2211..bda7d40 100644
 --- a/packages/curl.cmake
 +++ b/packages/curl.cmake
 @@ -4,6 +4,9 @@ ExternalProject_Add(curl
@@ -42,7 +42,7 @@ index caf2211..0fdf58e 100644
          openssl
          zlib
          zstd
-@@ -36,6 +39,9 @@ ExternalProject_Add(curl
+@@ -36,14 +39,18 @@ ExternalProject_Add(curl
          -DENABLE_CURL_MANUAL=OFF
          -DENABLE_UNICODE=ON
          -DENABLE_THREADED_RESOLVER=ON
@@ -52,8 +52,9 @@ index caf2211..0fdf58e 100644
          -DUSE_WIN32_IDN=ON
          -DUSE_WINDOWS_SSPI=ON
          -DUSE_ECH=ON
-@@ -43,7 +49,7 @@ ExternalProject_Add(curl
+         -DUSE_HTTPSRR=ON
          -DUSE_SSLS_EXPORT=ON
++        -DUSE_PROXY_HTTP3=ON
          -DCURL_USE_PKGCONFIG=ON
          -DCMAKE_DISABLE_FIND_PACKAGE_Perl=ON
 -        "-DCMAKE_C_FLAGS='-lz -lbrotlienc -lbrotlidec -lbrotlicommon -lzstd -lcrypt32 -lsecur32'"
