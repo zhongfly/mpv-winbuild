@@ -1,0 +1,153 @@
+From d6581d48c710d9281fd9d50daaebbafb0ca8b16f Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 13 Jun 2026 20:50:12 +0800
+Subject: [PATCH] vulkan: rebase patch
+
+---
+ ...1-cross-compile-static-linking-hacks.patch | 36 +++++++++----------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/packages/vulkan-0001-cross-compile-static-linking-hacks.patch b/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
+index 839e1e6..5c7a13d 100644
+--- a/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
++++ b/packages/vulkan-0001-cross-compile-static-linking-hacks.patch
+@@ -1,4 +1,4 @@
+-From 0d8458c33202708f358a78e62f93cc2a9eea6fa7 Mon Sep 17 00:00:00 2001
++From a7e332c1dcbf500c8871623f36f63d3a50e78712 Mon Sep 17 00:00:00 2001
+ From: shinchiro <shinchiro@users.noreply.github.com>
+ Date: Fri, 20 Feb 2026 17:33:04 +0800
+ Subject: [PATCH] loader: cross-compile & static linking hacks
+@@ -15,7 +15,7 @@ Subject: [PATCH] loader: cross-compile & static linking hacks
+  create mode 100644 loader/vulkan_own.pc.in
+ 
+ diff --git a/loader/CMakeLists.txt b/loader/CMakeLists.txt
+-index 6cbf131..4d4e196 100644
++index 46f83d016..edb2a2825 100644
+ --- a/loader/CMakeLists.txt
+ +++ b/loader/CMakeLists.txt
+ @@ -22,8 +22,9 @@ include(CheckIncludeFile)
+@@ -29,7 +29,7 @@ index 6cbf131..4d4e196 100644
+  
+      if(ENABLE_WIN10_ONECORE)
+          # Note: When linking your app or driver to OneCore.lib, be sure to remove any links to non-umbrella libs (such as
+-@@ -363,7 +364,7 @@ if(UNKNOWN_FUNCTIONS_SUPPORTED)
++@@ -379,7 +380,7 @@ if(UNKNOWN_FUNCTIONS_SUPPORTED)
+      list(APPEND NORMAL_LOADER_SRCS ${OPT_LOADER_SRCS})
+  endif()
+  
+@@ -38,7 +38,7 @@ index 6cbf131..4d4e196 100644
+      # If BUILD_DLL_VERSIONINFO was set, use the loader.rc in the build dir, otherwise use the checked in file
+      set(RC_FILE_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/loader.rc)
+      if (NOT "$CACHE{BUILD_DLL_VERSIONINFO}" STREQUAL "")
+-@@ -403,21 +404,8 @@ if(WIN32)
++@@ -419,21 +420,8 @@ if(WIN32)
+      endif()
+  
+  else()
+@@ -62,7 +62,7 @@ index 6cbf131..4d4e196 100644
+      target_sources(vulkan PRIVATE ${NORMAL_LOADER_SRCS})
+  
+      set_target_properties(vulkan PROPERTIES
+-@@ -517,7 +505,7 @@ if (BUILD_TESTS)
++@@ -538,7 +526,7 @@ if (BUILD_TESTS)
+      target_compile_definitions(vulkan PRIVATE SHOULD_EXPORT_TEST_FUNCTIONS)
+  endif()
+  
+@@ -72,10 +72,10 @@ index 6cbf131..4d4e196 100644
+      message(NOTICE "Apple STATIC lib: it will be built but not installed, and vulkan.pc and VulkanLoaderConfig.cmake won't be generated!")
+      return()
+ diff --git a/loader/loader.c b/loader/loader.c
+-index f8b01b6..738adb0 100644
++index 6c775db55..9689fd59e 100644
+ --- a/loader/loader.c
+ +++ b/loader/loader.c
+-@@ -2290,7 +2290,7 @@ out:
++@@ -2317,7 +2317,7 @@ out:
+      return res;
+  }
+  
+@@ -84,7 +84,7 @@ index f8b01b6..738adb0 100644
+  BOOL __stdcall loader_initialize(PINIT_ONCE InitOnce, PVOID Parameter, PVOID *Context) {
+      (void)InitOnce;
+      (void)Parameter;
+-@@ -2328,7 +2328,7 @@ void loader_initialize(void) {
++@@ -2354,7 +2354,7 @@ void loader_initialize(void) {
+  #if defined(LOADER_USE_UNSAFE_FILE_SEARCH)
+      loader_log(NULL, VULKAN_LOADER_WARN_BIT, 0, "Vulkan Loader: unsafe searching is enabled");
+  #endif
+@@ -94,7 +94,7 @@ index f8b01b6..738adb0 100644
+  #endif
+  }
+ diff --git a/loader/loader.h b/loader/loader.h
+-index cdc1ecd..e2fe1a9 100644
++index 1ff1e34ba..36e416096 100644
+ --- a/loader/loader.h
+ +++ b/loader/loader.h
+ @@ -33,7 +33,9 @@
+@@ -107,7 +107,7 @@ index cdc1ecd..e2fe1a9 100644
+  
+  static inline VkPhysicalDevice loader_unwrap_physical_device(VkPhysicalDevice physicalDevice) {
+      if (VK_NULL_HANDLE == physicalDevice) {
+-@@ -97,7 +99,7 @@ VkResult loader_validate_instance_extensions(struct loader_instance *inst, const
++@@ -92,7 +94,7 @@ VkResult loader_validate_instance_extensions(struct loader_instance *inst, const
+                                               const struct loader_envvar_all_filters *layer_filters,
+                                               const VkInstanceCreateInfo *pCreateInfo);
+  
+@@ -117,7 +117,7 @@ index cdc1ecd..e2fe1a9 100644
+  #else
+  void loader_initialize(void);
+ diff --git a/loader/loader.rc.in b/loader/loader.rc.in
+-index 0dc4227..e7fcea0 100644
++index 0dc4227da..e7fcea06f 100644
+ --- a/loader/loader.rc.in
+ +++ b/loader/loader.rc.in
+ @@ -19,7 +19,11 @@
+@@ -133,7 +133,7 @@ index 0dc4227..e7fcea0 100644
+  // All set through CMake
+  #define VER_FILE_VERSION ${LOADER_VER_FILE_VERSION}
+ diff --git a/loader/loader_windows.c b/loader/loader_windows.c
+-index 91cdfd0..9c6a326 100644
++index 28fa82129..f200662b9 100644
+ --- a/loader/loader_windows.c
+ +++ b/loader/loader_windows.c
+ @@ -95,6 +95,7 @@ void windows_initialization(void) {
+@@ -144,16 +144,16 @@ index 91cdfd0..9c6a326 100644
+  BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
+      (void)hinst;
+      switch (reason) {
+-@@ -116,6 +117,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
++@@ -115,6 +116,7 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
+      }
+      return TRUE;
+  }
+ +#endif
+  
+- bool windows_add_json_entry(const struct loader_instance *inst,
+-                             char **reg_data,    // list of JSON files
++ VkResult windows_add_json_entry(const struct loader_instance *inst, struct loader_string_list *search_paths,
++                                 LPCSTR key_name,  // key name - used for debug prints - i.e. VulkanDriverName
+ diff --git a/loader/vk_loader_platform.h b/loader/vk_loader_platform.h
+-index 987337c..5acc00f 100644
++index e02d99e17..89fbf9f6d 100644
+ --- a/loader/vk_loader_platform.h
+ +++ b/loader/vk_loader_platform.h
+ @@ -71,15 +71,12 @@
+@@ -194,7 +194,7 @@ index 987337c..5acc00f 100644
+  }
+ diff --git a/loader/vulkan_own.pc.in b/loader/vulkan_own.pc.in
+ new file mode 100644
+-index 0000000..ed2f30b
++index 000000000..ed2f30bb2
+ --- /dev/null
+ +++ b/loader/vulkan_own.pc.in
+ @@ -0,0 +1,11 @@
+@@ -210,5 +210,5 @@ index 0000000..ed2f30b
+ +Libs.private: -lshlwapi -lcfgmgr32
+ +Cflags: -I${includedir}
+ -- 
+-2.49.0
++2.53.0
+ 
+-- 
+2.45.2.windows.1
+
