@@ -1,0 +1,25 @@
+From da8d3ed605206edf9fd2e124526a2c1812fe9379 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Tue, 30 Jun 2026 23:08:50 +0800
+Subject: [PATCH] libbluray: fix clash symbol name with libdvdread
+
+---
+ packages/libbluray.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/libbluray.cmake b/packages/libbluray.cmake
+index 89f87e4..55621af 100644
+--- a/packages/libbluray.cmake
++++ b/packages/libbluray.cmake
+@@ -19,7 +19,7 @@ ExternalProject_Add(libbluray
+         -Dbdj_jar=disabled
+         -Dfreetype=enabled
+         -Dlibxml2=enabled
+-        "-Dc_args='-Ddec_init=libbluray_dec_init'"
++        "-Dc_args='-Ddec_init=libbluray_dec_init -Ddir_open_default=libbluray_dir_open_default -Dfile_open_default=libbluray_file_open_default'"
+     BUILD_COMMAND ${EXEC} ninja -C <BINARY_DIR>
+     INSTALL_COMMAND ${EXEC} ninja -C <BINARY_DIR> install
+     COMMAND ${EXEC} sed -i [['s/-lbluray/-lbluray -lgdi32/']] ${MINGW_INSTALL_PREFIX}/lib/pkgconfig/libbluray.pc
+-- 
+2.54.0.windows.1
+
