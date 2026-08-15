@@ -1,0 +1,24 @@
+From 039b684b39cac2ab5aaadd91f0c6d944086ade84 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 14 Aug 2026 20:59:06 +0800
+Subject: [PATCH] llvm: switch to 22.1.6
+
+---
+ toolchain/llvm/llvm.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/toolchain/llvm/llvm.cmake b/toolchain/llvm/llvm.cmake
+index 2c9a972..aee8690 100644
+--- a/toolchain/llvm/llvm.cmake
++++ b/toolchain/llvm/llvm.cmake
+@@ -7,6 +7,7 @@ ExternalProject_Add(llvm
+     UPDATE_COMMAND ""
+     GIT_REMOTE_NAME origin
+     GIT_TAG release/22.x
++    GIT_RESET fc4aad7b5db3fff421df9a9637605b9ca5667881
+     LIST_SEPARATOR ,
+     CONFIGURE_COMMAND ${EXEC} CONF=1 PATH=$O_PATH cmake -H<SOURCE_DIR>/llvm -B<BINARY_DIR>
+         -G Ninja
+-- 
+2.45.2.windows.1
+

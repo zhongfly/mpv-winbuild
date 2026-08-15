@@ -1,0 +1,30 @@
+From b2146f5858b41a1c3f3345239cb10383636d0e90 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 15 Aug 2026 12:16:29 +0800
+Subject: [PATCH] rust: pin to llvm 22
+
+---
+ toolchain/rustup.cmake | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/rustup.cmake b/toolchain/rustup.cmake
+index 0889364..fdb9c74 100644
+--- a/toolchain/rustup.cmake
++++ b/toolchain/rustup.cmake
+@@ -1,11 +1,12 @@
++set(rust_toolchain "nightly-2026-08-05")
+ ExternalProject_Add(rustup
+     DOWNLOAD_COMMAND ""
+     UPDATE_COMMAND ""
+     SOURCE_DIR rustup-prefix/src
+     CONFIGURE_COMMAND ${EXEC} CONF=1
+         curl -sSf https://sh.rustup.rs |
+-        sh -s -- -y --default-toolchain nightly --target aarch64-pc-windows-gnullvm,x86_64-pc-windows-gnullvm,i686-pc-windows-gnullvm,x86_64-pc-windows-gnu,i686-pc-windows-gnu --no-modify-path --profile minimal
+-    BUILD_COMMAND ${EXEC} rustup update
++        sh -s -- -y --default-toolchain ${rust_toolchain} --target aarch64-pc-windows-gnullvm,x86_64-pc-windows-gnullvm,i686-pc-windows-gnullvm,x86_64-pc-windows-gnu,i686-pc-windows-gnu --no-modify-path --profile minimal
++    BUILD_COMMAND ${EXEC} rustup update ${rust_toolchain}
+     INSTALL_COMMAND ""
+     LOG_CONFIGURE 1 LOG_BUILD 1 LOG_INSTALL 1
+ )
+-- 
+2.45.2.windows.1
