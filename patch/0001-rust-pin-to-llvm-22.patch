@@ -1,4 +1,4 @@
-From fe23c0daa7f2151294e0167e2ebbf5d7478685ec Mon Sep 17 00:00:00 2001
+From b2146f5858b41a1c3f3345239cb10383636d0e90 Mon Sep 17 00:00:00 2001
 From: zhongfly <11155705+zhongfly@users.noreply.github.com>
 Date: Sat, 15 Aug 2026 12:16:29 +0800
 Subject: [PATCH] rust: pin to llvm 22
@@ -8,11 +8,11 @@ Subject: [PATCH] rust: pin to llvm 22
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/toolchain/rustup.cmake b/toolchain/rustup.cmake
-index 0889364..0bf31c2 100644
+index 0889364..fdb9c74 100644
 --- a/toolchain/rustup.cmake
 +++ b/toolchain/rustup.cmake
 @@ -1,11 +1,12 @@
-+set(rust_toolchain "nightly-2026-08-09")
++set(rust_toolchain "nightly-2026-08-05")
  ExternalProject_Add(rustup
      DOWNLOAD_COMMAND ""
      UPDATE_COMMAND ""
