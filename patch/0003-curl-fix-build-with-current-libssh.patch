@@ -1,0 +1,56 @@
+From 3cf398310e8539cee347b70a41d62a27c0c35fdf Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 4 Sep 2026 02:19:36 +0800
+Subject: [PATCH] curl: fix build with current libssh
+
+Apply a curl patch that includes libssh/scp.h after libssh moved the SCP declarations out of libssh.h.
+---
+ ...0001-libssh-include-scp-declarations.patch | 22 +++++++++++++++++++
+ packages/curl.cmake                           |  2 +-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+ create mode 100644 packages/curl-0001-libssh-include-scp-declarations.patch
+
+diff --git a/packages/curl-0001-libssh-include-scp-declarations.patch b/packages/curl-0001-libssh-include-scp-declarations.patch
+new file mode 100644
+index 0000000..9809875
+--- /dev/null
++++ b/packages/curl-0001-libssh-include-scp-declarations.patch
+@@ -0,0 +1,22 @@
++From 011f7a9c2a96742c9f4d6b38a06d6ee026cbaf86 Mon Sep 17 00:00:00 2001
++From: zhongfly <zhongfly@users.noreply.github.com>
++Date: Fri, 4 Sep 2026 12:00:00 +0800
++Subject: [PATCH] libssh: include SCP declarations
++
++libssh moved its SCP API declarations from libssh.h to scp.h in
++9c26d881fc58e35a5ff588d5e25d9492ad9fe915.
++---
++ lib/vssh/ssh.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/vssh/ssh.h b/lib/vssh/ssh.h
++index 52bc13999..6b75f68ac 100644
++--- a/lib/vssh/ssh.h
+++++ b/lib/vssh/ssh.h
++@@ -38,5 +38,6 @@ extern const struct Curl_protocol Curl_protocol_scp;
++ /* in 0.10.0 or later, ignore deprecated warnings */
++ #define SSH_SUPPRESS_DEPRECATED
++ #include <libssh/libssh.h>
+++#include <libssh/scp.h>
++ #include <libssh/sftp.h>
++ #endif
+diff --git a/packages/curl.cmake b/packages/curl.cmake
+index bda7d40..9e2130b 100644
+--- a/packages/curl.cmake
++++ b/packages/curl.cmake
+@@ -14,7 +14,7 @@ ExternalProject_Add(curl
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone /* !tests !docs"
+-    PATCH_COMMAND ""
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/curl-*.patch
+     UPDATE_COMMAND ""
+     CONFIGURE_COMMAND ${EXEC} ${CMAKE_COMMAND} -H<SOURCE_DIR> -B<BINARY_DIR>
+         -G Ninja
+-- 
+2.45.2.windows.1
+
