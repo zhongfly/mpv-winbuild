@@ -1,0 +1,27 @@
+From c43d00106ecee33e8176b28e1701628e830c5e0a Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 9 Oct 2026 19:08:19 +0800
+Subject: [PATCH] Revert "angle-headers: reset to working commit"
+
+This reverts commit 3ad2e69d348d5f1e30d02bc3cbbf116e3d43062a.
+
+mpv drop angle D3D9 renderer https://github.com/mpv-player/mpv/commit/fd9265a9058d32d2cfdb16a02114669a6a62209e
+---
+ packages/angle-headers.cmake | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/packages/angle-headers.cmake b/packages/angle-headers.cmake
+index 32a50c11..590aad50 100644
+--- a/packages/angle-headers.cmake
++++ b/packages/angle-headers.cmake
+@@ -3,7 +3,6 @@ ExternalProject_Add(angle-headers
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_REMOTE_NAME origin
+     GIT_TAG main
+-    GIT_RESET 0cb8023c01f92b29f3738ea7472d06f8f059ed84
+     GIT_CLONE_FLAGS "--sparse --filter=tree:0"
+     GIT_CLONE_POST_COMMAND "sparse-checkout set --no-cone include/EGL include/KHR"
+     GIT_SUBMODULES ""
+-- 
+2.45.2.windows.1
+
