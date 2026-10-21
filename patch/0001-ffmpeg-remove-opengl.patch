@@ -1,0 +1,24 @@
+From 4a57378607b94a46df388805474885637c0e3dc3 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Wed, 21 Oct 2026 21:56:29 +0800
+Subject: [PATCH] ffmpeg: remove opengl
+
+---
+ packages/ffmpeg.cmake | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/packages/ffmpeg.cmake b/packages/ffmpeg.cmake
+index b9ab7a3..fc0149d 100644
+--- a/packages/ffmpeg.cmake
++++ b/packages/ffmpeg.cmake
+@@ -105,7 +105,6 @@ ExternalProject_Add(ffmpeg
+         --enable-nvenc
+         --enable-amf
+         --enable-openal
+-        --enable-opengl
+         --disable-doc
+         --disable-ffplay
+         --disable-ffprobe
+-- 
+2.51.0.windows.1
+
