@@ -87,7 +87,7 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
     -   speex [![speex](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fxiph%2Fspeex&cacheSeconds=1800)](https://github.com/xiph/speex)
     -   spirv-cross [![spirv-cross](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FKhronosGroup%2FSPIRV-Cross%2Fmain&cacheSeconds=1800)](https://github.com/KhronosGroup/SPIRV-Cross)
     -   subrandr [![subrandr](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fafishhh%2Fsubrandr%2Fmaster&cacheSeconds=1800)](https://github.com/afishhh/subrandr)
-    -   svtav1 [![svtav1](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.com%2FAOMediaCodec%2FSVT-AV1&cacheSeconds=1800)](https://gitlab.com/AOMediaCodec/SVT-AV1)
+    -   svtav1 [![svtav1](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2FAOMediaCodec%2FSVT-AV1&cacheSeconds=1800)](https://github.com/AOMediaCodec/SVT-AV1)
     -   uavs3d [![uavs3d](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fuavs3%2Fuavs3d&cacheSeconds=1800)](https://github.com/uavs3/uavs3d)
     -   uchardet [![uchardet](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgitlab%2Fgitlab.freedesktop.org%2Fuchardet%2Fuchardet&cacheSeconds=1800)](https://gitlab.freedesktop.org/uchardet/uchardet)
     -   vorbis [![vorbis](https://img.shields.io/endpoint?url=https%3A%2F%2Flatest-commit-badgen.vercel.app%2Fgithub%2Fxiph%2Fvorbis&cacheSeconds=1800)](https://github.com/xiph/vorbis) 
@@ -101,8 +101,8 @@ same as [shinchiro](https://github.com/shinchiro/mpv-winbuild-cmake/blob/master/
 
 -   Zip
     -   [lzo](https://fossies.org/linux/misc/) (2.10)
-    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.7.12)
-    -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.18)
+    -   [libopenmpt](https://lib.openmpt.org/libopenmpt/download/) (0.8.10)
+    -   [libiconv](https://ftp.gnu.org/pub/gnu/libiconv/) (1.19.1)
     -   [vapoursynth](https://github.com/vapoursynth/vapoursynth)  ![](https://img.shields.io/github/v/release/vapoursynth/vapoursynth?style=flat-square&cacheSeconds=1800)
 
 
