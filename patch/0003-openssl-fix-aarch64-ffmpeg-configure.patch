@@ -1,0 +1,24 @@
+From d86c96aefa5c664aa5e31b851a0fb61e777cd67d Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Sat, 28 Nov 2026 01:04:17 +0800
+Subject: [PATCH] openssl: fix aarch64 ffmpeg configure
+
+---
+ packages/openssl.cmake | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/packages/openssl.cmake b/packages/openssl.cmake
+index 523e93b..87ccb33 100644
+--- a/packages/openssl.cmake
++++ b/packages/openssl.cmake
+@@ -12,6 +12,7 @@ ExternalProject_Add(openssl
+     PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/openssl-*.patch
+     CONFIGURE_COMMAND ${EXEC} mkdir -p apps/include
+     COMMAND ${EXEC} CONF=1 <SOURCE_DIR>/Configure
++        "CFLAGS='-DOSSL_CORE_NAMES_C'"
+         --cross-compile-prefix=${TARGET_ARCH}-
+         --prefix=${MINGW_INSTALL_PREFIX}
+         --libdir=lib
+-- 
+2.56.1.windows.1
+
