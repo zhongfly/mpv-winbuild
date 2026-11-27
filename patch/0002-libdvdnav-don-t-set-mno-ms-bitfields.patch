@@ -1,0 +1,68 @@
+From a66628b26805e8ad7cb6c40f0fa00a1d06da61c4 Mon Sep 17 00:00:00 2001
+From: zhongfly <11155705+zhongfly@users.noreply.github.com>
+Date: Fri, 27 Nov 2026 21:47:00 +0800
+Subject: [PATCH] libdvdnav: don't set -mno-ms-bitfields
+
+---
+ ...0001-meson-dont-set-mno-ms-bitfields.patch | 36 +++++++++++++++++++
+ packages/libdvdnav.cmake                      |  1 +
+ 2 files changed, 37 insertions(+)
+ create mode 100644 packages/libdvdnav-0001-meson-dont-set-mno-ms-bitfields.patch
+
+diff --git a/packages/libdvdnav-0001-meson-dont-set-mno-ms-bitfields.patch b/packages/libdvdnav-0001-meson-dont-set-mno-ms-bitfields.patch
+new file mode 100644
+index 0000000..fc3919a
+--- /dev/null
++++ b/packages/libdvdnav-0001-meson-dont-set-mno-ms-bitfields.patch
+@@ -0,0 +1,36 @@
++From d00e4bd81df1967d6dc5a660a85823883eb0ae3f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>
++Date: Mon, 18 May 2026 03:38:43 +0200
++Subject: [PATCH] meson: don't set -mno-ms-bitfields
++X-Git-Committer-Name: Kacper Michajłow
++X-Git-Committer-Email: kasper93@gmail.com
++X-Git-Committer-Date: 2026-05-18T03:38:48+02:00
++
++libdvdread does not set this flag by default, so libdvdnav shouldn't
++either. Otherwise default builds are not ABI compatible between each
++other, since there are packed structures with bitfields all over.
++
++Fixes libdvdnav interoperability with libdvdread on Clang build on
++Windows.
++
++It's still responsibility on user to ensure that thier project is built
++in compatible way.
++---
++ meson.build | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 534cc2a..6751223 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -96,7 +96,6 @@ endif
++ # it is not an error and silently tolerated
++ if cc.get_argument_syntax() != 'msvc'
++     optional_arguments += [
++-        '-mno-ms-bitfields',
++         '-Wsign-compare',
++         '-Wundef',
++         '-Wpointer-arith',
++-- 
++2.51.0
++
+diff --git a/packages/libdvdnav.cmake b/packages/libdvdnav.cmake
+index 794e324..09ac5c5 100644
+--- a/packages/libdvdnav.cmake
++++ b/packages/libdvdnav.cmake
+@@ -4,6 +4,7 @@ ExternalProject_Add(libdvdnav
+     SOURCE_DIR ${SOURCE_LOCATION}
+     GIT_CLONE_FLAGS "--filter=tree:0"
+     UPDATE_COMMAND ""
++    PATCH_COMMAND ${EXEC} git am --3way ${CMAKE_CURRENT_SOURCE_DIR}/libdvdnav-*.patch
+     CONFIGURE_COMMAND ${EXEC} CONF=1 meson setup <BINARY_DIR> <SOURCE_DIR>
+         --prefix=${MINGW_INSTALL_PREFIX}
+         --libdir=${MINGW_INSTALL_PREFIX}/lib
+-- 
+2.56.1
+
